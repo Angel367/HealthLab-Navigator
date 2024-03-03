@@ -139,6 +139,12 @@ class ServiceInMedicalInstitution(models.Model):
         null=False,
         blank=False
     )
+    internal_code = models.CharField(
+        max_length=30,
+        verbose_name="Внутренний код услуги",
+        null=True,
+        blank=True
+    )
 
     class Meta:
         verbose_name = 'Медицинское учреждение в услуге'
