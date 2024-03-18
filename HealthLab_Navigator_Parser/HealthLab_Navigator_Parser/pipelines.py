@@ -11,7 +11,7 @@ import json
 
 
 class SaveToFilePipeline:
-    allowed_spiders = ['gemotest_spider']
+    allowed_spiders = ['gemotest_spider', 'gemotest_moscow_branch_spider']
 
     def __init__(self):
         self.file = None
@@ -19,7 +19,7 @@ class SaveToFilePipeline:
     def open_spider(self, spider):
         if spider.name in self.allowed_spiders:
             self.file = open(
-                f'data/{spider.name.replace("_spider", "")}/parsed_data/{spider.output_filename}', 'w', encoding='utf-8'
+                f'data/{spider.lab}/parsed_data/{spider.output_filename}', 'w', encoding='utf-8'
             )
 
     def close_spider(self, spider):

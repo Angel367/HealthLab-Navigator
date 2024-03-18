@@ -39,12 +39,6 @@ class MedicalInstitution(models.Model):
 
 
 class MedicalInstitutionBranch(models.Model):
-    name = models.CharField(
-        max_length=200,
-        verbose_name='Название филиала',
-        null=True,
-        blank=True
-    )
     address = models.CharField(
         max_length=200,
         verbose_name='Адрес филиала',
@@ -61,6 +55,18 @@ class MedicalInstitutionBranch(models.Model):
         MedicalInstitution,
         on_delete=models.CASCADE,
         verbose_name='Медицинское учреждение',
+        null=False,
+        blank=False
+    )
+    latitude = models.CharField(
+        max_length=50,
+        verbose_name='Широта',
+        null=False,
+        blank=False
+    )
+    longitude = models.CharField(
+        max_length=50,
+        verbose_name='Долгота',
         null=False,
         blank=False
     )

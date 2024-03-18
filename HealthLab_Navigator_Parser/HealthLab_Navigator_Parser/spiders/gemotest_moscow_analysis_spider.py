@@ -13,6 +13,7 @@ class gemotestMoscowAnalysisSpider(scrapy.Spider):
     output_filename = f'gemotest-moscow-analysis-{uuid4()}.jsonl'
     user_agent = UserAgent().random
     headers = {"User-Agent": user_agent}
+    lab = 'gemotest'
 
     def start_requests(self):
         files = os.listdir(self.urls_data_path)
@@ -45,7 +46,8 @@ class gemotestMoscowAnalysisSpider(scrapy.Spider):
             'government_code_804n': government_code_804n,
             'research_material': research_material,
             'internal_code': internal_code,
-            'url': response.url
+            'url': response.url,
+            'lab': self.lab
         }
 
     @staticmethod
