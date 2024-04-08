@@ -14,7 +14,7 @@ class MedicalInstitution(models.Model):
         null=False,
         blank=False
     )
-    # todo foreign key (телефонов почти всегда больше одного)
+    #  foreign key (телефонов почти всегда больше одного)
     main_phone = models.CharField(
         max_length=50,
         verbose_name='Общий телефон',
