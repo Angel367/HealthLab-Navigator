@@ -1,5 +1,10 @@
 from django.db import models
 
+# types of user: casual, med_institution, moderator
+# user access system of bonus, med_ access to statistic, moderator access to access
+# feedback, location
+# tags? или заболевания
+
 
 # Модели для медицинских учреждений
 class MedicalInstitution(models.Model):
@@ -9,6 +14,7 @@ class MedicalInstitution(models.Model):
         null=False,
         blank=False
     )
+    # todo foreign key (телефонов почти всегда больше одного)
     main_phone = models.CharField(
         max_length=50,
         verbose_name='Общий телефон',
@@ -26,6 +32,7 @@ class MedicalInstitution(models.Model):
         null=False,
         blank=False
     )
+    # доступ по омс зависит от услуги
     is_oms_available = models.BooleanField(
         verbose_name='Доступно по ОМС',
         default=False,
@@ -58,6 +65,8 @@ class MedicalInstitutionBranch(models.Model):
         null=False,
         blank=False
     )
+    # is main branch
+    # location as FK
     latitude = models.CharField(
         max_length=50,
         verbose_name='Широта',
@@ -85,6 +94,8 @@ research_material_choices = (
     ('biopsy', 'Биопсия'),
     ('other', 'Другое')
 )
+# это касается только мед анализов не мед услуг (куда мрт отнести)
+# оценка посещаемости для пользователя фиксировать?
 
 
 class MedicalService(models.Model):
@@ -106,6 +117,7 @@ class MedicalService(models.Model):
         null=False,
         blank=False
     )
+    # не у всех ведь есть код
     government_code_804n = models.CharField(
         max_length=12,
         verbose_name='Код услуги по 804н',
@@ -119,6 +131,7 @@ class MedicalService(models.Model):
 
 
 class ServiceInMedicalInstitution(models.Model):
+    #  access OMS
     medical_institution = models.ForeignKey(
         MedicalInstitution,
         on_delete=models.CASCADE,
@@ -151,6 +164,8 @@ class ServiceInMedicalInstitution(models.Model):
         null=True,
         blank=True
     )
+    # возможность сдачи на дому (наверное как перечисление
+    # ускорение за доплату
 
     class Meta:
         verbose_name = 'Медицинское учреждение в услуге'
