@@ -1,8 +1,10 @@
 import FilterForm from "./FilterForm";
 import HolderAdv from "./HolderAdv";
 import CardAgregator from "./CardAgregator";
+import {Navigate, useParams} from "react-router-dom";
 
-function Analysis() {
+function LaboratoryPage() {
+    const {id_laboratory} = useParams();
     const advList = [
         {
             img: "https://via.placeholder.com/150",
@@ -17,7 +19,7 @@ function Analysis() {
             title: "Adv 3"
         }
     ];
-    const analysisList = [
+    const labsList = [
         {
             id_analysis: 1,
             name: 'Analysis 1',
@@ -39,20 +41,28 @@ function Analysis() {
             duration: 3,
             id_laboratory: 3
         }];
+    let laboratory;
+    if (id_laboratory !== undefined)
+        laboratory = labsList.find(
+            lab => lab.id_laboratory == id_laboratory
+        )
+    else
+        return (
+            <Navigate to={'error'}/>
+        )
+
     return (
         <div>
-            <h1>Analysis</h1>
+            <h1>{laboratory.name}</h1>
+            <div>
+                <CardAgregator {...laboratory}/>
+            </div>
             <FilterForm/>
             <HolderAdv advList={advList}/>
-            <div className="analysis cards">
-                {analysisList.map((analysis, index) => {
-                    return (
-                        <CardAgregator key={index} {...analysis}/>
-                    );
-                })}
-            </div>
-
         </div>
     )
+
+
 }
-export default Analysis;
+
+export default LaboratoryPage;

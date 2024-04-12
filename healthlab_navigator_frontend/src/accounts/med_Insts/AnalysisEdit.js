@@ -5,3 +5,4 @@ function AnalysisEdit() {
         </div>
     );
 }
+export default AnalysisEdit;

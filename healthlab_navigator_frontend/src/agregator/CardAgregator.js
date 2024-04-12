@@ -1,6 +1,6 @@
 import {Link} from "react-router-dom";
 
-function CardAgregator({name, price, id_analysis, dates, types, id_laboratory}) {
+function CardAgregator({name, price, id_analysis, duration, id_laboratory}) {
     let link = "";
     if (id_laboratory !== undefined && id_analysis !== undefined)
         link = `/laboratory/${id_laboratory}/analysis/${id_analysis}`;
@@ -14,7 +14,7 @@ function CardAgregator({name, price, id_analysis, dates, types, id_laboratory}) 
     return (
         <Link to={link} className="card">
             <div className="card__name">{name}</div>
-            <div className="card__dates">{dates}</div>
+            <div className="card__duration">{duration}</div>
             <div className="card__price">{price}</div>
         </Link>
     );
