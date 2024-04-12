@@ -7,7 +7,7 @@ function Footer() {
       <div className="App-footer__links-holder">
         <div className="App-footer__links-item">
           <div>Навигация</div>
-          <Link to="/about">Главная</Link>
+          <Link to="/">Главная</Link>
           <Link to={'/about'}>О нас</Link>
           <Link to={'/partners'}>Партнеры</Link>
 

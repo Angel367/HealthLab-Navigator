@@ -18,6 +18,7 @@ import Analysis from "./agregator/Analysis";
 import AnalysisEdit from "./accounts/med_Insts/AnalysisEdit";
 import AnalysisPage from "./agregator/AnalysisPage";
 import LaboratoryPage from "./agregator/LaboratoryPage";
+import Partners from "./main/Partners";
 
 const analysis = {
         path: 'analysis/',
@@ -111,6 +112,11 @@ const router = createBrowserRouter([
         element: <Layout children={<About/>}/>,
         errorElement: <Layout children={<Error/>}/>,
 
+    },
+    {
+        path: '/partners',
+        element: <Layout children={<Partners/>}/>,
+        errorElement: <Layout children={<Error/>}/>,
     },
     analysis,
     laboratory,
