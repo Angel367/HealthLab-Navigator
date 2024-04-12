@@ -9,6 +9,7 @@ cryptography==42.0.5
 cssselect==1.2.0
 Django==5.0.2
 djangorestframework==3.14.0
+djangorestframework-simplejwt==5.3.1
 filelock==3.13.1
 hyperlink==21.0.0
 idna==3.6
