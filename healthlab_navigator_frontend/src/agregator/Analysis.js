@@ -1,6 +1,7 @@
 import FilterForm from "./FilterForm";
 import HolderAdv from "./HolderAdv";
 import CardAgregator from "./CardAgregator";
+import {useState} from "react";
 
 function Analysis() {
     const advList = [
@@ -39,13 +40,15 @@ function Analysis() {
             duration: 3,
             id_laboratory: 3
         }];
+    const [selectedOption, setSelectedOption] = useState(analysisList);
+
     return (
         <div>
             <h1>Analysis</h1>
-            <FilterForm/>
+            <FilterForm options={analysisList} labelName='name' valueName='id_analysis' setSelectedOption={setSelectedOption}/>
             <HolderAdv advList={advList}/>
             <div className="analysis cards">
-                {analysisList.map((analysis, index) => {
+                {selectedOption.map((analysis, index) => {
                     return (
                         <CardAgregator key={index} {...analysis}/>
                     );
