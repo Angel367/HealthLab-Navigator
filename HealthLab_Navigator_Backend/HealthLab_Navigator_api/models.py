@@ -23,6 +23,7 @@ USER_TYPE_CHOICES = [
 
 class Phone(models.Model):
     number = models.CharField(max_length=50, verbose_name='Номер телефона', null=False, blank=False, unique=True)
+    description = models.TextField(verbose_name='Описание номера телефона', null=False, blank=True, default="")
 
     class Meta:
         verbose_name = 'Телефон'
@@ -72,7 +73,13 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         blank=True,
         verbose_name='Дата рождения'
     )
-    phone_number = models.OneToOneField(Phone, on_delete=models.CASCADE, verbose_name='Номер телефона', null=False, blank=False, unique=True)
+    phone_number = models.CharField(
+        max_length=20,
+        unique=True,
+        verbose_name='Номер телефона',
+        null=False,
+        blank=False
+    )
     is_active = models.BooleanField(
         default=True
     )
@@ -83,6 +90,9 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         default=False
     )
     is_superuser = models.BooleanField(
+        default=False
+    )
+    is_medical_agent = models.BooleanField(
         default=False
     )
     user_type = models.CharField(
@@ -118,7 +128,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = []
 
     def __str__(self):
-        return self.phone_number
+        return str(self.phone_number)  # Преобразуем номер телефона в строку для вывода
 
 
 class Patient(models.Model):
@@ -220,8 +230,13 @@ class MedicalInstitution(models.Model):
         blank=False
     )
     #  foreign key (телефонов почти всегда больше одного)
-    main_phone = models.ForeignKey(Phone, on_delete=models.SET_NULL, verbose_name='Основной телефон', null=True,
-                                   blank=True)
+    main_phone = models.ForeignKey(
+        Phone,
+        on_delete=models.SET_NULL,
+        verbose_name='Основной телефон',
+        null=True,
+        blank=True
+    )
     website = models.URLField(
         max_length=200,
         verbose_name='Сайт',
@@ -233,8 +248,19 @@ class MedicalInstitution(models.Model):
         null=False,
         blank=False
     )
-    visiting = models.ForeignKey(Visiting, on_delete=models.SET_NULL, verbose_name='Визиты', null=True, blank=True)
-    is_active = models.BooleanField(verbose_name='Активный', default=True, null=False, blank=False)
+    visiting = models.ForeignKey(
+        Visiting,
+        on_delete=models.SET_NULL,
+        verbose_name='Визиты',
+        null=True,
+        blank=True
+    )
+    is_active = models.BooleanField(
+        verbose_name='Активный',
+        default=True,
+        null=False,
+        blank=False
+    )
 
     class Meta:
         verbose_name = 'Медицинское учреждение'
@@ -267,22 +293,49 @@ class MedicalInstitutionBranch(models.Model):
     is_main = models.BooleanField(verbose_name='Основной филиал', default=False, null=False, blank=False)
     location = models.ForeignKey(Location, on_delete=models.SET_NULL, verbose_name='Локация', null=True, blank=True)
     metro_stations = models.ManyToManyField(MetroStation, verbose_name='Станции метро', blank=True)
-    working_hours = models.CharField(max_length=200, verbose_name='Рабочие часы', null=False, blank=False)
+    working_hours = models.JSONField(verbose_name='Рабочие часы', null=False, blank=False)
     visiting = models.ForeignKey(Visiting, on_delete=models.SET_NULL, verbose_name='Визиты', null=True, blank=True)
     is_active = models.BooleanField(verbose_name='Активный', default=True, null=False, blank=False)
+    latitude = models.CharField(
+        max_length=50,
+        verbose_name='Широта',
+        null=False,
+        blank=False
+    )
+    longitude = models.CharField(
+        max_length=50,
+        verbose_name='Долгота',
+        null=False,
+        blank=False
+    )
+    url = models.URLField(
+        max_length=200,
+        verbose_name='Ссылка на филиал',
+        null=True,
+        blank=True
+    )
     class Meta:
         verbose_name = 'Филиал медицинского учреждения'
         verbose_name_plural = 'Филиалы медицинского учреждения'
 
 
-research_material_choices = (
-    ('blood', 'Кровь'),
-    ('urine', 'Моча'),
-    ('feces', 'Кал'),
-    ('smear', 'Мазок'),
-    ('biopsy', 'Биопсия'),
-    ('other', 'Другое')
-)
+class ResearchMaterial(models.Model):
+    name = models.CharField(
+        max_length=50,
+        verbose_name='Название материала',
+        null=False,
+        blank=False
+    )
+    description = models.TextField(
+        verbose_name='Описание',
+        null=True,
+        blank=True,
+        default=""
+    )
+
+    class Meta:
+        verbose_name = 'Материал исследования'
+        verbose_name_plural = 'Материалы исследования'
 
 
 class ResearchMedicalSystem(models.Model):
@@ -326,7 +379,12 @@ class ResearchMedicalIllness(models.Model):
 
 
 class MedicalService(models.Model):
-    is_active = models.BooleanField(verbose_name='Активный', default=True, null=False, blank=False)
+    is_active = models.BooleanField(
+        verbose_name='Активный',
+        default=True,
+        null=False,
+        blank=False
+    )
     name = models.CharField(
         max_length=200,
         verbose_name='Название медицинской услуги',
@@ -339,16 +397,30 @@ class MedicalService(models.Model):
         blank=False
     )
     # для создания этой сущности необходимо подтверждение модератора
-    research_systems = models.ManyToManyField(ResearchMedicalSystem, verbose_name='Системы исследования', blank=True)
-    research_illnesses = models.ManyToManyField(ResearchMedicalIllness, verbose_name='Заболевания', blank=True)
-    created = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания системы')
-    status = models.CharField(choices=STATUS_CREATED_CHOICES, default='new', max_length=20)
-    research_material = models.CharField(
-        max_length=50,
-        choices=research_material_choices,
-        verbose_name='Материал исследования',
-        null=False,
-        blank=False
+    research_systems = models.ManyToManyField(
+        ResearchMedicalSystem,
+        verbose_name='Системы исследования',
+        blank=True
+    )
+    research_illnesses = models.ManyToManyField(
+        ResearchMedicalIllness,
+        verbose_name='Заболевания',
+        blank=True
+    )
+    created = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name='Дата создания системы'
+    )
+    status = models.CharField(
+        choices=STATUS_CREATED_CHOICES,
+        default='new',
+        max_length=20
+    )
+    research_material = models.ManyToManyField(
+        ResearchMaterial,
+        verbose_name='Материалы исследования',
+        blank=True,
+        related_name='research_material'
     )
     # не у всех ведь есть код
     government_code_804n = models.CharField(

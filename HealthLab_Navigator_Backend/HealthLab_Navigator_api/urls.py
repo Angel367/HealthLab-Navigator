@@ -12,7 +12,7 @@ router = DefaultRouter()
 # Регистрируем ваше представление для модели MedicalInstitution
 router.register(r'medical-service', MedicalServiceViewSet, basename='medical-service')
 router.register(r'medical-institution', MedicalInstitutionViewSet, basename='medical-institution')
-router.register(r'medical-institution-brunch', MedicalInstitutionBranchViewSet, basename='medical-institution-brunch')
+router.register(r'medical-institution-branch', MedicalInstitutionBranchViewSet, basename='medical-institution-branch')
 router.register(r'medical-institution-service', MedicalInstitutionServiceViewSet, basename='medical-institution-service')
 router.register(r'medical-institution-service-price', MedicalInstitutionServicePriceViewSet,
                 basename='medical-institution-service-price')

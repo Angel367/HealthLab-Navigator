@@ -68,6 +68,12 @@ class SpecialOfferForPatientSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class ResearchMaterialSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ResearchMaterial
+        fields = '__all__'
+
+
 class MedicalServiceSerializer(serializers.ModelSerializer):
     class Meta:
         model = MedicalService

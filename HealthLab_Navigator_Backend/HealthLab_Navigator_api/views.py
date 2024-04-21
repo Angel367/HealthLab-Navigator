@@ -94,11 +94,11 @@ class MedicalInstitutionServiceViewSet(viewsets.ModelViewSet):
 class MedicalServiceViewSet(viewsets.ModelViewSet):
     queryset = MedicalService.objects.all()
     serializer_class = MedicalServiceSerializer
-    permission_classes = [IsSuperuserOrReadOnly, MedicalAgentPermission]
+    permission_classes = [IsSuperuserOrReadOnly]
 
     def create(self, request, *args, **kwargs):
         if request.user.is_superuser:
-            return self.create(request, *args, **kwargs)
+            return super().create(request, *args, **kwargs)     # Adelina blyat SUPER not inf recursion plz
         elif request.user.is_medical_agent:
             request.data['status'] = 'new'
             return self.create(request, *args, **kwargs)
