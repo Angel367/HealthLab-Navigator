@@ -1,5 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
+from rest_framework.documentation import include_docs_urls
 
 from .views import *
 from rest_framework_simplejwt.views import (
@@ -36,7 +37,7 @@ urlpatterns = [
     path('register/agent', RegisterAgentView.as_view(), name='register-agent'),
     path('profile', ProfileView.as_view(), name='profile'),
     path('profile/update', ProfileUpdateView.as_view(), name='profile-update'),
-
+    path('docs/', include_docs_urls(title='Backend API', public=False)),
 
 
 ]
