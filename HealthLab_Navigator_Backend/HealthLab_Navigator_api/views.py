@@ -16,13 +16,13 @@ class MedicalInstitutionViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         if request.user.is_superuser:
-            return self.create(request, *args, **kwargs)
+            return super().create(request, *args, **kwargs)
         else:
             return self.permission_denied(request)
 
     def destroy(self, request, *args, **kwargs):
         if request.user.is_superuser:
-            return self.destroy(request, *args, **kwargs)
+            return super().destroy(request, *args, **kwargs)
         else:
             return self.permission_denied(request)
 
@@ -30,7 +30,7 @@ class MedicalInstitutionViewSet(viewsets.ModelViewSet):
         if (request.user.is_superuser or request.user.is_medical_agent and
                 MedicalInstitutionAgent.objects.filter(agent=request.user,
                                                        medical_institution=self.get_object()).exists()):
-            return self.update(request, *args, **kwargs)
+            return super().update(request, *args, **kwargs)
         else:
             return self.permission_denied(request)
 
@@ -45,13 +45,13 @@ class MedicalInstitutionBranchViewSet(viewsets.ModelViewSet):
         if (request.user.is_superuser or request.user.is_medical_agent and
                 MedicalInstitutionAgent.objects.filter(agent=request.user,
                                                        medical_institution=medical_institution).exists()):
-            return self.create(request, *args, **kwargs)
+            return super().create(request, *args, **kwargs)
         else:
             return self.permission_denied(request)
 
     def destroy(self, request, *args, **kwargs):
         if request.user.is_superuser:
-            return self.destroy(request, *args, **kwargs)
+            return super().destroy(request, *args, **kwargs)
         else:
             return self.permission_denied(request)
 
@@ -60,7 +60,7 @@ class MedicalInstitutionBranchViewSet(viewsets.ModelViewSet):
         if request.user.is_superuser or request.user.is_medical_agent and \
                 MedicalInstitutionAgent.objects.filter(agent=request.user,
                                                        medical_institution=medical_institution).exists():
-            return self.update(request, *args, **kwargs)
+            return super().update(request, *args, **kwargs)
 
 
 class MedicalInstitutionServiceViewSet(viewsets.ModelViewSet):
@@ -73,13 +73,13 @@ class MedicalInstitutionServiceViewSet(viewsets.ModelViewSet):
         if (request.user.is_superuser or request.user.is_medical_agent and
                 MedicalInstitutionAgent.objects.filter(agent=request.user,
                                                        medical_institution=medical_institution).exists()):
-            return self.create(request, *args, **kwargs)
+            return super().create(request, *args, **kwargs)
         else:
             return self.permission_denied(request)
 
     def destroy(self, request, *args, **kwargs):
         if request.user.is_superuser:
-            return self.destroy(request, *args, **kwargs)
+            return super().destroy(request, *args, **kwargs)
         else:
             return self.permission_denied(request)
 
@@ -88,7 +88,7 @@ class MedicalInstitutionServiceViewSet(viewsets.ModelViewSet):
         if request.user.is_superuser or request.user.is_medical_agent and \
                 MedicalInstitutionAgent.objects.filter(agent=request.user,
                                                        medical_institution=medical_institution).exists():
-            return self.update(request, *args, **kwargs)
+            return super().update(request, *args, **kwargs)
 
 
 class MedicalServiceViewSet(viewsets.ModelViewSet):
@@ -98,22 +98,22 @@ class MedicalServiceViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         if request.user.is_superuser:
-            return super().create(request, *args, **kwargs)     # Adelina blyat SUPER not inf recursion plz
+            return super().create(request, *args, **kwargs)
         elif request.user.is_medical_agent:
             request.data['status'] = 'new'
-            return self.create(request, *args, **kwargs)
+            return super().create(request, *args, **kwargs)
         else:
             return self.permission_denied(request)
 
     def destroy(self, request, *args, **kwargs):
         if request.user.is_superuser:
-            return self.destroy(request, *args, **kwargs)
+            return super().destroy(request, *args, **kwargs)
         else:
             return self.permission_denied(request)
 
     def update(self, request, *args, **kwargs):
         if request.user.is_superuser:
-            return self.update(request, *args, **kwargs)
+            return super().update(request, *args, **kwargs)
         else:
             return self.permission_denied(request)
 
@@ -130,11 +130,11 @@ class MedicalInstitutionServicePriceViewSet(viewsets.ModelViewSet):
         if request.user.is_superuser or request.user.is_medical_agent and \
                 MedicalInstitutionAgent.objects.filter(agent=request.user,
                                                        medical_institution=medical_institution).exists():
-            return self.update(request, *args, **kwargs)
+            return super().create(request, *args, **kwargs)
 
     def destroy(self, request, *args, **kwargs):
         if request.user.is_superuser:
-            return self.destroy(request, *args, **kwargs)
+            return super().destroy(request, *args, **kwargs)
         else:
             return self.permission_denied(request)
 
@@ -145,7 +145,7 @@ class MedicalInstitutionServicePriceViewSet(viewsets.ModelViewSet):
         if request.user.is_superuser or request.user.is_medical_agent and \
                 MedicalInstitutionAgent.objects.filter(agent=request.user,
                                                        medical_institution=medical_institution).exists():
-            return self.update(request, *args, **kwargs)
+            return super().update(request, *args, **kwargs)
 
 
 class IllnessViewSet(viewsets.ModelViewSet):
@@ -155,22 +155,22 @@ class IllnessViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         if request.user.is_superuser:
-            return self.create(request, *args, **kwargs)
+            return super().create(request, *args, **kwargs)
         elif request.user.is_medical_agent:
             request.data['status'] = 'new'
-            return self.create(request, *args, **kwargs)
+            return super().create(request, *args, **kwargs)
         else:
             return self.permission_denied(request)
 
     def destroy(self, request, *args, **kwargs):
         if request.user.is_superuser:
-            return self.destroy(request, *args, **kwargs)
+            return super().destroy(request, *args, **kwargs)
         else:
             return self.permission_denied(request)
 
     def update(self, request, *args, **kwargs):
         if request.user.is_superuser:
-            return self.update(request, *args, **kwargs)
+            return super().update(request, *args, **kwargs)
         else:
             return self.permission_denied(request)
 
@@ -185,42 +185,44 @@ class MedicalSystemViewSet(viewsets.ModelViewSet):
             return self.create(request, *args, **kwargs)
         elif request.user.is_medical_agent:
             request.data['status'] = 'new'
-            return self.create(request, *args, **kwargs)
+            return super().create(request, *args, **kwargs)
         else:
             return self.permission_denied(request)
 
     def destroy(self, request, *args, **kwargs):
         if request.user.is_superuser:
-            return self.destroy(request, *args, **kwargs)
+            return super().destroy(request, *args, **kwargs)
         else:
             return self.permission_denied(request)
 
     def update(self, request, *args, **kwargs):
         if request.user.is_superuser:
-            return self.update(request, *args, **kwargs)
+            return super().update(request, *args, **kwargs)
         else:
             return self.permission_denied(request)
 
 
 class FeedbackViewSet(viewsets.ModelViewSet):
     queryset = Feedback.objects.all()
-    serializer_class = FeedbackSerializer
+    serializer_class = FeedbackSerializerForAll
     permission_classes = []
 
     def create(self, request, *args, **kwargs):
-        if request.user.is_authenticated:
-            request.data['user'] = request.user.id
-        return self.create(request, *args, **kwargs)
+        if Feedback.objects.filter(email=request.data['email'], text=request.data['text']).exists():
+            return Response({'message': 'Feedback already exists'}, status=status.HTTP_400_BAD_REQUEST)
+        return super().create(request, *args, **kwargs)
 
     def destroy(self, request, *args, **kwargs):
         if request.user.is_superuser:
-            return self.destroy(request, *args, **kwargs)
+            self.serializer_class = FeedbackSerializerModerator
+            return super().destroy(request, *args, **kwargs)
         else:
             return self.permission_denied(request)
 
     def update(self, request, *args, **kwargs):
         if request.user.is_superuser:
-            return self.update(request, *args, **kwargs)
+            self.serializer_class = FeedbackSerializerModerator
+            return super().update(request, *args, **kwargs)
         else:
             return self.permission_denied(request)
 
@@ -240,8 +242,7 @@ class ReviewCommentViewSet(viewsets.ModelViewSet):
     ]
 
 
-
-class ProfileView(RetrieveAPIView):
+class ProfileView(UpdateAPIView, RetrieveAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -250,13 +251,7 @@ class ProfileView(RetrieveAPIView):
         return self.request.user
 
 
-class ProfileUpdateView(UpdateAPIView):
-    queryset = CustomUser.objects.all()
-    serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticated]
 
-    def get_object(self):
-        return self.request.user
 
 
 class RegisterPatientView(CreateAPIView):
@@ -311,19 +306,19 @@ class SpecialOfferViewSet(viewsets.ModelViewSet):
         if request.user.is_superuser or request.user.is_medical_agent and \
                 MedicalInstitutionAgent.objects.filter(agent=request.user,
                                                        medical_institution=medical_institution).exists():
-            return self.create(request, *args, **kwargs)
+            return super().create(request, *args, **kwargs)
         else:
             return self.permission_denied(request)
 
     def destroy(self, request, *args, **kwargs):
         if request.user.is_superuser:
-            return self.destroy(request, *args, **kwargs)
+            return super().destroy(request, *args, **kwargs)
         else:
             return self.permission_denied(request)
 
     def update(self, request, *args, **kwargs):
         if request.user.is_superuser:
-            return self.update(request, *args, **kwargs)
+            return super().update(request, *args, **kwargs)
         else:
             return self.permission_denied(request)
 

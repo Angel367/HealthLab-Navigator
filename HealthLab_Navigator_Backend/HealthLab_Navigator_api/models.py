@@ -31,7 +31,7 @@ class Phone(models.Model):
 
 
 class CustomUserManager(BaseUserManager):
-    def create_user(self, phone_number, password=None):
+    def create_user(self, phone_number, password=None, **extra_fields):
         """
         Creates and saves a User with the given phone_number and password.
         """
@@ -56,6 +56,8 @@ class CustomUserManager(BaseUserManager):
             password=password
         )
         user.is_admin = True
+        user.is_staff = True
+        user.is_superuser = True
         user.save(using=self._db)
         return user
 
@@ -133,7 +135,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
 class Patient(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, verbose_name='Пользователь', null=True, blank=True)
-
     class Meta:
         verbose_name = 'Пациент'
         verbose_name_plural = 'Пациенты'
@@ -143,6 +144,9 @@ class Visiting(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, verbose_name='Пользователь', null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания визита')
 
+    class Meta:
+        verbose_name = 'Визит'
+        verbose_name_plural = 'Визиты'
 
 class Feedback(models.Model):
     email = models.EmailField(max_length=100, verbose_name='Email пользователя', null=False, blank=False)
@@ -150,6 +154,9 @@ class Feedback(models.Model):
     create = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания обращения')
     status = models.CharField(choices=STATUS_FEEDBACK_CHOICES, default='new', max_length=20,
                               verbose_name='Статус обращения')
+    class Meta:
+        verbose_name = 'Обращение'
+        verbose_name_plural = 'Обращения'
 
 
 class City(models.Model):
@@ -467,13 +474,13 @@ class ServiceInMedicalInstitution(models.Model):
                                                 related_name='price_for_fast_result')
     time_to_complete = models.DurationField(
         verbose_name='Время выполнения',
-        null=False,
-        blank=False
+        null=True,
+        blank=True
     )
     time_to_complete_for_fast_result = models.DurationField(
         verbose_name='Время выполнения при скором результате',
-        null=False,
-        blank=False
+        null=True,
+        blank=True
     )
     internal_code = models.CharField(
         max_length=30,

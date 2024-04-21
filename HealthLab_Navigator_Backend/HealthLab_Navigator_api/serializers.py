@@ -38,10 +38,18 @@ class ResearchMedicalIllnessSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class FeedbackSerializer(serializers.ModelSerializer):
+class FeedbackSerializerForAll(serializers.ModelSerializer):
+    class Meta:
+        model = Feedback
+        fields = ['email', 'text', 'status', 'create', 'id']
+        read_only_fields = ['status', 'create']
+
+
+class FeedbackSerializerModerator(serializers.ModelSerializer):
     class Meta:
         model = Feedback
         fields = '__all__'
+        read_only_fields = ['create']
 
 
 class ReviewSerializer(serializers.ModelSerializer):
@@ -79,23 +87,54 @@ class MedicalServiceSerializer(serializers.ModelSerializer):
         model = MedicalService
         fields = '__all__'
 
+class ChangePasswordSerializer(serializers.Serializer):
+    model = CustomUser
+    old_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True)
+
+    def validate_old_password(self, value):
+        if not self.context['request'].user.check_password(value):
+            raise serializers.ValidationError('Old password is incorrect')
+        return value
+
+    def validate_new_password(self, value):
+        if len(value) < 8:
+            raise serializers.ValidationError('Password must be at least 8 characters long')
+        return value
+
+    def update(self, instance, validated_data):
+        instance.set_password(validated_data['new_password'])
+        instance.save()
+        return instance
+
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['id', 'phone_number', 'email', 'first_name', 'last_name', 'password']
+        fields = ['id', 'phone_number', 'email', 'first_name', 'last_name']
         extra_kwargs = {'password': {'write_only': True}}
 
 
 class RegisterPatientSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['phone_number', 'first_name', 'last_name', 'password']
+        fields = ['phone_number', 'password']
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
         user = CustomUser.objects.create_user(**validated_data)
         return user
+
+    def validate(self, attrs):
+        if not attrs.get('phone_number').isdigit():
+            raise serializers.ValidationError('Phone number must contain only digits')
+        if len(attrs.get('phone_number')) != 12:
+            raise serializers.ValidationError('Phone number must be 12 characters long')
+        if CustomUser.objects.filter(phone_number=attrs.get('phone_number')).exists():
+            raise serializers.ValidationError('User with this phone number already exists')
+        if len(attrs.get('password')) < 8:
+            raise serializers.ValidationError('Password must be at least 8 characters long')
+        return attrs
 
 
 class RegisterAgentSerializer(serializers.ModelSerializer):

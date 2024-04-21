@@ -43,14 +43,26 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'HealthLab_Navigator_api',
     'rest_framework',
+    # 'corsheaders',
     'rest_framework_simplejwt'
 ] + MY_APPS
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    ),
+    # 'DEFAULT_FILTER_BACKENDS': (
+    #     'django_filters.rest_framework.DjangoFilterBackend',
+    # ),
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
+    # 'DEFAULT_PAGINATION_CLASS': 'cosmetic_meow_api.pagination.CustomPagination',
+    # 'PAGE_SIZE': 10
 }
+
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_ALLOW_ALL = True
+APPEND_SLASH = True
+
 AUTH_USER_MODEL = 'HealthLab_Navigator_api.CustomUser'
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
@@ -100,6 +112,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # 'corsheaders.middleware.CorsMiddleware',
+
 ]
 
 ROOT_URLCONF = 'HealthLab_Navigator_Backend.urls'

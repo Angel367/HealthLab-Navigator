@@ -32,11 +32,7 @@ urlpatterns = [
     path('auth/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('auth/token/verify/', TokenVerifyView.as_view()),
-    path('auth/register/user', RegisterPatientView.as_view(), name='register-user'),
-    path('register/agent', RegisterAgentView.as_view(), name='register-agent'),
-    path('profile', ProfileView.as_view(), name='profile'),
-    path('profile/update', ProfileUpdateView.as_view(), name='profile-update'),
-
-
-
+    path('auth/register/', RegisterPatientView.as_view(), name='register-user'),
+    path('register/', RegisterAgentView.as_view(), name='register-agent'),
+    path('profile/', ProfileView.as_view(), name='profile'),
 ]
