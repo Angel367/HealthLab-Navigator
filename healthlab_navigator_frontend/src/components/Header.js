@@ -16,7 +16,7 @@ function Header() {
             <Link to="/analysis">Анализы</Link>
             <Link to="/about">О нас</Link>
             {isAuth() ? <Link to="/profile">Профиль</Link> : null}
-            {isAuth() ? <a href="#" onClick={logout}>Logout</a> : null}
+            {isAuth() ? <Link to="/login" onClick={logout}>Logout</Link> : null}
             {!isAuth() ? <Link to="/login">Login</Link> : null}
             {!isAuth() ? <Link to="/register">Register</Link> : null}
         </div>

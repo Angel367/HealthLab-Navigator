@@ -1,22 +1,35 @@
 import axios, {AxiosError} from "axios";
+import axiosService from "./axiosService";
+import {isAuth} from "../hooks/user.actions";
 
 async function getData(urlPart, params) {
-    let url = process.env.REACT_APP_HOST + urlPart;
-    return await axios.get(url,
-        {
+    let ax, config, url;
+    if (isAuth()){
+        url = urlPart;
+        ax = axiosService;
+        config = {
+            params: params
+        }
+    } else {
+        url = process.env.REACT_APP_HOST + urlPart;
+        ax = axios
+        config = {
             params: params,
             withCredentials: true,
             headers: {
                 'Content-Type': 'application/json',
             }
         }
-    ).then((res) => {
-        return {
-            status: res.status,
-            data: res.data
-        };
     }
-    ).catch((err) => {
+
+    return await ax.get(url, config)
+        .then((res) => {
+            return {
+                status: res.status,
+                data: res.data
+            };
+        })
+        .catch((err) => {
         if (err instanceof AxiosError) {
             const errors = err.response.data
             return {

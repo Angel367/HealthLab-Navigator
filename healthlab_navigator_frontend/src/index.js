@@ -67,7 +67,7 @@ const laboratory = {
                     analysis,
                     {
                         path: 'edit',
-                        element: <Layout children={<RoleMedInstLayout children_for_med_inst={<LaboratoryEdit/>}/>}/>,
+                        element: <Layout children={<RoleMedInstLayout children_for_med_inst={<LaboratoryEdit/>}/>} title={"edit"}/>,
                         errorElement: <Layout children={<Error/>}/>,
                     },
                     {

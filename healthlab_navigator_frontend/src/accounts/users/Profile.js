@@ -9,7 +9,9 @@ function Profile() {
             setUserData(response.data);
         }
         fetchUser();
+        // return userData;
     }, []);
+    // console.log(userData)
     return (
         <div>
             <h1>Профиль</h1>
@@ -17,8 +19,8 @@ function Profile() {
             <p>Имя: {userData?.first_name}</p>
             <p>Фамилия: {userData?.last_name}</p>
             <p>Почта: {userData?.email}</p>
-            <p>Телефон: {userData?.phone}</p>
-
+            <p>Телефон: {userData?.phone_number}</p>
+            <p>ROLE: {userData?.user_type}</p>
         </div>
     );
 }

@@ -111,7 +111,7 @@ class ChangePasswordSerializer(serializers.Serializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['id', 'phone_number', 'email', 'first_name', 'last_name']
+        fields = ['id', 'phone_number', 'email', 'first_name', 'last_name', 'user_type']
         extra_kwargs = {'password': {'write_only': True}, 'user_type': {'read_only': True}}
 
 
@@ -143,9 +143,11 @@ class RegisterAgentSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ['phone_number', 'first_name', 'last_name', 'password']
-        extra_kwargs = {'password': {'write_only': True}}
+        extra_kwargs = {
+            'password': {'write_only': True},
+
+        }
 
     def create(self, validated_data):
-
         user = CustomUser.objects.create_agent(**validated_data)
         return user

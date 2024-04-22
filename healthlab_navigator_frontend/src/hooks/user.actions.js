@@ -19,20 +19,18 @@ function getRole() {
  return Cookies.get("role");
 }
 function setRole(role) {
- Cookies.set("role", role);
+ Cookies.set("role", role, { expires:  1/48, secure: true });
 }
 // Set the access, token and user property
 function setUserData(data) {
- Cookies.set("access", data.access, { expires: 1, secure: true });
- Cookies.set("refresh", data.refresh, { expires: 7, secure: true });
- // Cookies.set("role", data.role);
-
+ Cookies.set("access", data.access, { expires:  1/48, secure: true });
+ Cookies.set("refresh", data.refresh, { expires: 1, secure: true });
 }
  // Logout the user
  function logout() {
     Cookies.remove("access");
     Cookies.remove("refresh");
     Cookies.remove("role");
-    window.location.reload();
+    // window.location.reload();
  }
  export {isAuth, getAccessToken, getRefreshToken, setUserData, logout, getRole, isRole, setRole};

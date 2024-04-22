@@ -4,16 +4,15 @@ import {Navigate} from "react-router-dom";
 import getData from "../requests/getData";
 
 function UserLayout({children_for_user}) {
+    console.log(!isAuth(), !getRole() || getRole() === undefined)
     useEffect(() => {
-        if (!isAuth()) {
-            return <Navigate to={'/login'} replace={true}/>
-        } if (!getRole()) {
+       if (isAuth() && (!getRole() || getRole() === undefined)){
             async function fetchUserRole() {
                 const response = await getData('/api/profile/');
                 setRole(response.data?.user_type);
             }
-
             fetchUserRole();
+            // return getRole();
         }
     }, []);
   return (

@@ -1,11 +1,11 @@
 import axios from "axios";
 import createAuthRefreshInterceptor from "axios-auth-refresh";
-import {getAccessToken, getRefreshToken, logout} from "../hooks/user.actions";
+import {getAccessToken, getRefreshToken, logout, setUserData} from "../hooks/user.actions";
 import Cookies from 'js-cookie';
 
 const axiosService = axios.create(
         {
-            baseURL: process.env.REACT_APP_HOST + "/api/auth/token/verify/",
+            baseURL: process.env.REACT_APP_HOST,
             withCredentials: true,
             headers: {
                 "Content-Type": "application/json",
@@ -24,56 +24,27 @@ axiosService.interceptors.response.use(
 );
 
 const refreshAuthLogic = async (failedRequest) => {
-     const  refreshRes  = getRefreshToken();
-     const accessRes = getAccessToken();
+    const  refreshRes  = getRefreshToken();
+    const accessRes = getAccessToken();
      if (refreshRes && accessRes){
-        const {refresh} = refreshRes;
-        const {access} = accessRes;
-        return axios.post(
+        return axiosService.post(
             "/api/auth/token/refresh/",
-            null,
-            {
-                baseURL: process.env.REACT_APP_HOST ,
-                withCredentials: true,
-                headers: {
-                    Authorization: `Bearer ${access}`,
-                },
-                body: {
-                    refresh: refresh
-                }
-    ,})
+            { refresh: refreshRes },
+        )
     .then((resp) => {
         const { access, refresh } = resp.data;
         failedRequest.response.config.headers["Authorization"] = "Bearer " + access;
-        Cookies.set('access', access, { expires: 1, secure: true });
-        Cookies.set('refresh', refresh, { expires: 7, secure: true });
+        setUserData({access, refresh});
     })
-    .catch(() => {
+    .catch((ex) => {
+        // console.log(ex)
         logout();
     });
      }
     else {
+        // console.log("no refresh token found. Logging out.")
         logout();
     }
 }
 createAuthRefreshInterceptor(axiosService,  refreshAuthLogic);
-// export function fetcherUser() {
-//  return axiosService.get(getBaseUrl() + 'auth/update/').then((res) => res.data)
-//         .catch((error) => {
-//             if (error.response.status === 401) {
-//                 logout();
-//             }
-//             return error.response.data;
-//         });
-// }
-// export async function updateUser(data) {
-//  return await axiosService.put( process.env.REACT_APP_HOST + '/api/auth/update/', data)
-//      .then((res) => res.data)
-//      .catch((error) => {
-//             if (error.response.status === 401) {
-//                 logout();
-//             }
-//          return error.response.data;
-//      });
-// }
 export default axiosService;

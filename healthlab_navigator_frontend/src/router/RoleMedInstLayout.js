@@ -6,9 +6,10 @@ import getData from "../requests/getData";
 
 function RoleMedInstLayout({children_for_med_inst}) {
   return (
-      <UserLayout>
-        {isRole("medical_institution_agent") ? children_for_med_inst : <Navigate to={'/error'} replace={true} />}
-      </UserLayout>
+      <UserLayout children_for_user=
+        {isRole("medical_institution_agent") ? children_for_med_inst :
+            <Navigate to={'/'} replace={true} />} />
+
     )
 }
 export default RoleMedInstLayout;

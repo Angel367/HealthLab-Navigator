@@ -5,9 +5,9 @@ import UserLayout from "./UserLayout";
 
 function RoleUserLayout({children_for_patient}) {
   return (
-    <UserLayout>
-      {isRole("patient") ? children_for_patient : <Navigate to="/login" /> }
-    </UserLayout>
+    <UserLayout children_for_user=
+      {isRole("patient") ? children_for_patient : <Navigate to="/" /> }
+    />
   )
 }
 export default RoleUserLayout;
