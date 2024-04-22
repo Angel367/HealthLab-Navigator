@@ -40,6 +40,7 @@ class CustomUserManager(BaseUserManager):
 
         user = self.model(
             phone_number=phone_number,
+            **extra_fields
         )
 
         user.set_password(password)
@@ -94,9 +95,9 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     is_superuser = models.BooleanField(
         default=False
     )
-    is_medical_agent = models.BooleanField(
-        default=False
-    )
+    # is_medical_agent = models.BooleanField(
+    #     default=False
+    # )
     user_type = models.CharField(
         max_length=50,
         choices=USER_TYPE_CHOICES,

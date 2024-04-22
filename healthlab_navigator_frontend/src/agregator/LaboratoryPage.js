@@ -1,7 +1,9 @@
 import FilterForm from "./FilterForm";
 import HolderAdv from "./HolderAdv";
 import CardAgregator from "./CardAgregator";
-import {Navigate, useParams} from "react-router-dom";
+import {Link, Navigate, useParams} from "react-router-dom";
+import {isAuth, isRole} from "../hooks/user.actions";
+import RoleMedInstLayout from "../router/RoleMedInstLayout";
 
 function LaboratoryPage() {
     const {id_laboratory} = useParams();
@@ -53,7 +55,15 @@ function LaboratoryPage() {
 
     return (
         <div>
+
             <h1>{laboratory.name}</h1>
+
+            {isRole("medical_institution_agent") ?
+                <Link to={`/laboratory/${id_laboratory}/edit`} > Редактировать </Link> :
+                <div>
+                    ПОТОМ ДОБАВЛЮ КОММЕТАРИИ
+                </div>
+            }
             <div>
                 <CardAgregator {...laboratory}/>
             </div>

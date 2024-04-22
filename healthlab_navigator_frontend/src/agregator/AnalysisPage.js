@@ -1,7 +1,7 @@
 import FilterForm from "./FilterForm";
 import HolderAdv from "./HolderAdv";
 import CardAgregator from "./CardAgregator";
-import {Navigate, useParams} from "react-router-dom";
+import {Link, Navigate, useParams} from "react-router-dom";
 import analysis from "./Analysis";
 
 function AnalysisPage() {
@@ -61,6 +61,7 @@ function AnalysisPage() {
             <h1>Analysis</h1>
             <div>
                 <CardAgregator {...analysis}/>
+                <Link to={`/laboratory/${id_laboratory}`} > Перейти к лабе</Link>
             </div>
             <FilterForm/>
             <HolderAdv advList={advList}/>

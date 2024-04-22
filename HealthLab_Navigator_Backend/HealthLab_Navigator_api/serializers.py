@@ -112,7 +112,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ['id', 'phone_number', 'email', 'first_name', 'last_name']
-        extra_kwargs = {'password': {'write_only': True}}
+        extra_kwargs = {'password': {'write_only': True}, 'user_type': {'read_only': True}}
 
 
 class RegisterPatientSerializer(serializers.ModelSerializer):
@@ -122,14 +122,15 @@ class RegisterPatientSerializer(serializers.ModelSerializer):
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
+        self.validate(validated_data)
         user = CustomUser.objects.create_user(**validated_data)
         return user
 
     def validate(self, attrs):
         if not attrs.get('phone_number').isdigit():
             raise serializers.ValidationError('Phone number must contain only digits')
-        if len(attrs.get('phone_number')) != 12:
-            raise serializers.ValidationError('Phone number must be 12 characters long')
+        if len(attrs.get('phone_number')) != 10:
+            raise serializers.ValidationError('Phone number must be 10 characters long')
         if CustomUser.objects.filter(phone_number=attrs.get('phone_number')).exists():
             raise serializers.ValidationError('User with this phone number already exists')
         if len(attrs.get('password')) < 8:
@@ -138,11 +139,13 @@ class RegisterPatientSerializer(serializers.ModelSerializer):
 
 
 class RegisterAgentSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = CustomUser
         fields = ['phone_number', 'first_name', 'last_name', 'password']
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
+
         user = CustomUser.objects.create_agent(**validated_data)
         return user

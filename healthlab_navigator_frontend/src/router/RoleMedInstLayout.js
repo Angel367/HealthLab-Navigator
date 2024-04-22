@@ -1,12 +1,13 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Navigate} from "react-router-dom";
-import {isRole} from "../hooks/user.actions";
+import {getRole, isAuth, isRole, setRole} from "../hooks/user.actions";
 import UserLayout from "./UserLayout";
+import getData from "../requests/getData";
 
-function RoleMedInstLayout({children}) {
+function RoleMedInstLayout({children_for_med_inst}) {
   return (
       <UserLayout>
-        {isRole("med_inst") ? {children} : <Navigate to={'/error'} replace={true} />}
+        {isRole("medical_institution_agent") ? children_for_med_inst : <Navigate to={'/error'} replace={true} />}
       </UserLayout>
     )
 }

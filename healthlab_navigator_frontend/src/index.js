@@ -35,7 +35,7 @@ const analysis = {
                     },
                     {
                         path: 'edit',
-                        element: <Layout children={<RoleMedInstLayout children={<AnalysisEdit/>}/>}/>,
+                        element: <Layout children={<RoleMedInstLayout children_for_med_inst={<AnalysisEdit/>}/>}/>,
                         errorElement: <Layout children={<Error/>}/>,
 
                     }
@@ -49,7 +49,7 @@ const analysis = {
             },
             {
                 path: 'create',
-                element: <Layout children={<RoleMedInstLayout children={<AnalysisEdit/>}/>}/>,
+                element: <Layout children={<RoleMedInstLayout children_for_med_inst={<AnalysisEdit/>}/>}/>,
                 errorElement: <Layout children={<Error/>}/>,
             }
 
@@ -67,7 +67,7 @@ const laboratory = {
                     analysis,
                     {
                         path: 'edit',
-                        element: <Layout children={<RoleMedInstLayout children={<LaboratoryEdit/>}/>}/>,
+                        element: <Layout children={<RoleMedInstLayout children_for_med_inst={<LaboratoryEdit/>}/>}/>,
                         errorElement: <Layout children={<Error/>}/>,
                     },
                     {
@@ -84,7 +84,7 @@ const laboratory = {
             },
             {
                 path: 'create',
-                element: <Layout children={<RoleMedInstLayout children={<LaboratoryEdit/>}/>}/>,
+                element: <Layout children={<RoleMedInstLayout children_for_med_inst={<LaboratoryEdit/>}/>}/>,
                 errorElement: <Layout children={<Error/>}/>,
             }
             ]
@@ -99,12 +99,12 @@ const router = createBrowserRouter([
     },
     {
         path: '/login',
-        element: <Layout children={<AnonymousLayout children={<Login/>}/>}/>,
+        element: <Layout children={<AnonymousLayout children_for_anonymous={<Login/>}/>} title={"log"}/>,
         errorElement: <Layout children={<Error/>}/>,
     },
     {
        path: '/register',
-        element: <Layout children={<AnonymousLayout children={<Register/>}/>}/>,
+        element: <Layout children={<AnonymousLayout children_for_anonymous={<Register/>}/>} title={"reg"}/>,
         errorElement: <Layout children={<Error/>}/>,
     },
     {
@@ -126,12 +126,12 @@ const router = createBrowserRouter([
         children: [
             {
                 path: 'edit',
-                element: <Layout children={<UserLayout children={<ProfileEdit/>}/>}/>,
+                element: <Layout children={<UserLayout children_for_user={<ProfileEdit/>}/>}/>,
                 errorElement: <Layout children={<Error/>}/>,
             },
             {
                 index: true,
-                element: <Layout children={<UserLayout children={<Profile/>}/>}/>,
+                element: <Layout children={<UserLayout children_for_user={<Profile/>}/>}/>,
                 errorElement: <Layout children={<Error/>}/>,
             },
         ],

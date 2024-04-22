@@ -5,7 +5,7 @@ import Cookies from 'js-cookie';
 
 const axiosService = axios.create(
         {
-            baseURL: process.env.REACT_APP_HOST + "auth/token/verify/",
+            baseURL: process.env.REACT_APP_HOST + "/api/auth/token/verify/",
             withCredentials: true,
             headers: {
                 "Content-Type": "application/json",
@@ -30,10 +30,10 @@ const refreshAuthLogic = async (failedRequest) => {
         const {refresh} = refreshRes;
         const {access} = accessRes;
         return axios.post(
-            "token/refresh/",
+            "/api/auth/token/refresh/",
             null,
             {
-                baseURL: process.env.REACT_APP_HOST + "auth/",
+                baseURL: process.env.REACT_APP_HOST ,
                 withCredentials: true,
                 headers: {
                     Authorization: `Bearer ${access}`,
@@ -57,24 +57,23 @@ const refreshAuthLogic = async (failedRequest) => {
     }
 }
 createAuthRefreshInterceptor(axiosService,  refreshAuthLogic);
-export function fetcherUser() {
- return axiosService.get(getBaseUrl() + 'auth/update/').then((res) => res.data)
-        .catch((error) => {
-            if (error.response.status === 401) {
-                logout();
-            }
-            return error.response.data;
-        });
-
-}
-export async function updateUser(data) {
- return await axiosService.put( process.env.REACT_APP_HOST + 'auth/update/', data)
-     .then((res) => res.data)
-     .catch((error) => {
-            if (error.response.status === 401) {
-                logout();
-            }
-         return error.response.data;
-     });
-}
+// export function fetcherUser() {
+//  return axiosService.get(getBaseUrl() + 'auth/update/').then((res) => res.data)
+//         .catch((error) => {
+//             if (error.response.status === 401) {
+//                 logout();
+//             }
+//             return error.response.data;
+//         });
+// }
+// export async function updateUser(data) {
+//  return await axiosService.put( process.env.REACT_APP_HOST + '/api/auth/update/', data)
+//      .then((res) => res.data)
+//      .catch((error) => {
+//             if (error.response.status === 401) {
+//                 logout();
+//             }
+//          return error.response.data;
+//      });
+// }
 export default axiosService;

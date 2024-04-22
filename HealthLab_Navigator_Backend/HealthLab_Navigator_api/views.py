@@ -9,6 +9,7 @@ from .serializers import *
 from .models import *
 
 
+
 class MedicalInstitutionViewSet(viewsets.ModelViewSet):
     queryset = MedicalInstitution.objects.all()
     serializer_class = MedicalInstitutionSerializer
@@ -249,9 +250,6 @@ class ProfileView(UpdateAPIView, RetrieveAPIView):
 
     def get_object(self):
         return self.request.user
-
-
-
 
 
 class RegisterPatientView(CreateAPIView):

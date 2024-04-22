@@ -3,10 +3,10 @@ import {isRole} from "../hooks/user.actions";
 import {Navigate} from "react-router-dom";
 import UserLayout from "./UserLayout";
 
-function RoleUserLayout({children}) {
+function RoleUserLayout({children_for_patient}) {
   return (
     <UserLayout>
-      {isRole("user") ? children : <Navigate to="/login" /> }
+      {isRole("patient") ? children_for_patient : <Navigate to="/login" /> }
     </UserLayout>
   )
 }
