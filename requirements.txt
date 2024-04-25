@@ -43,3 +43,4 @@ urllib3==2.2.1
 w3lib==2.1.2
 zope.interface==6.2
 beautifulsoup4~=4.12.3
+Faker~=24.14.0

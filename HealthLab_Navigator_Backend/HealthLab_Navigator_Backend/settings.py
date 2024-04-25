@@ -44,7 +44,10 @@ INSTALLED_APPS = [
     'HealthLab_Navigator_api',
     'rest_framework',
     # 'corsheaders',
-    'rest_framework_simplejwt'
+    'rest_framework_simplejwt',
+    # 'django_filters',
+
+
 ] + MY_APPS
 
 REST_FRAMEWORK = {

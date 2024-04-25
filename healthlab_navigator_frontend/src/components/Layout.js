@@ -10,7 +10,7 @@ function Layout({children, title="HealthLab Navigator"}) {
         <Header/>
         <NotificationContainer/>
         {children}
-      <Footer/>
+        <Footer/>
     </div>
   );
 }

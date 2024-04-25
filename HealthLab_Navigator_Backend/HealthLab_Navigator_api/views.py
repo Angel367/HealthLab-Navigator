@@ -232,7 +232,7 @@ class ReviewViewSet(viewsets.ModelViewSet):
     serializer_class = ReviewSerializer
     permission_classes = [
         permissions.IsAuthenticated
-    ]
+    ]  # todo permissions.IsAuthenticated only for create, update, destroy
 
 
 class ReviewCommentViewSet(viewsets.ModelViewSet):

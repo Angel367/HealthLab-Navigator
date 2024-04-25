@@ -1,6 +1,11 @@
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
+STATUS_GENDER_CHOICES = [
+    ('male', 'Мужской'),
+    ('female', 'Женский'),
+    ('unknown', 'Неизвестно')
+    ]
 
 STATUS_FEEDBACK_CHOICES = [
     ('new', 'Новый'),
@@ -10,7 +15,7 @@ STATUS_FEEDBACK_CHOICES = [
 ]
 STATUS_CREATED_CHOICES = [
     ('new', 'Новый'),
-    ('waiting', 'Ожидает подтверждения'),
+    # ('waiting', 'Ожидает подтверждения'),
     ('confirmed', 'Подтвержден'),
     ('rejected', 'Отклонен'),
 ]
@@ -23,7 +28,9 @@ USER_TYPE_CHOICES = [
 
 class Phone(models.Model):
     number = models.CharField(max_length=50, verbose_name='Номер телефона', null=False, blank=False, unique=True)
-    description = models.TextField(verbose_name='Описание номера телефона', null=False, blank=True, default="")
+    branch = models.CharField(max_length=50, verbose_name='Филиал', null=True, blank=True)
+    institution = models.CharField(max_length=50, verbose_name='Медицинское учреждение', null=True, blank=True)
+    # description = models.TextField(verbose_name='Описание номера телефона', null=False, blank=True, default="")
 
     class Meta:
         verbose_name = 'Телефон'
@@ -124,7 +131,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         blank=True,
         verbose_name='Отчество'
     )
-
+    gender = models.CharField(choices=STATUS_GENDER_CHOICES, default='unknown', max_length=20,
+                                verbose_name='Пол')
     objects = CustomUserManager()
 
     USERNAME_FIELD = "phone_number"
@@ -144,10 +152,47 @@ class Patient(models.Model):
 class Visiting(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, verbose_name='Пользователь', null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания визита')
-
     class Meta:
-        verbose_name = 'Визит'
-        verbose_name_plural = 'Визиты'
+        verbose_name = 'Посещение'
+        verbose_name_plural = 'Посещения'
+
+
+class VisitingServiceInMedicalInstitution(models.Model):
+    visiting = models.ForeignKey(Visiting, on_delete=models.CASCADE, verbose_name='Визит', null=False, blank=False)
+    service = models.ForeignKey('ServiceInMedicalInstitution', on_delete=models.CASCADE, verbose_name='Услуга', null=False, blank=False)
+    class Meta:
+        verbose_name = 'Посещение услуги на стр мед учреждения'
+        verbose_name_plural = 'Посещения услуг на стр мед учреждения'
+
+class VisitingSpecialOffer(models.Model):
+    visiting = models.ForeignKey(Visiting, on_delete=models.CASCADE, verbose_name='Визит', null=False, blank=False)
+    special_offer = models.ForeignKey('SpecialOffer', on_delete=models.CASCADE, verbose_name='Спец предложение', null=False, blank=False)
+    class Meta:
+        verbose_name = 'Посещение спец предложения'
+        verbose_name_plural = 'Посещения спец предложения'
+
+
+class VisitingService(models.Model):
+    visiting = models.ForeignKey(Visiting, on_delete=models.CASCADE, verbose_name='Визит', null=False, blank=False)
+    service = models.ForeignKey('MedicalService', on_delete=models.CASCADE, verbose_name='Услуга', null=False, blank=False)
+    class Meta:
+        verbose_name = 'Посещение услуги'
+        verbose_name_plural = 'Посещения услуг'
+
+
+class VisitingMedicalInstitution(models.Model):
+    visiting = models.ForeignKey(Visiting, on_delete=models.CASCADE, verbose_name='Визит', null=False, blank=False)
+    medical_institution = models.ForeignKey('MedicalInstitution', on_delete=models.CASCADE, verbose_name='Мед учреждение', null=False, blank=False)
+    class Meta:
+        verbose_name = 'Посещение мед учреждения'
+        verbose_name_plural = 'Посещения мед учреждения'
+
+class VisitingMedicalInstitutionBranch(models.Model):
+    visiting = models.ForeignKey(Visiting, on_delete=models.CASCADE, verbose_name='Визит', null=False, blank=False)
+    medical_institution_branch = models.ForeignKey('MedicalInstitutionBranch', on_delete=models.CASCADE, verbose_name='Филиал мед учреждения', null=False, blank=False)
+    class Meta:
+        verbose_name = 'Посещение филиала мед учреждения'
+        verbose_name_plural = 'Посещения филиалов мед учреждения'
 
 class Feedback(models.Model):
     email = models.EmailField(max_length=100, verbose_name='Email пользователя', null=False, blank=False)
@@ -215,20 +260,6 @@ class Street(models.Model):
         verbose_name = 'Улица'
         verbose_name_plural = 'Улицы'
 
-
-class Location(models.Model):
-    latitude = models.CharField(max_length=50, verbose_name='Широта', null=True, blank=True)
-    longitude = models.CharField(max_length=50, verbose_name='Долгота', null=True, blank=True)
-    street = models.ForeignKey(Street, on_delete=models.SET_NULL, verbose_name='Улица', null=True, blank=True)
-    house = models.CharField(max_length=10, verbose_name='Дом', null=True, blank=True)
-    office = models.CharField(max_length=10, verbose_name='Офис', null=True, blank=True)
-    status = models.CharField(choices=STATUS_CREATED_CHOICES, default='new', max_length=20)
-
-    class Meta:
-        verbose_name = 'Локация'
-        verbose_name_plural = 'Локации'
-
-
 # Модели для медицинских учреждений
 class MedicalInstitution(models.Model):
     name = models.CharField(
@@ -238,13 +269,6 @@ class MedicalInstitution(models.Model):
         blank=False
     )
     #  foreign key (телефонов почти всегда больше одного)
-    main_phone = models.ForeignKey(
-        Phone,
-        on_delete=models.SET_NULL,
-        verbose_name='Основной телефон',
-        null=True,
-        blank=True
-    )
     website = models.URLField(
         max_length=200,
         verbose_name='Сайт',
@@ -256,13 +280,7 @@ class MedicalInstitution(models.Model):
         null=False,
         blank=False
     )
-    visiting = models.ForeignKey(
-        Visiting,
-        on_delete=models.SET_NULL,
-        verbose_name='Визиты',
-        null=True,
-        blank=True
-    )
+
     is_active = models.BooleanField(
         verbose_name='Активный',
         default=True,
@@ -290,7 +308,6 @@ class MedicalInstitutionAgent(CustomUser):
 
 
 class MedicalInstitutionBranch(models.Model):
-    phone = models.ForeignKey(Phone, on_delete=models.SET_NULL, verbose_name='Телефон', null=True, blank=True)
     medical_institution = models.ForeignKey(
         MedicalInstitution,
         on_delete=models.CASCADE,
@@ -299,23 +316,24 @@ class MedicalInstitutionBranch(models.Model):
         blank=False
     )
     is_main = models.BooleanField(verbose_name='Основной филиал', default=False, null=False, blank=False)
-    location = models.ForeignKey(Location, on_delete=models.SET_NULL, verbose_name='Локация', null=True, blank=True)
     metro_stations = models.ManyToManyField(MetroStation, verbose_name='Станции метро', blank=True)
-    working_hours = models.JSONField(verbose_name='Рабочие часы', null=False, blank=False)
-    visiting = models.ForeignKey(Visiting, on_delete=models.SET_NULL, verbose_name='Визиты', null=True, blank=True)
+    working_hours = models.JSONField(verbose_name='Рабочие часы', null=True, blank=True)
     is_active = models.BooleanField(verbose_name='Активный', default=True, null=False, blank=False)
     latitude = models.CharField(
         max_length=50,
         verbose_name='Широта',
-        null=False,
-        blank=False
+        null=True,
+        blank=True
     )
     longitude = models.CharField(
         max_length=50,
         verbose_name='Долгота',
-        null=False,
-        blank=False
+        null=True,
+        blank=True
     )
+    street = models.ForeignKey(Street, on_delete=models.SET_NULL, verbose_name='Улица', null=True, blank=True)
+    house = models.CharField(max_length=10, verbose_name='Дом', null=True, blank=True)
+    office = models.CharField(max_length=10, verbose_name='Офис', null=True, blank=True)
     url = models.URLField(
         max_length=200,
         verbose_name='Ссылка на филиал',
@@ -461,7 +479,6 @@ class ServiceInMedicalInstitution(models.Model):
         null=False,
         blank=False
     )
-    visiting = models.ForeignKey(Visiting, on_delete=models.SET_NULL, verbose_name='Визиты', null=True, blank=True)
     is_available_oms = models.BooleanField(verbose_name='Доступно по ОМС', default=False, null=False, blank=False)
     is_available_dms = models.BooleanField(verbose_name='Доступно по ДМС', default=False, null=False, blank=False)
     is_available_at_home = models.BooleanField(verbose_name='Доступно на дому', default=False, null=False, blank=False)
