@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'HealthLab_Navigator_api',
     'rest_framework',
-    # 'corsheaders',
+    'corsheaders',
     'rest_framework_simplejwt',
     # 'django_filters',
 

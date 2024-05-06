@@ -1,7 +1,6 @@
 import axios from "axios";
 import createAuthRefreshInterceptor from "axios-auth-refresh";
 import {getAccessToken, getRefreshToken, logout, setUserData} from "../hooks/user.actions";
-import Cookies from 'js-cookie';
 
 const axiosService = axios.create(
         {

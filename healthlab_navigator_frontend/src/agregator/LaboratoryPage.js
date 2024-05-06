@@ -2,73 +2,103 @@ import FilterForm from "./FilterForm";
 import HolderAdv from "./HolderAdv";
 import CardAgregator from "./CardAgregator";
 import {Link, Navigate, useParams} from "react-router-dom";
-import {isAuth, isRole} from "../hooks/user.actions";
-import RoleMedInstLayout from "../router/RoleMedInstLayout";
+import {isRole} from "../hooks/user.actions";
+import {useEffect, useState} from "react";
+import getData from "../requests/getData";
+
 
 function LaboratoryPage() {
     const {id_laboratory} = useParams();
-    const advList = [
-        {
-            img: "https://via.placeholder.com/150",
-            title: "Adv 1"
-        },
-        {
-            img: "https://via.placeholder.com/150",
-            title: "Adv 2"
-        },
-        {
-            img: "https://via.placeholder.com/150",
-            title: "Adv 3"
+    const [laboratory, setLaboratory] = useState({});
+    const [branches, setBranches] = useState([]);
+    const [offers, setOffers] = useState([]);
+    const [reviews, setReviews] = useState([]);
+
+    useEffect(() => {
+        const fetchLaboratory = async () => {
+            const resp = await getData(`/api/laboratory/${id_laboratory}/`);
+            setLaboratory(resp.data);
         }
-    ];
-    const labsList = [
-        {
-            id_analysis: 1,
-            name: 'Analysis 1',
-            price: 100,
-            duration: 1,
-            id_laboratory: 1
-        },
-        {
-            id_analysis: 2,
-            name: 'Analysis 2',
-            price: 200,
-            duration: 2,
-            id_laboratory: 2
-        },
-        {
-            id_analysis: 3,
-            name: 'Analysis 3',
-            price: 300,
-            duration: 3,
-            id_laboratory: 3
-        }];
-    let laboratory;
-    if (id_laboratory !== undefined)
-        laboratory = labsList.find(
-            lab => lab.id_laboratory == id_laboratory
-        )
-    else
-        return (
-            <Navigate to={'error'}/>
-        )
+        fetchLaboratory();
+    }, [id_laboratory]);
+    useEffect(() => {
+        const fetchBranches = async () => {
+            const resp = await getData(`/api/laboratory-branch/`, {id_laboratory: id_laboratory});
+            setBranches(resp.data);
+        }
+        fetchBranches();
+    }, [id_laboratory]);
+    useEffect(() => {
+        const fetchOffers = async () => {
+            const resp = await getData(`/api/special-offer/`, {id_laboratory: id_laboratory});
+            setOffers(resp.data);
+        }
+        fetchOffers();
+    }, [id_laboratory]);
+    useEffect(() => {
+        const fetchReviews = async () => {
+            const resp = await getData(`api/reviews/`, {id_laboratory: id_laboratory});
+            setReviews(resp.data);
+        }
+        fetchReviews();
+    }, [id_laboratory]);
+
+
 
     return (
         <div>
-
             <h1>{laboratory.name}</h1>
-
             {isRole("medical_institution_agent") ?
                 <Link to={`/laboratory/${id_laboratory}/edit`} > Редактировать </Link> :
-                <div>
-                    ПОТОМ ДОБАВЛЮ КОММЕТАРИИ
-                </div>
+                null
             }
-            <div>
-                <CardAgregator {...laboratory}/>
-            </div>
-            <FilterForm/>
-            <HolderAdv advList={advList}/>
+            <p>{laboratory.description}</p>
+            <a href={laboratory.website}>Перейти на сайт</a>ч
+
+            {offers.length > 0 ?
+                <div>
+                    <h2>Акции</h2>
+                    {offers.map((offer, index) => {
+                        return (
+                            <div key={index}>
+                                <h3>{offer.name}</h3>
+                                <p>{offer.description}</p>
+                                <p>{offer.date_start} - {offer.date_end}</p>
+                            </div>
+                        )
+                    })}
+                </div> :
+                null
+            }
+
+            {/*todo reviews*/}
+
+            {branches !== undefined && branches.length > 0  ?
+                <div>
+                    <h2>Филиалы</h2>
+                    {branches.map((branch, index) => {
+                        return (
+                            <div key={index}>
+                                <h3>{branch.is_main}</h3>
+                                <p>{branch.street}</p>
+                                <p>ПН: {branch.working_hours.пн}</p>
+                                <p>ВТ: {branch.working_hours.вт}</p>
+                                <p>СР: {branch.working_hours.ср}</p>
+                                <p>ЧТ: {branch.working_hours.чт}</p>
+                                <p>ПТ: {branch.working_hours.пт}</p>
+                                <p>СБ: {branch.working_hours.сб}</p>
+                                <p>ВС: {branch.working_hours.вс}</p>
+                                <p>{branch.phones}</p>
+
+                            </div>
+                        )
+                    })}
+                </div> :
+                null
+            }
+
+
+
         </div>
     )
 

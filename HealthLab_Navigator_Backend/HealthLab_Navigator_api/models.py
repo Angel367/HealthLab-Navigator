@@ -28,9 +28,8 @@ USER_TYPE_CHOICES = [
 
 class Phone(models.Model):
     number = models.CharField(max_length=50, verbose_name='Номер телефона', null=False, blank=False, unique=True)
-    branch = models.CharField(max_length=50, verbose_name='Филиал', null=True, blank=True)
-    institution = models.CharField(max_length=50, verbose_name='Медицинское учреждение', null=True, blank=True)
-    # description = models.TextField(verbose_name='Описание номера телефона', null=False, blank=True, default="")
+    institution = models.ForeignKey('MedicalInstitution', on_delete=models.CASCADE, verbose_name='Медицинское учреждение')
+    branch = models.ForeignKey('MedicalInstitutionBranch', on_delete=models.CASCADE, verbose_name='Филиал', null=True, blank=True)
 
     class Meta:
         verbose_name = 'Телефон'
@@ -229,6 +228,7 @@ class District(models.Model):
 
 
 class MetroLine(models.Model):
+    city = models.ForeignKey(City, on_delete=models.CASCADE, verbose_name='Город', null=False, blank=False)
     name = models.CharField(max_length=100, verbose_name='Название линии метро', null=False, blank=False)
     color = models.CharField(max_length=100, verbose_name='Цвет линии метро', null=False, blank=False)
 
@@ -239,15 +239,7 @@ class MetroLine(models.Model):
 
 class MetroStation(models.Model):
     name = models.CharField(max_length=100, verbose_name='Название станции метро', null=False, blank=False)
-    line = models.CharField(max_length=100, verbose_name='Линия метро', null=False, blank=False)
-
-    class Meta:
-        verbose_name = 'Станция метро'
-        verbose_name_plural = 'Станции метро'
-
-
-class Street(models.Model):
-    name = models.CharField(max_length=100, verbose_name='Название улицы', null=False, blank=False)
+    line = models.ForeignKey(MetroLine, on_delete=models.CASCADE, verbose_name='Линия метро', null=False, blank=False)
     district = models.ForeignKey(
         District,
         on_delete=models.CASCADE,
@@ -257,8 +249,40 @@ class Street(models.Model):
     )
 
     class Meta:
+        verbose_name = 'Станция метро'
+        verbose_name_plural = 'Станции метро'
+
+
+class Street(models.Model):
+    name = models.CharField(max_length=100, verbose_name='Название улицы', null=False, blank=False)
+    districts = models.ManyToManyField(District, verbose_name='Районы', blank=True)
+
+    class Meta:
         verbose_name = 'Улица'
         verbose_name_plural = 'Улицы'
+
+
+class Address(models.Model):
+    street = models.ForeignKey(Street, on_delete=models.CASCADE, verbose_name='Улица', null=False, blank=False)
+    house = models.CharField(max_length=10, verbose_name='Дом', null=False, blank=False)
+    office = models.CharField(max_length=10, verbose_name='Офис', null=True, blank=True)
+    latitude = models.CharField(
+        max_length=50,
+        verbose_name='Широта',
+        null=True,
+        blank=True
+    )
+    longitude = models.CharField(
+        max_length=50,
+        verbose_name='Долгота',
+        null=True,
+        blank=True
+    )
+    comment = models.TextField(
+        verbose_name='Комментарий',
+        null=True,
+        blank=True,
+        max_length=100)
 
 # Модели для медицинских учреждений
 class MedicalInstitution(models.Model):
@@ -287,7 +311,6 @@ class MedicalInstitution(models.Model):
         null=False,
         blank=False
     )
-
     class Meta:
         verbose_name = 'Медицинское учреждение'
         verbose_name_plural = 'Медицинские учреждения'
@@ -316,30 +339,22 @@ class MedicalInstitutionBranch(models.Model):
         blank=False
     )
     is_main = models.BooleanField(verbose_name='Основной филиал', default=False, null=False, blank=False)
-    metro_stations = models.ManyToManyField(MetroStation, verbose_name='Станции метро', blank=True)
     working_hours = models.JSONField(verbose_name='Рабочие часы', null=True, blank=True)
     is_active = models.BooleanField(verbose_name='Активный', default=True, null=False, blank=False)
-    latitude = models.CharField(
-        max_length=50,
-        verbose_name='Широта',
-        null=True,
-        blank=True
-    )
-    longitude = models.CharField(
-        max_length=50,
-        verbose_name='Долгота',
-        null=True,
-        blank=True
-    )
-    street = models.ForeignKey(Street, on_delete=models.SET_NULL, verbose_name='Улица', null=True, blank=True)
-    house = models.CharField(max_length=10, verbose_name='Дом', null=True, blank=True)
-    office = models.CharField(max_length=10, verbose_name='Офис', null=True, blank=True)
     url = models.URLField(
         max_length=200,
         verbose_name='Ссылка на филиал',
         null=True,
         blank=True
     )
+    address = models.ForeignKey(
+        Address,
+        on_delete=models.CASCADE,
+        verbose_name='Адрес',
+        null=True,
+        blank=True
+    )
+
     class Meta:
         verbose_name = 'Филиал медицинского учреждения'
         verbose_name_plural = 'Филиалы медицинского учреждения'

@@ -13,7 +13,7 @@ import About from "./main/About";
 import ProfileEdit from "./accounts/auth/ProfileEdit";
 import Profile from "./accounts/users/Profile";
 import LaboratoryEdit from "./accounts/med_Insts/LaboratoryEdit";
-import Laboratory from "./agregator/Laboratory";
+import Laboratories from "./agregator/Laboratories";
 import Analysis from "./agregator/Analysis";
 import AnalysisEdit from "./accounts/med_Insts/AnalysisEdit";
 import AnalysisPage from "./agregator/AnalysisPage";
@@ -79,7 +79,7 @@ const laboratory = {
             },
             {
                 index: true,
-                element: <Layout children={<Laboratory/>}/>,
+                element: <Layout children={<Laboratories/>}/>,
                 errorElement: <Layout children={<Error/>}/>,
             },
             {

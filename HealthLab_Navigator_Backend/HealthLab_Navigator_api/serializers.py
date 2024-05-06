@@ -2,13 +2,75 @@ from rest_framework import serializers
 from .models import *
 
 
-class MedicalInstitutionSerializer(serializers.ModelSerializer):
+class PhoneSerializer(serializers.ModelSerializer):
     class Meta:
-        model = MedicalInstitution
+        model = Phone
+        fields = '__all__'
+
+
+class CitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = City
+        fields = '__all__'
+
+
+class MetroLineSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MetroLine
+        fields = '__all__'
+
+
+class MetroStationSerializer(serializers.ModelSerializer):
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['line'] = MetroLineSerializer(instance.line).data
+        return representation
+
+    class Meta:
+        model = MetroStation
+        fields = '__all__'
+
+
+class DistrictSerializer(serializers.ModelSerializer):
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['city'] = CitySerializer(instance.city).data
+        representation['metro_stations'] = MetroStationSerializer(instance.metro_stations, many=True).data
+        return representation
+    # todo
+    
+
+    class Meta:
+        model = District
+        fields = '__all__'
+
+
+class StreetSerializer(serializers.ModelSerializer):
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['districts'] = DistrictSerializer(instance.districts, many=True).data
+
+        return representation
+
+    class Meta:
+        model = Street
+        fields = '__all__'
+
+
+class AddressSerializer(serializers.ModelSerializer):
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['street'] = StreetSerializer(instance.street).data
+        return representation
+
+    class Meta:
+        model = Address
         fields = '__all__'
 
 
 class MedicalInstitutionBranchSerializer(serializers.ModelSerializer):
+    address = AddressSerializer()
+
     class Meta:
         model = MedicalInstitutionBranch
         fields = '__all__'
@@ -23,6 +85,13 @@ class MedicalInstitutionServiceSerializer(serializers.ModelSerializer):
 class PriceHistorySerializer(serializers.ModelSerializer):
     class Meta:
         model = PriceHistory
+        fields = '__all__'
+
+
+class MedicalInstitutionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = MedicalInstitution
         fields = '__all__'
 
 
@@ -106,6 +175,8 @@ class ChangePasswordSerializer(serializers.Serializer):
         instance.set_password(validated_data['new_password'])
         instance.save()
         return instance
+
+
 
 
 class UserSerializer(serializers.ModelSerializer):
