@@ -24,14 +24,12 @@ class GemotestMoscowBranchSpider(scrapy.Spider):
 
     def parse(self, response, **kwargs):
         coords = self.get_address(response)
-        workings_hours = self.get_working_hours(response)
-        print(workings_hours)
         yield {
             'latitude': coords.get("latitude"),
             'longitude': coords.get("longitude"),
             'address': coords.get("address"),
+            'metro_stations': ...,
             'url': response.url,
-            'working_hours': workings_hours,
             'lab': self.lab
         }
 

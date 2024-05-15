@@ -43,9 +43,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'HealthLab_Navigator_api',
     'rest_framework',
-    # 'corsheaders',
+    'corsheaders',
     'rest_framework_simplejwt',
-    # 'django_filters',
+    'django_filters',
 
 
 ] + MY_APPS
@@ -54,12 +54,12 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
-    # 'DEFAULT_FILTER_BACKENDS': (
-    #     'django_filters.rest_framework.DjangoFilterBackend',
-    # ),
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ),
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
-    # 'DEFAULT_PAGINATION_CLASS': 'cosmetic_meow_api.pagination.CustomPagination',
-    # 'PAGE_SIZE': 10
+    'DEFAULT_PAGINATION_CLASS': 'HealthLab_Navigator_api.pagination.CustomPagination',
+    'PAGE_SIZE': 10
 }
 
 CORS_ALLOW_CREDENTIALS = True

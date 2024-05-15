@@ -14,10 +14,9 @@ router.register(r'medical-service', MedicalServiceViewSet, basename='medical-ser
 router.register(r'medical-institution', MedicalInstitutionViewSet, basename='medical-institution')
 router.register(r'medical-institution-branch', MedicalInstitutionBranchViewSet, basename='medical-institution-branch')
 router.register(r'medical-institution-service', MedicalInstitutionServiceViewSet, basename='medical-institution-service')
-router.register(r'medical-institution-service-price', MedicalInstitutionServicePriceViewSet,
-                basename='medical-institution-service-price')
-
-
+router.register(r'metro-line', MetroLineViewSet, basename='metro-line')
+router.register(r'metro-station', MetroStationViewSet, basename='metro-station')
+router.register(r'research-material', ResearchMaterialViewSet, basename='research-material')
 router.register(r'illness', IllnessViewSet, basename='illness')
 router.register(r'medical-system', MedicalSystemViewSet, basename='medical-system')
 router.register(r'feedback', FeedbackViewSet, basename='feedback')

@@ -7,6 +7,7 @@ from .permissions import IsSuperuserOrReadOnly, MedicalAgentPermission
 
 from .serializers import *
 from .models import *
+from .filters import *
 
 
 
@@ -38,115 +39,87 @@ class MedicalInstitutionViewSet(viewsets.ModelViewSet):
 
 class MedicalInstitutionBranchViewSet(viewsets.ModelViewSet):
     queryset = MedicalInstitutionBranch.objects.all()
-    permission_classes = [IsSuperuserOrReadOnly, MedicalAgentPermission]
+    permission_classes = [permissions.AllowAny]
     serializer_class = MedicalInstitutionBranchSerializer
 
-    def create(self, request, *args, **kwargs):
-        medical_institution = MedicalInstitution.objects.get(id=request.data['medical_institution'])
-        if (request.user.is_superuser or request.user.is_medical_agent and
-                MedicalInstitutionAgent.objects.filter(agent=request.user,
-                                                       medical_institution=medical_institution).exists()):
-            return super().create(request, *args, **kwargs)
-        else:
-            return self.permission_denied(request)
+    # def create(self, request, *args, **kwargs):
+    #     medical_institution = MedicalInstitution.objects.get(id=request.data['medical_institution'])
+    #     if (request.user.is_superuser or request.user.is_medical_agent and
+    #             MedicalInstitutionAgent.objects.filter(agent=request.user,
+    #                                                    medical_institution=medical_institution).exists()):
+    #         return super().create(request, *args, **kwargs)
+    #     else:
+    #         return self.permission_denied(request)
 
-    def destroy(self, request, *args, **kwargs):
-        if request.user.is_superuser:
-            return super().destroy(request, *args, **kwargs)
-        else:
-            return self.permission_denied(request)
-
-    def update(self, request, *args, **kwargs):
-        medical_institution = MedicalInstitution.objects.get(id=request.data['medical_institution'])
-        if request.user.is_superuser or request.user.is_medical_agent and \
-                MedicalInstitutionAgent.objects.filter(agent=request.user,
-                                                       medical_institution=medical_institution).exists():
-            return super().update(request, *args, **kwargs)
+    # def destroy(self, request, *args, **kwargs):
+    #     if request.user.is_superuser:
+    #         return super().destroy(request, *args, **kwargs)
+    #     else:
+    #         return self.permission_denied(request)
+    #
+    # def update(self, request, *args, **kwargs):
+    #     medical_institution = MedicalInstitution.objects.get(id=request.data['medical_institution'])
+    #     if request.user.is_superuser or request.user.is_medical_agent and \
+    #             MedicalInstitutionAgent.objects.filter(agent=request.user,
+    #                                                    medical_institution=medical_institution).exists():
+    #         return super().update(request, *args, **kwargs)
 
 
 class MedicalInstitutionServiceViewSet(viewsets.ModelViewSet):
     queryset = ServiceInMedicalInstitution.objects.all()
-    serializers_class = MedicalInstitutionServiceSerializer
-    permission_classes = [IsSuperuserOrReadOnly, MedicalAgentPermission]
+    serializer_class = ServiceInMedicalInstitutionSerializer
+    permission_classes = [permissions.AllowAny]
 
-    def create(self, request, *args, **kwargs):
-        medical_institution = get_object_or_404(MedicalInstitution.objects.get(id=request.data['medical_institution']))
-        if (request.user.is_superuser or request.user.is_medical_agent and
-                MedicalInstitutionAgent.objects.filter(agent=request.user,
-                                                       medical_institution=medical_institution).exists()):
-            return super().create(request, *args, **kwargs)
-        else:
-            return self.permission_denied(request)
-
-    def destroy(self, request, *args, **kwargs):
-        if request.user.is_superuser:
-            return super().destroy(request, *args, **kwargs)
-        else:
-            return self.permission_denied(request)
-
-    def update(self, request, *args, **kwargs):
-        medical_institution = get_object_or_404(MedicalInstitution.objects.get(id=request.data['medical_institution']))
-        if request.user.is_superuser or request.user.is_medical_agent and \
-                MedicalInstitutionAgent.objects.filter(agent=request.user,
-                                                       medical_institution=medical_institution).exists():
-            return super().update(request, *args, **kwargs)
+    # def create(self, request, *args, **kwargs):
+    #     medical_institution = get_object_or_404(MedicalInstitution.objects.get(id=request.data['medical_institution']))
+    #     if (request.user.is_superuser or request.user.is_medical_agent and
+    #             MedicalInstitutionAgent.objects.filter(agent=request.user,
+    #                                                    medical_institution=medical_institution).exists()):
+    #         return super().create(request, *args, **kwargs)
+    #     else:
+    #         return self.permission_denied(request)
+    #
+    # def destroy(self, request, *args, **kwargs):
+    #     if request.user.is_superuser:
+    #         return super().destroy(request, *args, **kwargs)
+    #     else:
+    #         return self.permission_denied(request)
+    #
+    # def update(self, request, *args, **kwargs):
+    #     medical_institution = get_object_or_404(MedicalInstitution.objects.get(id=request.data['medical_institution']))
+    #     if request.user.is_superuser or request.user.is_medical_agent and \
+    #             MedicalInstitutionAgent.objects.filter(agent=request.user,
+    #                                                    medical_institution=medical_institution).exists():
+    #         return super().update(request, *args, **kwargs)
 
 
 class MedicalServiceViewSet(viewsets.ModelViewSet):
     queryset = MedicalService.objects.all()
     serializer_class = MedicalServiceSerializer
-    permission_classes = [IsSuperuserOrReadOnly]
-
-    def create(self, request, *args, **kwargs):
-        if request.user.is_superuser:
-            return super().create(request, *args, **kwargs)
-        elif request.user.is_medical_agent:
-            request.data['status'] = 'new'
-            return super().create(request, *args, **kwargs)
-        else:
-            return self.permission_denied(request)
-
-    def destroy(self, request, *args, **kwargs):
-        if request.user.is_superuser:
-            return super().destroy(request, *args, **kwargs)
-        else:
-            return self.permission_denied(request)
-
-    def update(self, request, *args, **kwargs):
-        if request.user.is_superuser:
-            return super().update(request, *args, **kwargs)
-        else:
-            return self.permission_denied(request)
+    permission_classes = [permissions.AllowAny]
+    filterset_class = MedicalServiceFilter
 
 
-class MedicalInstitutionServicePriceViewSet(viewsets.ModelViewSet):
-    queryset = PriceHistory.objects.all()
-    serializer_class = PriceHistorySerializer
-    permission_classes = [IsSuperuserOrReadOnly, MedicalAgentPermission]
-
-    def create(self, request, *args, **kwargs):
-        medical_service = get_object_or_404(MedicalService.objects.get(id=request.data['medical_service']))
-        medical_institution = get_object_or_404(
-            MedicalInstitution.objects.get(id=medical_service.medical_institution.id))
-        if request.user.is_superuser or request.user.is_medical_agent and \
-                MedicalInstitutionAgent.objects.filter(agent=request.user,
-                                                       medical_institution=medical_institution).exists():
-            return super().create(request, *args, **kwargs)
-
-    def destroy(self, request, *args, **kwargs):
-        if request.user.is_superuser:
-            return super().destroy(request, *args, **kwargs)
-        else:
-            return self.permission_denied(request)
-
-    def update(self, request, *args, **kwargs):
-        medical_service = get_object_or_404(MedicalService.objects.get(id=request.data['medical_service']))
-        medical_institution = get_object_or_404(
-            MedicalInstitution.objects.get(id=medical_service.medical_institution.id))
-        if request.user.is_superuser or request.user.is_medical_agent and \
-                MedicalInstitutionAgent.objects.filter(agent=request.user,
-                                                       medical_institution=medical_institution).exists():
-            return super().update(request, *args, **kwargs)
+    # def create(self, request, *args, **kwargs):
+    #     if request.user.is_superuser:
+    #         return super().create(request, *args, **kwargs)
+    #     elif request.user.is_medical_agent:
+    #         request.data['status'] = 'new'
+    #         return super().create(request, *args, **kwargs)
+    #     else:
+    #         return self.permission_denied(request)
+    #
+    # def destroy(self, request, *args, **kwargs):
+    #     if request.user.is_superuser:
+    #         return super().destroy(request, *args, **kwargs)
+    #     else:
+    #         return self.permission_denied(request)
+    #
+    # def update(self, request, *args, **kwargs):
+    #     if request.user.is_superuser:
+    #         return super().update(request, *args, **kwargs)
+    #     else:
+    #         return self.permission_denied(request)
 
 
 class IllnessViewSet(viewsets.ModelViewSet):
@@ -327,3 +300,19 @@ class SpecialOfferForPatientViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
 
+class MetroLineViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = MetroLine.objects.all()
+    serializer_class = MetroLineSerializer
+    permission_classes = [permissions.AllowAny]
+
+class MetroStationViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = MetroStation.objects.all()
+    serializer_class = MetroStationSerializer
+    permission_classes = [permissions.AllowAny]
+    filterset_class = MetroStationFilter
+
+class ResearchMaterialViewSet(viewsets.ModelViewSet):
+    queryset = ResearchMaterial.objects.all()
+    serializer_class = ResearchMaterialSerializer
+    permission_classes = [permissions.AllowAny]
+    filterset_class = ResearchMaterialFilter

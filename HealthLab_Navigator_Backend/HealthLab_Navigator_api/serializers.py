@@ -14,15 +14,9 @@ class MedicalInstitutionBranchSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class MedicalInstitutionServiceSerializer(serializers.ModelSerializer):
+class ServiceInMedicalInstitutionSerializer(serializers.ModelSerializer):
     class Meta:
         model = ServiceInMedicalInstitution
-        fields = '__all__'
-
-
-class PriceHistorySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = PriceHistory
         fields = '__all__'
 
 
@@ -151,3 +145,14 @@ class RegisterAgentSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = CustomUser.objects.create_agent(**validated_data)
         return user
+
+
+class MetroLineSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MetroLine
+        fields = '__all__'
+
+class MetroStationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MetroStation
+        fields = '__all__'

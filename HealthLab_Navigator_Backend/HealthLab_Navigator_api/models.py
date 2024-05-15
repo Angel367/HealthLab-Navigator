@@ -1,11 +1,13 @@
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
+
 STATUS_GENDER_CHOICES = [
     ('male', 'Мужской'),
     ('female', 'Женский'),
+    ('other', 'Другой'),
     ('unknown', 'Неизвестно')
-    ]
+]
 
 STATUS_FEEDBACK_CHOICES = [
     ('new', 'Новый'),
@@ -152,6 +154,7 @@ class Patient(models.Model):
 class Visiting(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, verbose_name='Пользователь', null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания визита')
+
     class Meta:
         verbose_name = 'Посещение'
         verbose_name_plural = 'Посещения'
@@ -160,6 +163,7 @@ class Visiting(models.Model):
 class VisitingServiceInMedicalInstitution(models.Model):
     visiting = models.ForeignKey(Visiting, on_delete=models.CASCADE, verbose_name='Визит', null=False, blank=False)
     service = models.ForeignKey('ServiceInMedicalInstitution', on_delete=models.CASCADE, verbose_name='Услуга', null=False, blank=False)
+
     class Meta:
         verbose_name = 'Посещение услуги на стр мед учреждения'
         verbose_name_plural = 'Посещения услуг на стр мед учреждения'
@@ -167,6 +171,7 @@ class VisitingServiceInMedicalInstitution(models.Model):
 class VisitingSpecialOffer(models.Model):
     visiting = models.ForeignKey(Visiting, on_delete=models.CASCADE, verbose_name='Визит', null=False, blank=False)
     special_offer = models.ForeignKey('SpecialOffer', on_delete=models.CASCADE, verbose_name='Спец предложение', null=False, blank=False)
+
     class Meta:
         verbose_name = 'Посещение спец предложения'
         verbose_name_plural = 'Посещения спец предложения'
@@ -175,6 +180,7 @@ class VisitingSpecialOffer(models.Model):
 class VisitingService(models.Model):
     visiting = models.ForeignKey(Visiting, on_delete=models.CASCADE, verbose_name='Визит', null=False, blank=False)
     service = models.ForeignKey('MedicalService', on_delete=models.CASCADE, verbose_name='Услуга', null=False, blank=False)
+
     class Meta:
         verbose_name = 'Посещение услуги'
         verbose_name_plural = 'Посещения услуг'
@@ -183,16 +189,21 @@ class VisitingService(models.Model):
 class VisitingMedicalInstitution(models.Model):
     visiting = models.ForeignKey(Visiting, on_delete=models.CASCADE, verbose_name='Визит', null=False, blank=False)
     medical_institution = models.ForeignKey('MedicalInstitution', on_delete=models.CASCADE, verbose_name='Мед учреждение', null=False, blank=False)
+
     class Meta:
         verbose_name = 'Посещение мед учреждения'
         verbose_name_plural = 'Посещения мед учреждения'
 
+
 class VisitingMedicalInstitutionBranch(models.Model):
     visiting = models.ForeignKey(Visiting, on_delete=models.CASCADE, verbose_name='Визит', null=False, blank=False)
     medical_institution_branch = models.ForeignKey('MedicalInstitutionBranch', on_delete=models.CASCADE, verbose_name='Филиал мед учреждения', null=False, blank=False)
+
     class Meta:
         verbose_name = 'Посещение филиала мед учреждения'
         verbose_name_plural = 'Посещения филиалов мед учреждения'
+
+
 
 class Feedback(models.Model):
     email = models.EmailField(max_length=100, verbose_name='Email пользователя', null=False, blank=False)
@@ -230,6 +241,7 @@ class District(models.Model):
 
 class MetroLine(models.Model):
     name = models.CharField(max_length=100, verbose_name='Название линии метро', null=False, blank=False)
+    number = models.PositiveSmallIntegerField(verbose_name='Номер линии метро', default=0, null=False, blank=False)
     color = models.CharField(max_length=100, verbose_name='Цвет линии метро', null=False, blank=False)
 
     class Meta:
@@ -239,7 +251,15 @@ class MetroLine(models.Model):
 
 class MetroStation(models.Model):
     name = models.CharField(max_length=100, verbose_name='Название станции метро', null=False, blank=False)
-    line = models.CharField(max_length=100, verbose_name='Линия метро', null=False, blank=False)
+    latitude = models.CharField(max_length=50, verbose_name='Широта', null=True, blank=True)
+    longitude = models.CharField(max_length=50, verbose_name='Долгота', null=True, blank=True)
+    line = models.ForeignKey(
+        to=MetroLine,
+        on_delete=models.CASCADE,
+        verbose_name='Линия метро',
+        null=False,
+        blank=False
+    )
 
     class Meta:
         verbose_name = 'Станция метро'
@@ -350,7 +370,8 @@ class ResearchMaterial(models.Model):
         max_length=50,
         verbose_name='Название материала',
         null=False,
-        blank=False
+        blank=False,
+        unique=True
     )
     description = models.TextField(
         verbose_name='Описание',
@@ -420,7 +441,8 @@ class MedicalService(models.Model):
     main_description = models.TextField(
         verbose_name='Описание',
         null=False,
-        blank=False
+        blank=False,
+        default=""
     )
     # для создания этой сущности необходимо подтверждение модератора
     research_systems = models.ManyToManyField(
@@ -449,23 +471,15 @@ class MedicalService(models.Model):
         related_name='research_material'
     )
     # не у всех ведь есть код
-    government_code_804n = models.CharField(
-        max_length=12,
-        verbose_name='Код услуги по 804н',
-        null=False,
+    government_code_804n = models.JSONField(
+        verbose_name='Коды услуги по 804н',
+        null=True,
         blank=True
     )
 
     class Meta:
         verbose_name = 'Медицинская услуга'
         verbose_name_plural = 'Медицинские услуги'
-
-
-class PriceHistory(models.Model):
-    price_value = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Цена', null=False, blank=False)
-    created = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания цены')
-    start = models.DateTimeField(verbose_name='Дата начала действия цены', null=False, blank=False)
-    end = models.DateTimeField(verbose_name='Дата окончания действия цены', null=True, blank=True)
 
 
 class ServiceInMedicalInstitution(models.Model):
@@ -484,12 +498,27 @@ class ServiceInMedicalInstitution(models.Model):
     is_available_at_home = models.BooleanField(verbose_name='Доступно на дому', default=False, null=False, blank=False)
     is_available_fast_result = models.BooleanField(verbose_name='Доступно при скором результате', default=False,
                                                    null=False, blank=False)
-    price_for_at_home = models.ForeignKey(PriceHistory, on_delete=models.SET_NULL, verbose_name='Цена за выезд',
-                                          null=True, blank=True, related_name='price_for_at_home')
-    price = models.ForeignKey(PriceHistory, on_delete=models.SET_NULL, verbose_name='Цена', null=True, blank=True, related_name='price')
-    price_for_fast_result = models.ForeignKey(PriceHistory, on_delete=models.SET_NULL,
-                                              verbose_name='Цена при скором результате', null=True, blank=True,
-                                                related_name='price_for_fast_result')
+    price = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        verbose_name='Цена',
+        null=True,
+        blank=True
+    )
+    price_for_fast_result = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        verbose_name='Цена при скором результате',
+        null=True,
+        blank=True
+    )
+    price_for_at_home = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        verbose_name='Цена на дому',
+        null=True,
+        blank=True
+    )
     time_to_complete = models.DurationField(
         verbose_name='Время выполнения',
         null=True,
@@ -506,10 +535,18 @@ class ServiceInMedicalInstitution(models.Model):
         null=True,
         blank=True
     )
+    url = models.URLField(
+        max_length=500,
+        verbose_name='Ссылка на услугу',
+        null=True,
+        blank=True
+    )
+
 
     class Meta:
         verbose_name = 'Медицинское учреждение в услуге'
         verbose_name_plural = 'Медицинские учреждения в услугах'
+        unique_together = ['service', 'medical_institution']
 
 
 class SpecialOffer(models.Model):

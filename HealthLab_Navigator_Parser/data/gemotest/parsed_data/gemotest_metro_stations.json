@@ -1,0 +1,1417 @@
+[
+    {
+        "metro_stations": [
+            "{{subway.title}}"
+        ],
+        "url": "https://gemotest.ruNone"
+    },
+    {
+        "metro_stations": [
+            "Бульвар Рокоссовского"
+        ],
+        "url": "https://gemotest.ru/moskva/address/ivanteevskaya-ulitsa-19/"
+    },
+    {
+        "metro_stations": [
+            "Окружная"
+        ],
+        "url": "https://gemotest.ru/moskva/address/dmitrovskoe-shosse-59k1/"
+    },
+    {
+        "metro_stations": [],
+        "url": "https://gemotest.ru/moskva/address/poselenie-vnukovskoe-ulitsa-letchika-gritsevtsa-4-pom-4/"
+    },
+    {
+        "metro_stations": [
+            "Авиамоторная"
+        ],
+        "url": "https://gemotest.ru/moskva/address/shosse-entuziastov-11ak2/"
+    },
+    {
+        "metro_stations": [
+            "Текстильщики"
+        ],
+        "url": "https://gemotest.ru/moskva/address/11-ya-ulitsa-tekstilshchikov-11/"
+    },
+    {
+        "metro_stations": [
+            "Нагорная"
+        ],
+        "url": "https://gemotest.ru/moskva/address/elektrolitnyy-proezd-16k2/"
+    },
+    {
+        "metro_stations": [],
+        "url": "https://gemotest.ru/moskva/address/dmitrovskoe-shosse-165ek6/"
+    },
+    {
+        "metro_stations": [],
+        "url": "https://gemotest.ru/moskva/address/sokolovo-meshcherskaya-ulitsa-14/"
+    },
+    {
+        "metro_stations": [
+            "Савёловская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/ulitsa-sushchevskiy-val-3-5a/"
+    },
+    {
+        "metro_stations": [],
+        "url": "https://gemotest.ru/moskva/address/prospekt-marshala-zhukova-68k1/"
+    },
+    {
+        "metro_stations": [
+            "Коптево"
+        ],
+        "url": "https://gemotest.ru/moskva/address/mikhalkovskaya-ulitsa-2/"
+    },
+    {
+        "metro_stations": [
+            "Ясенево"
+        ],
+        "url": "https://gemotest.ru/moskva/address/yasnogorskaya-ulitsa-17k1/"
+    },
+    {
+        "metro_stations": [],
+        "url": "https://gemotest.ru/moskva/address/ulitsa-marshala-savitskogo-18/"
+    },
+    {
+        "metro_stations": [
+            "Шаболовская",
+            "Тульская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/lyusinovskaya-ulitsa-66/"
+    },
+    {
+        "metro_stations": [
+            "Перово"
+        ],
+        "url": "https://gemotest.ru/moskva/address/perovskaya-ulitsa-22k1/"
+    },
+    {
+        "metro_stations": [
+            "Улица Дмитриевского"
+        ],
+        "url": "https://gemotest.ru/moskva/address/ulitsa-rudnevka-2/"
+    },
+    {
+        "metro_stations": [
+            "Пятницкое шоссе",
+            "Митино"
+        ],
+        "url": "https://gemotest.ru/moskva/address/mitinskaya-ulitsa-49/"
+    },
+    {
+        "metro_stations": [],
+        "url": "https://gemotest.ru/moskva/address/novovatutinskiy-prospekt-12/"
+    },
+    {
+        "metro_stations": [
+            "Бауманская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/ladozhskaya-ulitsa-8/"
+    },
+    {
+        "metro_stations": [
+            "Алма-Атинская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/paromnaya-ulitsa-3/"
+    },
+    {
+        "metro_stations": [
+            "Проспект Вернадского"
+        ],
+        "url": "https://gemotest.ru/moskva/address/ulitsa-udaltsova-71k3/"
+    },
+    {
+        "metro_stations": [],
+        "url": "https://gemotest.ru/moskva/address/moskovskiy-1-y-mikrorayon-5g/"
+    },
+    {
+        "metro_stations": [
+            "Южная"
+        ],
+        "url": "https://gemotest.ru/moskva/address/sumskaya-ulitsa-6k1/"
+    },
+    {
+        "metro_stations": [
+            "Пионерская",
+            "Славянский бульвар"
+        ],
+        "url": "https://gemotest.ru/moskva/address/kastanaevskaya-ulitsa-41/"
+    },
+    {
+        "metro_stations": [
+            "Ростокино",
+            "ВДНХ"
+        ],
+        "url": "https://gemotest.ru/moskva/address/prospekt-mira-188bk4/"
+    },
+    {
+        "metro_stations": [
+            "Улица Академика Янгеля"
+        ],
+        "url": "https://gemotest.ru/moskva/address/ulitsa-akademika-yangelya-2/"
+    },
+    {
+        "metro_stations": [
+            "Шипиловская",
+            "Зябликово",
+            "Красногвардейская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/ulitsa-musy-dzhalilya-31k1/"
+    },
+    {
+        "metro_stations": [
+            "Автозаводская",
+            "Дубровка"
+        ],
+        "url": "https://gemotest.ru/moskva/address/velozavodskaya-ulitsa-2k3/"
+    },
+    {
+        "metro_stations": [
+            "Парк Победы",
+            "Деловой центр",
+            "Фили",
+            "Кутузовская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/kutuzovskiy-proezd-4/"
+    },
+    {
+        "metro_stations": [
+            "Фонвизинская",
+            "Улица Милашенкова"
+        ],
+        "url": "https://gemotest.ru/moskva/address/bolshaya-marfinskaya-ulitsa-1k2/"
+    },
+    {
+        "metro_stations": [
+            "Марьино"
+        ],
+        "url": "https://gemotest.ru/moskva/address/novocherkasskiy-bulvar-55/"
+    },
+    {
+        "metro_stations": [
+            "Кантемировская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/ulitsa-moskvoreche-4k6/"
+    },
+    {
+        "metro_stations": [
+            "Отрадное"
+        ],
+        "url": "https://gemotest.ru/moskva/address/ulitsa-dekabristov-21/"
+    },
+    {
+        "metro_stations": [
+            "Сухаревская",
+            "Трубная",
+            "Тургеневская",
+            "Чистые пруды",
+            "Кузнецкий мост",
+            "Лубянка",
+            "Цветной бульвар",
+            "Сретенский бульвар"
+        ],
+        "url": "https://gemotest.ru/moskva/address/rozhdestvenskiy-bulvar-21s2/"
+    },
+    {
+        "metro_stations": [
+            "Свиблово",
+            "Ботанический сад"
+        ],
+        "url": "https://gemotest.ru/moskva/address/snezhnaya-ulitsa-17k1/"
+    },
+    {
+        "metro_stations": [
+            "Лужники",
+            "Спортивная"
+        ],
+        "url": "https://gemotest.ru/moskva/address/ulitsa-khamovnicheskiy-val-14/"
+    },
+    {
+        "metro_stations": [
+            "Крымская",
+            "Верхние Котлы"
+        ],
+        "url": "https://gemotest.ru/moskva/address/zagorodnoe-shosse-4k2/"
+    },
+    {
+        "metro_stations": [],
+        "url": "https://gemotest.ru/moskva/address/ulitsa-artamonova-16k1/"
+    },
+    {
+        "metro_stations": [
+            "Дмитровская",
+            "Тимирязевская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/ulitsa-vsevoloda-vishnevskogo-9/"
+    },
+    {
+        "metro_stations": [
+            "Новопеределкино"
+        ],
+        "url": "https://gemotest.ru/moskva/address/lukinskaya-ulitsa-16/"
+    },
+    {
+        "metro_stations": [
+            "Раменки",
+            "Ломоносовский проспект"
+        ],
+        "url": "https://gemotest.ru/moskva/address/michurinskiy-prospekt-7k1/"
+    },
+    {
+        "metro_stations": [
+            "Некрасовка"
+        ],
+        "url": "https://gemotest.ru/moskva/address/prospekt-zashchitnikov-moskvy-14/"
+    },
+    {
+        "metro_stations": [
+            "Коломенская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/sudostroitelnaya-ulitsa-20-2k2/"
+    },
+    {
+        "metro_stations": [
+            "Новогиреево",
+            "Первомайская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/shosse-entuziastov-55/"
+    },
+    {
+        "metro_stations": [
+            "Нахимовский проспект",
+            "Каховская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/sivashskaya-ulitsa-9/"
+    },
+    {
+        "metro_stations": [
+            "Жулебино",
+            "Котельники"
+        ],
+        "url": "https://gemotest.ru/moskva/address/ulitsa-aviakonstruktora-milya-16/"
+    },
+    {
+        "metro_stations": [
+            "Митино"
+        ],
+        "url": "https://gemotest.ru/moskva/address/mitinskaya-ulitsa-27/"
+    },
+    {
+        "metro_stations": [
+            "Братиславская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/novomarinskaya-ulitsa-32/"
+    },
+    {
+        "metro_stations": [],
+        "url": "https://gemotest.ru/moskva/address/lopatino-sukhanovskaya-ulitsa-9/"
+    },
+    {
+        "metro_stations": [
+            "Первомайская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/7-ya-parkovaya-ulitsa-15k2/"
+    },
+    {
+        "metro_stations": [
+            "Медведково"
+        ],
+        "url": "https://gemotest.ru/moskva/address/polyarnaya-ulitsa-27-k-5/"
+    },
+    {
+        "metro_stations": [],
+        "url": "https://gemotest.ru/moskva/address/poselenie-sosenskoe-bulvar-velaskesa-4/"
+    },
+    {
+        "metro_stations": [
+            "Аэропорт"
+        ],
+        "url": "https://gemotest.ru/moskva/address/leningradskiy-prospekt-56-2/"
+    },
+    {
+        "metro_stations": [],
+        "url": "https://gemotest.ru/moskva/address/belovezhskaya-ulitsa-13/"
+    },
+    {
+        "metro_stations": [
+            "Крылатское"
+        ],
+        "url": "https://gemotest.ru/moskva/address/osenniy-bulvar-15/"
+    },
+    {
+        "metro_stations": [],
+        "url": "https://gemotest.ru/moskva/address/moskovskiy-solnechnaya-ulitsa-7/"
+    },
+    {
+        "metro_stations": [
+            "Беляево"
+        ],
+        "url": "https://gemotest.ru/moskva/address/profsoyuznaya-ulitsa-104/"
+    },
+    {
+        "metro_stations": [
+            "Щукинская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/ulitsa-marshala-novikova-10k1/"
+    },
+    {
+        "metro_stations": [
+            "Люблино"
+        ],
+        "url": "https://gemotest.ru/moskva/address/novorossiyskaya-ulitsa-3/"
+    },
+    {
+        "metro_stations": [
+            "Селигерская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/dmitrovskoe-shosse-86k6/"
+    },
+    {
+        "metro_stations": [],
+        "url": "https://gemotest.ru/moskva/address/ulitsa-aleksandry-monakhovoy-107k1/"
+    },
+    {
+        "metro_stations": [
+            "Бабушкинская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/ulitsa-menzhinskogo-29/"
+    },
+    {
+        "metro_stations": [
+            "Ховрино"
+        ],
+        "url": "https://gemotest.ru/moskva/address/ulitsa-dybenko-32k1/"
+    },
+    {
+        "metro_stations": [
+            "Щелковская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/shchelkovskoe-shosse-78/"
+    },
+    {
+        "metro_stations": [],
+        "url": "https://gemotest.ru/moskva/address/prospekt-marshala-zhukova-51/"
+    },
+    {
+        "metro_stations": [],
+        "url": "https://gemotest.ru/moskva/address/veernaya-ulitsa-1k4/"
+    },
+    {
+        "metro_stations": [
+            "Молодежная"
+        ],
+        "url": "https://gemotest.ru/moskva/address/yartsevskaya-ulitsa-11k1/"
+    },
+    {
+        "metro_stations": [],
+        "url": "https://gemotest.ru/moskva/address/ulitsa-klary-tsetkin-29k1/"
+    },
+    {
+        "metro_stations": [
+            "Университет"
+        ],
+        "url": "https://gemotest.ru/moskva/address/lomonosovskiy-prospekt-23/"
+    },
+    {
+        "metro_stations": [
+            "Ольховая"
+        ],
+        "url": "https://gemotest.ru/moskva/address/lazurnaya-ulitsa-6/"
+    },
+    {
+        "metro_stations": [
+            "Новаторская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/leninskiy-prospekt-90/"
+    },
+    {
+        "metro_stations": [
+            "Печатники"
+        ],
+        "url": "https://gemotest.ru/moskva/address/ulitsa-guryanova-2k1/"
+    },
+    {
+        "metro_stations": [
+            "Преображенская площадь"
+        ],
+        "url": "https://gemotest.ru/moskva/address/khalturinskaya-ulitsa-18/"
+    },
+    {
+        "metro_stations": [
+            "Крестьянская застава",
+            "Пролетарская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/volgogradskiy-prospekt-2/"
+    },
+    {
+        "metro_stations": [
+            "Планерная",
+            "Сходненская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/ulitsa-geroev-panfilovtsev-1k1/"
+    },
+    {
+        "metro_stations": [
+            "Улица Старокачаловская",
+            "Бульвар Дмитрия Донского"
+        ],
+        "url": "https://gemotest.ru/moskva/address/ulitsa-grina-40/"
+    },
+    {
+        "metro_stations": [
+            "Выхино",
+            "Юго-Восточная"
+        ],
+        "url": "https://gemotest.ru/moskva/address/ferganskaya-ulitsa-14-13/"
+    },
+    {
+        "metro_stations": [
+            "Бунинская аллея"
+        ],
+        "url": "https://gemotest.ru/moskva/address/yuzhnobutovskaya-ulitsa-80/"
+    },
+    {
+        "metro_stations": [],
+        "url": "https://gemotest.ru/moskva/address/lipetskaya-ulitsa-36-20/"
+    },
+    {
+        "metro_stations": [
+            "Говорово"
+        ],
+        "url": "https://gemotest.ru/moskva/address/ulitsa-bogdanova-2k1/"
+    },
+    {
+        "metro_stations": [
+            "Беломорская",
+            "Речной вокзал"
+        ],
+        "url": "https://gemotest.ru/moskva/address/festivalnaya-ulitsa-17k1/"
+    },
+    {
+        "metro_stations": [
+            "Строгино"
+        ],
+        "url": "https://gemotest.ru/moskva/address/stroginskiy-bulvar-30/"
+    },
+    {
+        "metro_stations": [
+            "Теплый Стан"
+        ],
+        "url": "https://gemotest.ru/moskva/address/ulitsa-tyeplyy-stan-5k4/"
+    },
+    {
+        "metro_stations": [
+            "Водный стадион"
+        ],
+        "url": "https://gemotest.ru/moskva/address/golovinskoe-shosse-4/"
+    },
+    {
+        "metro_stations": [
+            "Новогиреево"
+        ],
+        "url": "https://gemotest.ru/moskva/address/soyuznyy-prospekt-22/"
+    },
+    {
+        "metro_stations": [
+            "Полянка",
+            "Серпуховская",
+            "Октябрьская",
+            "Добрынинская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/leninskiy-prospekt-2a/"
+    },
+    {
+        "metro_stations": [
+            "Первомайская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/9-ya-parkovaya-ulitsa-13k2/"
+    },
+    {
+        "metro_stations": [],
+        "url": "https://gemotest.ru/moskva/address/ulitsa-ostrovityanova-9/"
+    },
+    {
+        "metro_stations": [
+            "Профсоюзная",
+            "Академическая"
+        ],
+        "url": "https://gemotest.ru/moskva/address/profsoyuznaya-ulitsa-5-9/"
+    },
+    {
+        "metro_stations": [
+            "Чеховская",
+            "Тверская",
+            "Маяковская",
+            "Пушкинская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/sytinskiy-tupik-1s4/"
+    },
+    {
+        "metro_stations": [
+            "Новокузнецкая",
+            "Полянка",
+            "Третьяковская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/pyatnitskaya-ulitsa-28/"
+    },
+    {
+        "metro_stations": [
+            "Новокосино"
+        ],
+        "url": "https://gemotest.ru/moskva/address/suzdalskaya-ulitsa-12k4/"
+    },
+    {
+        "metro_stations": [
+            "Каховская",
+            "Севастопольская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/azovskaya-ulitsa-24k2/"
+    },
+    {
+        "metro_stations": [
+            "Верхние Лихоборы",
+            "Окружная",
+            "Дегунино"
+        ],
+        "url": "https://gemotest.ru/moskva/address/dubninskaya-ulitsa-2k6/"
+    },
+    {
+        "metro_stations": [
+            "Кузьминки"
+        ],
+        "url": "https://gemotest.ru/moskva/address/zelenodolskaya-ulitsa-36k2/"
+    },
+    {
+        "metro_stations": [
+            "Юго-Западная"
+        ],
+        "url": "https://gemotest.ru/moskva/address/ulitsa-pokryshkina-8/"
+    },
+    {
+        "metro_stations": [
+            "Багратионовская",
+            "Филевский парк"
+        ],
+        "url": "https://gemotest.ru/moskva/address/seslavinskaya-ulitsa-16k2/"
+    },
+    {
+        "metro_stations": [
+            "Новые Черемушки"
+        ],
+        "url": "https://gemotest.ru/moskva/address/ulitsa-nametkina-11k1/"
+    },
+    {
+        "metro_stations": [
+            "Крестьянская застава",
+            "Марксистская",
+            "Пролетарская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/taganskaya-ulitsa-31-22/"
+    },
+    {
+        "metro_stations": [
+            "Рассказовка"
+        ],
+        "url": "https://gemotest.ru/moskva/address/posyelok-vnukovskoe-ulitsa-samuila-marshaka-23k1/"
+    },
+    {
+        "metro_stations": [],
+        "url": "https://gemotest.ru/moskva/address/leninskiy-prospekt-152/"
+    },
+    {
+        "metro_stations": [
+            "Хорошевская",
+            "Полежаевская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/khoroshevskoe-shosse-66-1-etazh-pom-4/"
+    },
+    {
+        "metro_stations": [
+            "Перово"
+        ],
+        "url": "https://gemotest.ru/moskva/address/novogireevskaya-ulitsa-24k1/"
+    },
+    {
+        "metro_stations": [
+            "Шоссе Энтузиастов"
+        ],
+        "url": "https://gemotest.ru/moskva/address/elektrodnaya-ulitsa-d-2-str-1a/"
+    },
+    {
+        "metro_stations": [
+            "Свиблово"
+        ],
+        "url": "https://gemotest.ru/moskva/address/kolskaya-ulitsa-2k4/"
+    },
+    {
+        "metro_stations": [
+            "Зорге"
+        ],
+        "url": "https://gemotest.ru/moskva/address/proezd-berezovoy-roshchi-10/"
+    },
+    {
+        "metro_stations": [
+            "Теплый Стан"
+        ],
+        "url": "https://gemotest.ru/moskva/address/ulitsa-akademika-vargi-5/"
+    },
+    {
+        "metro_stations": [],
+        "url": "https://gemotest.ru/moskva/address/posyelok-voskresenskoe-pkh-40k1/"
+    },
+    {
+        "metro_stations": [
+            "Говорово"
+        ],
+        "url": "https://gemotest.ru/moskva/address/ulitsa-tatyanin-park-15k1/"
+    },
+    {
+        "metro_stations": [
+            "Домодедовская",
+            "Орехово"
+        ],
+        "url": "https://gemotest.ru/moskva/address/orekhovyy-bulvar-7k1/"
+    },
+    {
+        "metro_stations": [
+            "Бибирево"
+        ],
+        "url": "https://gemotest.ru/moskva/address/ulitsa-prishvina-17-2/"
+    },
+    {
+        "metro_stations": [
+            "Новопеределкино"
+        ],
+        "url": "https://gemotest.ru/moskva/address/borovskoe-shosse-43k1/"
+    },
+    {
+        "metro_stations": [
+            "Краснопресненская",
+            "Улица 1905 года"
+        ],
+        "url": "https://gemotest.ru/moskva/address/ulitsa-zamorenova-41/"
+    },
+    {
+        "metro_stations": [
+            "Алексеевская",
+            "ВДНХ"
+        ],
+        "url": "https://gemotest.ru/moskva/address/1-y-rizhskiy-pereulok-3/"
+    },
+    {
+        "metro_stations": [
+            "Царицыно"
+        ],
+        "url": "https://gemotest.ru/moskva/address/veselaya-ulitsa-3/"
+    },
+    {
+        "metro_stations": [
+            "Саларьево"
+        ],
+        "url": "https://gemotest.ru/moskva/address/poselenie-moskovskiy-salarevskaya-ulitsa-8k1/"
+    },
+    {
+        "metro_stations": [],
+        "url": "https://gemotest.ru/moskva/address/dmitrovskoe-shosse-107ak3/"
+    },
+    {
+        "metro_stations": [
+            "Волжская",
+            "Текстильщики"
+        ],
+        "url": "https://gemotest.ru/moskva/address/lyublinskaya-ulitsa-39-2/"
+    },
+    {
+        "metro_stations": [
+            "Отрадное",
+            "Ботанический сад"
+        ],
+        "url": "https://gemotest.ru/moskva/address/olonetskaya-ulitsa-4/"
+    },
+    {
+        "metro_stations": [],
+        "url": "https://gemotest.ru/moskva/address/razdory-ulitsa-lipovoy-roshchi-1k4/"
+    },
+    {
+        "metro_stations": [
+            "Чкаловская",
+            "Курская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/yakovoapostolskiy-pereulok-11-13s1/"
+    },
+    {
+        "metro_stations": [
+            "Коньково"
+        ],
+        "url": "https://gemotest.ru/moskva/address/profsoyuznaya-ulitsa-124/"
+    },
+    {
+        "metro_stations": [
+            "Алексеевская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/mira-prospekt-89/"
+    },
+    {
+        "metro_stations": [
+            "Коломенская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/nagatinskaya-naberezhnaya-20k2/"
+    },
+    {
+        "metro_stations": [
+            "Братиславская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/pererva-ulitsa-49/"
+    },
+    {
+        "metro_stations": [],
+        "url": "https://gemotest.ru/moskva/address/skandinavskiy-bulvar-8/"
+    },
+    {
+        "metro_stations": [],
+        "url": "https://gemotest.ru/moskva/address/aleksandry-monakhovoy-ulitsa-90k1/"
+    },
+    {
+        "metro_stations": [
+            "Бабушкинская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/lyetchika-babushkina-ulitsa-17k3/"
+    },
+    {
+        "metro_stations": [
+            "ЗИЛ"
+        ],
+        "url": "https://gemotest.ru/moskva/address/arkhitektora-shchuseva-ulitsa-3/"
+    },
+    {
+        "metro_stations": [
+            "Тушинская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/tsiolkovskogo-ulitsa-7/"
+    },
+    {
+        "metro_stations": [
+            "Кантемировская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/kantemirovskaya-ulitsa-17k1/"
+    },
+    {
+        "metro_stations": [
+            "Кожуховская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/trofimova-33/"
+    },
+    {
+        "metro_stations": [
+            "Семеновская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/velyaminovskaya-6/"
+    },
+    {
+        "metro_stations": [
+            "Нижегородская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/ryazanskiy-prospekt-2-1k5u/"
+    },
+    {
+        "metro_stations": [],
+        "url": "https://gemotest.ru/moskva/address/kashirskoe-shosse-7k1/"
+    },
+    {
+        "metro_stations": [
+            "Парк культуры"
+        ],
+        "url": "https://gemotest.ru/moskva/address/zubovskiy-bulvar-16-20s1/"
+    },
+    {
+        "metro_stations": [
+            "Алтуфьево"
+        ],
+        "url": "https://gemotest.ru/moskva/address/altufevskoe-shosse-89/"
+    },
+    {
+        "metro_stations": [
+            "Савёловская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/vyatskaya-3/"
+    },
+    {
+        "metro_stations": [
+            "Преображенская площадь"
+        ],
+        "url": "https://gemotest.ru/moskva/address/krasnobogatyrskaya-90s2/"
+    },
+    {
+        "metro_stations": [
+            "Улица Милашенкова",
+            "Бутырская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/rustaveli-15/"
+    },
+    {
+        "metro_stations": [
+            "Университет"
+        ],
+        "url": "https://gemotest.ru/moskva/address/leninskiy-prospekt-73-8/"
+    },
+    {
+        "metro_stations": [
+            "Солнцево"
+        ],
+        "url": "https://gemotest.ru/moskva/address/proizvodstvennaya-10k1/"
+    },
+    {
+        "metro_stations": [
+            "Менделеевская",
+            "Новослободская",
+            "Достоевская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/sushchevskaya-29/"
+    },
+    {
+        "metro_stations": [],
+        "url": "https://gemotest.ru/moskva/address/radio-24/"
+    },
+    {
+        "metro_stations": [],
+        "url": "https://gemotest.ru/moskva/address/svobody-ulitsa-32/"
+    },
+    {
+        "metro_stations": [
+            "Белорусская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/gruzinskiy-val-ulitsa-26s1/"
+    },
+    {
+        "metro_stations": [
+            "Нагатинская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/nagatinskiy-proezd-1-y-11-k2/"
+    },
+    {
+        "metro_stations": [
+            "Окская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/mikhaylova-ulitsa-31-a/"
+    },
+    {
+        "metro_stations": [
+            "Панфиловская",
+            "Зорге",
+            "Октябрьское поле"
+        ],
+        "url": "https://gemotest.ru/moskva/address/marshala-biryuzova-ulitsa-d-14/"
+    },
+    {
+        "metro_stations": [
+            "Красносельская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/rusakovskaya-ulitsa-1/"
+    },
+    {
+        "metro_stations": [],
+        "url": "https://gemotest.ru/moskva/address/volynskaya-ulitsa-d-10-k-2/"
+    },
+    {
+        "metro_stations": [
+            "Парк Победы",
+            "Деловой центр",
+            "Кутузовская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/kutuzovskiy-prospekt-d-41/"
+    },
+    {
+        "metro_stations": [],
+        "url": "https://gemotest.ru/moskva/address/lobnenskaya-ulitsa-d-13-k1/"
+    },
+    {
+        "metro_stations": [
+            "Новокузнецкая",
+            "Полянка",
+            "Октябрьская",
+            "Третьяковская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/bolshaya-yakimanka-ulitsa-d-15/"
+    },
+    {
+        "metro_stations": [
+            "Выхино"
+        ],
+        "url": "https://gemotest.ru/moskva/address/veshnyaki-veshnyakovskaya-ulitsa-d-25-k-1/"
+    },
+    {
+        "metro_stations": [
+            "Селигерская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/korovinskoe-shosse-d-5-k-2/"
+    },
+    {
+        "metro_stations": [
+            "Проспект Мира",
+            "Рижская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/shchepkina-ulitsa-d-60-2-str-1/"
+    },
+    {
+        "metro_stations": [
+            "Стрешнево"
+        ],
+        "url": "https://gemotest.ru/moskva/address/volokolamskoe-shosse-d-13/"
+    },
+    {
+        "metro_stations": [
+            "Калитники",
+            "Москва Товарная"
+        ],
+        "url": "https://gemotest.ru/moskva/address/nizhegorodskaya-ulitsa-d-25/"
+    },
+    {
+        "metro_stations": [],
+        "url": "https://gemotest.ru/moskva/address/nakhimovskiy-prospekt-d-33-2/"
+    },
+    {
+        "metro_stations": [
+            "Фонвизинская",
+            "Улица Милашенкова",
+            "Тимирязевская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/milashenkova-ul-8/"
+    },
+    {
+        "metro_stations": [
+            "Зябликово"
+        ],
+        "url": "https://gemotest.ru/moskva/address/yasenevaya-ulitsa-d-12-korp-5/"
+    },
+    {
+        "metro_stations": [
+            "Улица 1905 года"
+        ],
+        "url": "https://gemotest.ru/moskva/address/bolshaya-dekabrskaya-ulitsa-d-4/"
+    },
+    {
+        "metro_stations": [
+            "Долгопрудная"
+        ],
+        "url": "https://gemotest.ru/moskva/address/dolgoprudnaya-alleya-14k3/"
+    },
+    {
+        "metro_stations": [
+            "Улица Скобелевская",
+            "Бутово"
+        ],
+        "url": "https://gemotest.ru/moskva/address/polyany-ul-5a-k-1/"
+    },
+    {
+        "metro_stations": [],
+        "url": "https://gemotest.ru/moskva/address/yaroslavskoe-shosse-117/"
+    },
+    {
+        "metro_stations": [
+            "Борисово"
+        ],
+        "url": "https://gemotest.ru/moskva/address/borisovskie-prudy-ulitsa-d-5-k-1/"
+    },
+    {
+        "metro_stations": [
+            "Щелковская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/shchelkovskoe-shosse-61/"
+    },
+    {
+        "metro_stations": [
+            "Аминьевская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/bolshaya-ochakovskaya-ul-3/"
+    },
+    {
+        "metro_stations": [
+            "Медведково"
+        ],
+        "url": "https://gemotest.ru/moskva/address/shirokaya-ulitsa-d-9-k-2/"
+    },
+    {
+        "metro_stations": [
+            "Рассказовка"
+        ],
+        "url": "https://gemotest.ru/moskva/address/korneya-chukovskogo-ul-1/"
+    },
+    {
+        "metro_stations": [],
+        "url": "https://gemotest.ru/moskva/address/dolgoprudnaya-ul-12/"
+    },
+    {
+        "metro_stations": [
+            "Коптево"
+        ],
+        "url": "https://gemotest.ru/moskva/address/koptevskaya-ulitsa-d-30/"
+    },
+    {
+        "metro_stations": [
+            "Электрозаводская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/gospitalnyy-val-ul-5-str-7/"
+    },
+    {
+        "metro_stations": [],
+        "url": "https://gemotest.ru/moskva/address/poselenie-moskovskiy-rodnikovaya-ulitsa-d-9a-k-2/"
+    },
+    {
+        "metro_stations": [],
+        "url": "https://gemotest.ru/moskva/address/poselenie-sosenskoe-prospekt-magellana-d-2/"
+    },
+    {
+        "metro_stations": [
+            "Первомайская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/izmaylovskiy-bulvar-d-11-31/"
+    },
+    {
+        "metro_stations": [
+            "Волгоградский проспект",
+            "Дубровка"
+        ],
+        "url": "https://gemotest.ru/moskva/address/sharikopodshipnikovskaya-ulitsa-12/"
+    },
+    {
+        "metro_stations": [
+            "Филатов луг"
+        ],
+        "url": "https://gemotest.ru/moskva/address/sosenskoe-ul-maloe-ponizove-d-9-korp-2/"
+    },
+    {
+        "metro_stations": [
+            "Сокольники"
+        ],
+        "url": "https://gemotest.ru/moskva/address/rusakovskaya-ul-31/"
+    },
+    {
+        "metro_stations": [],
+        "url": "https://gemotest.ru/moskva/address/lyapidevskogo-ulitsa-d-14-str-1/"
+    },
+    {
+        "metro_stations": [
+            "Соколиная Гора"
+        ],
+        "url": "https://gemotest.ru/moskva/address/volnaya-ul-28-4-k-3/"
+    },
+    {
+        "metro_stations": [],
+        "url": "https://gemotest.ru/moskva/address/michurinskiy-prospekt-olimpiyskaya-derevnya-10-k-1/"
+    },
+    {
+        "metro_stations": [
+            "Остафьево"
+        ],
+        "url": "https://gemotest.ru/moskva/address/ostafevskoe-shosse-14-k-4/"
+    },
+    {
+        "metro_stations": [],
+        "url": "https://gemotest.ru/moskva/address/muravskaya-ulitsa-d-38-k-2/"
+    },
+    {
+        "metro_stations": [
+            "Домодедовская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/generala-belova-ul-33-19/"
+    },
+    {
+        "metro_stations": [
+            "Тропарево"
+        ],
+        "url": "https://gemotest.ru/moskva/address/leninskiy-prospekt-131/"
+    },
+    {
+        "metro_stations": [],
+        "url": "https://gemotest.ru/moskva/address/krasnobogatyrskaya-ulitsa-d-9/"
+    },
+    {
+        "metro_stations": [
+            "Бульвар Адмирала Ушакова",
+            "Улица Горчакова"
+        ],
+        "url": "https://gemotest.ru/moskva/address/admirala-lazareva-ulitsa-d-36/"
+    },
+    {
+        "metro_stations": [],
+        "url": "https://gemotest.ru/moskva/address/mikrorayon-yuzhnaya-bittsa-parkovaya-ulitsa-d-2/"
+    },
+    {
+        "metro_stations": [
+            "Международная",
+            "Выставочная",
+            "Кутузовская",
+            "Тестовская",
+            "Деловой центр"
+        ],
+        "url": "https://gemotest.ru/moskva/address/presnenskaya-naberezhnaya-d-10-blok-b/"
+    },
+    {
+        "metro_stations": [
+            "Беломорская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/belomorskaya-ulitsa-d-13-k-1/"
+    },
+    {
+        "metro_stations": [
+            "Сокольники"
+        ],
+        "url": "https://gemotest.ru/moskva/address/stromynka-ulitsa-16/"
+    },
+    {
+        "metro_stations": [
+            "Крылатское"
+        ],
+        "url": "https://gemotest.ru/moskva/address/osenniy-bulvar-d-12-korp-10/"
+    },
+    {
+        "metro_stations": [
+            "Рабочий Посёлок"
+        ],
+        "url": "https://gemotest.ru/moskva/address/grishina-ulitsa-dom-2-korpus-1/"
+    },
+    {
+        "metro_stations": [],
+        "url": "https://gemotest.ru/moskva/address/ussuriyskaya-ulitsa-d-11-k-1/"
+    },
+    {
+        "metro_stations": [
+            "Петровский парк",
+            "Гражданская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/8-marta-ulitsa-d-1s11/"
+    },
+    {
+        "metro_stations": [
+            "Кузьминки"
+        ],
+        "url": "https://gemotest.ru/moskva/address/volgogradskiy-prospekt-dom-96-k-1/"
+    },
+    {
+        "metro_stations": [
+            "Сухаревская",
+            "Проспект Мира"
+        ],
+        "url": "https://gemotest.ru/moskva/address/mira-prospekt-dom-36-stroenie-1/"
+    },
+    {
+        "metro_stations": [
+            "Бибирево"
+        ],
+        "url": "https://gemotest.ru/moskva/address/rimskogo-korsakova-ulitsa-d-11-korp-7/"
+    },
+    {
+        "metro_stations": [
+            "Водный стадион",
+            "Речной вокзал"
+        ],
+        "url": "https://gemotest.ru/moskva/address/smolnaya-ulitsa-d-15/"
+    },
+    {
+        "metro_stations": [
+            "Комсомольская",
+            "Бауманская",
+            "Красносельская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/novoryazanskaya-ulitsa-d-36/"
+    },
+    {
+        "metro_stations": [
+            "Павелецкая"
+        ],
+        "url": "https://gemotest.ru/moskva/address/letnikovskaya-ulitsa-d-4-str-5/"
+    },
+    {
+        "metro_stations": [
+            "Павелецкая",
+            "Серпуховская",
+            "Октябрьская",
+            "Добрынинская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/lyusinovskaya-ulitsa-d-4/"
+    },
+    {
+        "metro_stations": [
+            "Кузнецкий мост",
+            "Тургеневская",
+            "Чистые пруды",
+            "Китай-город",
+            "Лубянка",
+            "Сретенский бульвар"
+        ],
+        "url": "https://gemotest.ru/moskva/address/pokrovka-ulitsa-d-2-1-str-1ab/"
+    },
+    {
+        "metro_stations": [],
+        "url": "https://gemotest.ru/moskva/address/narodnogo-opolcheniya-ulitsa-d-15-str-5/"
+    },
+    {
+        "metro_stations": [
+            "Преображенская площадь"
+        ],
+        "url": "https://gemotest.ru/moskva/address/elektrozavodskaya-ulitsa-37-4s7-b91cb2/"
+    },
+    {
+        "metro_stations": [],
+        "url": "https://gemotest.ru/moskva/address/lipovyy-park-ulitsa-d-9/"
+    },
+    {
+        "metro_stations": [],
+        "url": "https://gemotest.ru/moskva/address/ulitsa-natashi-kovshovoy-d-11/"
+    },
+    {
+        "metro_stations": [
+            "Перово"
+        ],
+        "url": "https://gemotest.ru/moskva/address/perovskaya-ulitsa-d-49-53/"
+    },
+    {
+        "metro_stations": [
+            "Варшавская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/varshavskoe-shosse-d-86a/"
+    },
+    {
+        "metro_stations": [],
+        "url": "https://gemotest.ru/moskva/address/angarskaya-ulitsa-d-28-k-2/"
+    },
+    {
+        "metro_stations": [
+            "Площадь Ильича",
+            "Римская",
+            "Москва Товарная"
+        ],
+        "url": "https://gemotest.ru/moskva/address/sergiya-radonezhskogo-d-8/"
+    },
+    {
+        "metro_stations": [],
+        "url": "https://gemotest.ru/moskva/address/turistskaya-ulitsa-d-33/"
+    },
+    {
+        "metro_stations": [
+            "Новаторская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/novatorov-ulitsa-d-4-k-4/"
+    },
+    {
+        "metro_stations": [
+            "Люблино"
+        ],
+        "url": "https://gemotest.ru/moskva/address/belorechenskaya-ulitsa-d-12/"
+    },
+    {
+        "metro_stations": [
+            "Нагорная"
+        ],
+        "url": "https://gemotest.ru/moskva/address/nagornyy-bulvar-d-19-k-1/"
+    },
+    {
+        "metro_stations": [],
+        "url": "https://gemotest.ru/moskva/address/yasenevaya-ulitsa-d-5/"
+    },
+    {
+        "metro_stations": [
+            "Парк культуры",
+            "Смоленская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/bolshoy-lyevshinskiy-pereulok-d-17-25-str-3/"
+    },
+    {
+        "metro_stations": [],
+        "url": "https://gemotest.ru/moskva/address/marshala-tukhachevskogo-ulitsa-d-33/"
+    },
+    {
+        "metro_stations": [
+            "Улица Сергея Эйзенштейна",
+            "Выставочный центр",
+            "ВДНХ"
+        ],
+        "url": "https://gemotest.ru/moskva/address/borisa-galushkina-ulitsa-d-3/"
+    },
+    {
+        "metro_stations": [
+            "Сокол",
+            "Аэропорт"
+        ],
+        "url": "https://gemotest.ru/moskva/address/leningradskiy-prospekt-d-74-k-4/"
+    },
+    {
+        "metro_stations": [
+            "Александровский сад",
+            "Библиотека им.Ленина",
+            "Боровицкая",
+            "Кропоткинская",
+            "Арбатская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/novyy-arbat-ulitsa-d-7-str-1/"
+    },
+    {
+        "metro_stations": [
+            "Баррикадная",
+            "Маяковская",
+            "Белорусская",
+            "Краснопресненская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/krasina-ulitsa-d-9-str-1/"
+    },
+    {
+        "metro_stations": [
+            "Пражская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/ulitsa-krasnogo-mayaka-1k1-2b4867/"
+    },
+    {
+        "metro_stations": [],
+        "url": "https://gemotest.ru/moskva/address/kuntsevo-kvartal-100-d-1-korp-1/"
+    },
+    {
+        "metro_stations": [],
+        "url": "https://gemotest.ru/moskva/address/ulitsa-garibaldi-11-67416e/"
+    },
+    {
+        "metro_stations": [],
+        "url": "https://gemotest.ru/moskva/address/6-ya-radialnaya-ulitsa-d-3-korp-10/"
+    },
+    {
+        "metro_stations": [
+            "Улица Академика Королёва",
+            "Выставочный центр",
+            "ВДНХ"
+        ],
+        "url": "https://gemotest.ru/moskva/address/akademika-koroleva-ulitsa-d-3/"
+    },
+    {
+        "metro_stations": [],
+        "url": "https://gemotest.ru/moskva/address/krasnaya-sosna-ulitsa-d-3a/"
+    },
+    {
+        "metro_stations": [
+            "Сокол",
+            "Аэропорт"
+        ],
+        "url": "https://gemotest.ru/moskva/address/novopeschanaya-ulitsa-8k1-b37bbc/"
+    },
+    {
+        "metro_stations": [
+            "Отрадное"
+        ],
+        "url": "https://gemotest.ru/moskva/address/dekabristov-ulitsa-d-10-k-3/"
+    },
+    {
+        "metro_stations": [
+            "Спартак"
+        ],
+        "url": "https://gemotest.ru/moskva/address/volokolamskoe-shosse-d-71-13-k-1/"
+    },
+    {
+        "metro_stations": [],
+        "url": "https://gemotest.ru/moskva/address/sokolovo-meshcherskaya-ulitsa-d-16-114/"
+    },
+    {
+        "metro_stations": [
+            "Чертановская"
+        ],
+        "url": "https://gemotest.ru/moskva/address/balaklavskiy-prospekt-d-18-k-1/"
+    }
+]
