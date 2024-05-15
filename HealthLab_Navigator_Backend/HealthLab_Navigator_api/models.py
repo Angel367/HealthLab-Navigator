@@ -1,3 +1,4 @@
+from django.utils import timezone
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
@@ -110,6 +111,12 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = "phone_number"
     REQUIRED_FIELDS = []
 
+    @property
+    def age(self):
+        if self.date_of_birth:
+            return timezone.now().year - self.date_of_birth.year
+        return None
+
     def __str__(self):
         return str(self.phone_number)  # Преобразуем номер телефона в строку для вывода
 
@@ -143,47 +150,39 @@ class Patient(models.Model):
         verbose_name_plural = 'Пациенты'
 
 
-class Visiting(models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, verbose_name='Пользователь', null=True, blank=True)
-    created = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания визита')
-
-    class Meta:
-        verbose_name = 'Посещение'
-        verbose_name_plural = 'Посещения'
-
-
 class VisitingServiceInMedicalInstitution(models.Model):
-    visiting = models.ForeignKey(Visiting, on_delete=models.CASCADE, verbose_name='Визит', null=False, blank=False)
-    service = models.ForeignKey('ServiceInMedicalInstitution', on_delete=models.CASCADE, verbose_name='Услуга',
-                                null=False, blank=False)
+    user = models.ForeignKey(
+        CustomUser,
+        on_delete=models.SET_NULL,
+        verbose_name='Пользователь',
+        null=True,
+        blank=True,
+        default=None
+    )
+    created = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания визита')
+    service_in_medical_institution = models.ForeignKey(
+        to='ServiceInMedicalInstitution',
+        on_delete=models.CASCADE,
+        verbose_name='Услуга',
+        null=False,
+        blank=False
+    )
 
     class Meta:
         verbose_name = 'Посещение услуги на стр мед учреждения'
         verbose_name_plural = 'Посещения услуг на стр мед учреждения'
 
 
-# class VisitingSpecialOffer(models.Model):
-#     visiting = models.ForeignKey(Visiting, on_delete=models.CASCADE, verbose_name='Визит', null=False, blank=False)
-#     special_offer = models.ForeignKey(to='SpecialOffer', on_delete=models.CASCADE, verbose_name='Спец предложение',
-#                                       null=False, blank=False)
-#
-#     class Meta:
-#         verbose_name = 'Посещение спец предложения'
-#         verbose_name_plural = 'Посещения спец предложения'
-
-
-class VisitingService(models.Model):
-    visiting = models.ForeignKey(Visiting, on_delete=models.CASCADE, verbose_name='Визит', null=False, blank=False)
-    service = models.ForeignKey('MedicalService', on_delete=models.CASCADE, verbose_name='Услуга', null=False,
-                                blank=False)
-
-    class Meta:
-        verbose_name = 'Посещение услуги'
-        verbose_name_plural = 'Посещения услуг'
-
-
 class VisitingMedicalInstitution(models.Model):
-    visiting = models.ForeignKey(Visiting, on_delete=models.CASCADE, verbose_name='Визит', null=False, blank=False)
+    user = models.ForeignKey(
+        CustomUser,
+        on_delete=models.SET_NULL,
+        verbose_name='Пользователь',
+        null=True,
+        blank=True,
+        default=None
+    )
+    created = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания визита')
     medical_institution = models.ForeignKey('MedicalInstitution', on_delete=models.CASCADE,
                                             verbose_name='Мед учреждение', null=False, blank=False)
 
@@ -193,7 +192,15 @@ class VisitingMedicalInstitution(models.Model):
 
 
 class VisitingMedicalInstitutionBranch(models.Model):
-    visiting = models.ForeignKey(Visiting, on_delete=models.CASCADE, verbose_name='Визит', null=False, blank=False)
+    user = models.ForeignKey(
+        CustomUser,
+        on_delete=models.SET_NULL,
+        verbose_name='Пользователь',
+        null=True,
+        blank=True,
+        default=None
+    )
+    created = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания визита')
     medical_institution_branch = models.ForeignKey(to='MedicalInstitutionBranch', on_delete=models.CASCADE,
                                                    verbose_name='Филиал мед учреждения', null=False, blank=False)
 

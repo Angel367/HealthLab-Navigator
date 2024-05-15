@@ -45,9 +45,6 @@ class ServiceInMedicalInstitutionSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-
-
-
 class ResearchMaterialSerializer(serializers.ModelSerializer):
     class Meta:
         model = ResearchMaterial

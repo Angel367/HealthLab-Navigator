@@ -3,12 +3,25 @@ from .models import *
 
 
 class MedicalServiceFilter(filters.FilterSet):
-    exact_name = filters.CharFilter(field_name='name', lookup_expr='exact', label='Точное имя')
-    similar_name = filters.CharFilter(field_name='name', lookup_expr='icontains', label='Имя содержит')
-
     class Meta:
         model = MedicalService
-        fields = ['name']
+        fields = {
+            'is_active': ['exact'],
+            'name': ['icontains'],
+            'main_description': ['icontains'],
+            'created': ['exact', 'year__gt', 'year__lt'],
+            'research_material': ['exact']
+        }
+
+    # Дополнительные методы для упорядочивания
+    ordering = filters.OrderingFilter(
+        # Доступные поля для сортировки
+        fields=(
+            ('name', 'name'),
+        ),
+        # По умолчанию сортировка по наименованию (name)
+        field_labels={'name': 'Название'}
+    )
 
 
 class MetroStationFilter(filters.FilterSet):
@@ -21,6 +34,7 @@ class MetroStationFilter(filters.FilterSet):
 
 class ResearchMaterialFilter(filters.FilterSet):
     name = filters.CharFilter(field_name='name', lookup_expr='iexact')
+
 
     class Meta:
         model = ResearchMaterial

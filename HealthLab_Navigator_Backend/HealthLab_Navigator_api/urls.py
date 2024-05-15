@@ -35,4 +35,19 @@ urlpatterns = [
     path('auth/register/', RegisterPatientView.as_view(), name='register-user'),
     path('register/', RegisterAgentView.as_view(), name='register-agent'),
     path('profile/', ProfileView.as_view(), name='profile'),
+    path(
+        'visiting-service-in-medical-institution/<service_in_medical_institution_id>/',
+        get_visiting_service_in_medical_institution,
+        name='visiting-service-in-medical-institution'
+    ),
+    path(
+        'visiting-medical-institution/<medical_institution_id>/',
+        get_visiting_medical_institution,
+        name='visiting-medical-institution'
+    ),
+    path(
+        'visiting-medical-institution-branch/<medical_institution_branch_id>/',
+        get_visiting_medical_institution_branch,
+        name='visiting-medical-institution-branch'
+    ),
 ]
