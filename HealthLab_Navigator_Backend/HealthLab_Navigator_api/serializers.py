@@ -20,54 +20,7 @@ class ServiceInMedicalInstitutionSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class ResearchMedicalSystemSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ResearchMedicalSystem
-        fields = '__all__'
 
-
-class ResearchMedicalIllnessSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ResearchMedicalIllness
-        fields = '__all__'
-
-
-class FeedbackSerializerForAll(serializers.ModelSerializer):
-    class Meta:
-        model = Feedback
-        fields = ['email', 'text', 'status', 'create', 'id']
-        read_only_fields = ['status', 'create']
-
-
-class FeedbackSerializerModerator(serializers.ModelSerializer):
-    class Meta:
-        model = Feedback
-        fields = '__all__'
-        read_only_fields = ['create']
-
-
-class ReviewSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Review
-        fields = '__all__'
-
-
-class ReviewCommentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ReviewComment
-        fields = '__all__'
-
-
-class SpecialOfferSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = SpecialOffer
-        fields = '__all__'
-
-
-class SpecialOfferForPatientSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = SpecialOfferForPatient
-        fields = '__all__'
 
 
 class ResearchMaterialSerializer(serializers.ModelSerializer):
@@ -105,8 +58,8 @@ class ChangePasswordSerializer(serializers.Serializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['id', 'phone_number', 'email', 'first_name', 'last_name', 'user_type']
-        extra_kwargs = {'password': {'write_only': True}, 'user_type': {'read_only': True}}
+        fields = ['id', 'phone_number', 'email', 'first_name', 'last_name']
+        extra_kwargs = {'password': {'write_only': True}}
 
 
 class RegisterPatientSerializer(serializers.ModelSerializer):
@@ -121,10 +74,10 @@ class RegisterPatientSerializer(serializers.ModelSerializer):
         return user
 
     def validate(self, attrs):
-        if not attrs.get('phone_number').isdigit():
+        if not attrs.get('phone_number')[1:].isdigit():
             raise serializers.ValidationError('Phone number must contain only digits')
-        if len(attrs.get('phone_number')) != 10:
-            raise serializers.ValidationError('Phone number must be 10 characters long')
+        if 10 <= len(attrs.get('phone_number')) > 12:
+            raise serializers.ValidationError('Phone number must be more or equals 10 and less 12 characters long')
         if CustomUser.objects.filter(phone_number=attrs.get('phone_number')).exists():
             raise serializers.ValidationError('User with this phone number already exists')
         if len(attrs.get('password')) < 8:
@@ -156,3 +109,53 @@ class MetroStationSerializer(serializers.ModelSerializer):
     class Meta:
         model = MetroStation
         fields = '__all__'
+
+
+# class ResearchMedicalSystemSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = ResearchMedicalSystem
+#         fields = '__all__'
+#
+#
+# class ResearchMedicalIllnessSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = ResearchMedicalIllness
+#         fields = '__all__'
+#
+#
+# class FeedbackSerializerForAll(serializers.ModelSerializer):
+#     class Meta:
+#         model = Feedback
+#         fields = ['email', 'text', 'status', 'create', 'id']
+#         read_only_fields = ['status', 'create']
+#
+#
+# class FeedbackSerializerModerator(serializers.ModelSerializer):
+#     class Meta:
+#         model = Feedback
+#         fields = '__all__'
+#         read_only_fields = ['create']
+#
+#
+# class ReviewSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Review
+#         fields = '__all__'
+#
+#
+# class ReviewCommentSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = ReviewComment
+#         fields = '__all__'
+#
+#
+# class SpecialOfferSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = SpecialOffer
+#         fields = '__all__'
+#
+#
+# class SpecialOfferForPatientSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = SpecialOfferForPatient
+#         fields = '__all__'

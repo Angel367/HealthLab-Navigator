@@ -17,13 +17,13 @@ router.register(r'medical-institution-service', MedicalInstitutionServiceViewSet
 router.register(r'metro-line', MetroLineViewSet, basename='metro-line')
 router.register(r'metro-station', MetroStationViewSet, basename='metro-station')
 router.register(r'research-material', ResearchMaterialViewSet, basename='research-material')
-router.register(r'illness', IllnessViewSet, basename='illness')
-router.register(r'medical-system', MedicalSystemViewSet, basename='medical-system')
-router.register(r'feedback', FeedbackViewSet, basename='feedback')
-router.register(r'review', ReviewViewSet, basename='review')
-router.register(r'question', ReviewCommentViewSet, basename='review-comment')
-router.register(r'special-offer', SpecialOfferViewSet, basename='special-offer')
-router.register(r'special-offer', SpecialOfferForPatientViewSet, basename='special-offer-for-patient')
+# router.register(r'illness', IllnessViewSet, basename='illness')
+# router.register(r'medical-system', MedicalSystemViewSet, basename='medical-system')
+# router.register(r'feedback', FeedbackViewSet, basename='feedback')
+# router.register(r'review', ReviewViewSet, basename='review')
+# router.register(r'question', ReviewCommentViewSet, basename='review-comment')
+# router.register(r'special-offer', SpecialOfferViewSet, basename='special-offer')
+# router.register(r'special-offer', SpecialOfferForPatientViewSet, basename='special-offer-for-patient')
 
 
 urlpatterns = [
