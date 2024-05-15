@@ -2,6 +2,18 @@ from rest_framework import serializers
 from .models import *
 
 
+class MetroLineSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MetroLine
+        fields = '__all__'
+
+class MetroStationSerializer(serializers.ModelSerializer):
+    line = MetroLineSerializer(read_only=True)
+    class Meta:
+        model = MetroStation
+        fields = '__all__'
+
+
 class MedicalInstitutionSerializer(serializers.ModelSerializer):
     class Meta:
         model = MedicalInstitution
@@ -9,6 +21,7 @@ class MedicalInstitutionSerializer(serializers.ModelSerializer):
 
 
 class MedicalInstitutionBranchSerializer(serializers.ModelSerializer):
+    metro_stations = MetroStationSerializer(many=True, read_only=True)
     class Meta:
         model = MedicalInstitutionBranch
         fields = '__all__'
@@ -98,17 +111,6 @@ class RegisterAgentSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = CustomUser.objects.create_agent(**validated_data)
         return user
-
-
-class MetroLineSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = MetroLine
-        fields = '__all__'
-
-class MetroStationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = MetroStation
-        fields = '__all__'
 
 
 # class ResearchMedicalSystemSerializer(serializers.ModelSerializer):

@@ -20,9 +20,12 @@ class MedicalInstitutionPermission(permissions.BasePermission, ):
         # Разрешение для всех для метода GET
         if request.method in permissions.SAFE_METHODS:
             return True
-        if request.user.is_authenticated and MedicalAgentOfMedicalInstitution.objects.filter(user=request.user).exists():
+        if request.method == 'POST':
+            return False
+        if request.user.is_authenticated and MedicalAgentOfMedicalInstitution.objects.filter(
+                user=request.user).exists():
             return True
-        return request.user and request.user.is_authenticated
+        return False
 
     def has_object_permission(self, request, view, obj):
         if request.method in permissions.SAFE_METHODS:
@@ -32,18 +35,23 @@ class MedicalInstitutionPermission(permissions.BasePermission, ):
         return False
 
 
-class MedicalInstitutionBranchPermission(permissions.BasePermission, ):
+class MedicalInstitutionBranchAndServicePermission(permissions.BasePermission, ):
     def has_permission(self, request, view):
         # Разрешение для всех для метода GET
         if request.method in permissions.SAFE_METHODS:
             return True
-        if request.user.is_authenticated and MedicalAgentOfMedicalInstitution.objects.filter(user=request.user).exists():
+        if request.user.is_authenticated and MedicalAgentOfMedicalInstitution.objects.filter(
+                user=request.user).exists():
             return True
-        return request.user and request.user.is_authenticated
+        return False
 
     def has_object_permission(self, request, view, obj):
         if request.method in permissions.SAFE_METHODS:
             return True
-        if MedicalAgentOfMedicalInstitution.objects.filter(user=request.user, medical_institution=obj.medical_institution).exists():
+        if MedicalAgentOfMedicalInstitution.objects.filter(
+                user=request.user,
+                medical_institution=obj.medical_institution
+        ).exists():
             return True
         return False
+

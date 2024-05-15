@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 
 from .permissions import *
-
+from .models import *
 from .serializers import *
 from .filters import *
 
@@ -18,35 +18,36 @@ class MedicalInstitutionViewSet(viewsets.ModelViewSet):
 class MedicalInstitutionBranchViewSet(viewsets.ModelViewSet):
     queryset = MedicalInstitutionBranch.objects.all()
     serializer_class = MedicalInstitutionBranchSerializer
-    permission_classes = [MedicalInstitutionBranchPermission]
+    permission_classes = [MedicalInstitutionBranchAndServicePermission]
+
+    def create(self, request, *args, **kwargs):
+        if 'medical_institution' not in request.data:
+            return Response({"error": "medical_institution is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        if request.user.is_superuser:
+            return super().create(request, *args, **kwargs)
+        if MedicalAgentOfMedicalInstitution.objects.filter(user=request.user, medical_institution_id=request.data['medical_institution']).exists():
+            return super().create(request, *args, **kwargs)
+        else:
+            return self.permission_denied(request)
 
 
-class MedicalInstitutionServiceViewSet(viewsets.ModelViewSet):
+class ServiceInMedicalInstitutionViewSet(viewsets.ModelViewSet):
     queryset = ServiceInMedicalInstitution.objects.all()
     serializer_class = ServiceInMedicalInstitutionSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [MedicalInstitutionBranchAndServicePermission]
 
-    # def create(self, request, *args, **kwargs):
-    #     medical_institution = get_object_or_404(MedicalInstitution.objects.get(id=request.data['medical_institution']))
-    #     if (request.user.is_superuser or request.user.is_medical_agent and
-    #             MedicalInstitutionAgent.objects.filter(agent=request.user,
-    #                                                    medical_institution=medical_institution).exists()):
-    #         return super().create(request, *args, **kwargs)
-    #     else:
-    #         return self.permission_denied(request)
-    #
-    # def destroy(self, request, *args, **kwargs):
-    #     if request.user.is_superuser:
-    #         return super().destroy(request, *args, **kwargs)
-    #     else:
-    #         return self.permission_denied(request)
-    #
-    # def update(self, request, *args, **kwargs):
-    #     medical_institution = get_object_or_404(MedicalInstitution.objects.get(id=request.data['medical_institution']))
-    #     if request.user.is_superuser or request.user.is_medical_agent and \
-    #             MedicalInstitutionAgent.objects.filter(agent=request.user,
-    #                                                    medical_institution=medical_institution).exists():
-    #         return super().update(request, *args, **kwargs)
+    def create(self, request, *args, **kwargs):
+        if 'medical_institution' not in request.data:
+            return Response({"error": "medical_institution is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        if request.user.is_superuser:
+            return super().create(request, *args, **kwargs)
+        if MedicalAgentOfMedicalInstitution.objects.filter(user=request.user, medical_institution_id=request.data['medical_institution']).exists():
+            return super().create(request, *args, **kwargs)
+        else:
+            return self.permission_denied(request)
+
 
 
 class MedicalServiceViewSet(viewsets.ModelViewSet):
