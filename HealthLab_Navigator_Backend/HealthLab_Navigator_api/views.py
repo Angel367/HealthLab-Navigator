@@ -1,7 +1,9 @@
+from django.http import JsonResponse
 from rest_framework import viewsets, permissions, status
 from rest_framework.generics import RetrieveAPIView, UpdateAPIView, CreateAPIView
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
+from geopy.distance import geodesic
 
 from .permissions import *
 from .models import *
@@ -16,9 +18,10 @@ class MedicalInstitutionViewSet(viewsets.ModelViewSet):
 
 
 class MedicalInstitutionBranchViewSet(viewsets.ModelViewSet):
-    queryset = MedicalInstitutionBranch.objects.all()
+    queryset = MedicalInstitutionBranch.objects.all().order_by('id')
     serializer_class = MedicalInstitutionBranchSerializer
     permission_classes = [MedicalInstitutionBranchAndServicePermission]
+    filterset_class = MedicalInstitutionBranchFilter
 
     def create(self, request, *args, **kwargs):
         if 'medical_institution' not in request.data:
@@ -30,6 +33,18 @@ class MedicalInstitutionBranchViewSet(viewsets.ModelViewSet):
             return super().create(request, *args, **kwargs)
         else:
             return self.permission_denied(request)
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        params = self.request.query_params
+        latitude = params.get('latitude')
+        longitude = params.get('longitude')
+
+        if latitude and longitude:
+            context['user_latitude'] = latitude
+            context['user_longitude'] = longitude
+
+        return context
 
 
 class ServiceInMedicalInstitutionViewSet(viewsets.ModelViewSet):
@@ -132,14 +147,15 @@ class RegisterAgentView(CreateAPIView):
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 class MetroLineViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = MetroLine.objects.all()
+    queryset = MetroLine.objects.all().order_by('number')
     serializer_class = MetroLineSerializer
     permission_classes = [permissions.AllowAny]
 
 
 class MetroStationViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = MetroStation.objects.all()
+    queryset = MetroStation.objects.all().order_by('name')
     serializer_class = MetroStationSerializer
     permission_classes = [permissions.AllowAny]
     filterset_class = MetroStationFilter
@@ -150,6 +166,7 @@ class ResearchMaterialViewSet(viewsets.ModelViewSet):
     serializer_class = ResearchMaterialSerializer
     permission_classes = [permissions.AllowAny]
     filterset_class = ResearchMaterialFilter
+
 
 # class SpecialOfferViewSet(viewsets.ModelViewSet):
 #     queryset = SpecialOffer.objects.all()

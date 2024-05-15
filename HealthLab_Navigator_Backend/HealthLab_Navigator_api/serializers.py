@@ -1,3 +1,4 @@
+from geopy.distance import geodesic
 from rest_framework import serializers
 from .models import *
 
@@ -22,9 +23,20 @@ class MedicalInstitutionSerializer(serializers.ModelSerializer):
 
 class MedicalInstitutionBranchSerializer(serializers.ModelSerializer):
     metro_stations = MetroStationSerializer(many=True, read_only=True)
+    distance_to_user = serializers.SerializerMethodField()
+
     class Meta:
         model = MedicalInstitutionBranch
         fields = '__all__'
+
+    def get_distance_to_user(self, obj):
+        if self.context.get('user_latitude') and self.context.get('user_longitude'):
+            return get_distance(
+                self.context.get('user_latitude'),
+                self.context.get('user_longitude'),
+                obj.latitude,
+                obj.longitude
+            )
 
 
 class ServiceInMedicalInstitutionSerializer(serializers.ModelSerializer):
@@ -161,3 +173,14 @@ class RegisterAgentSerializer(serializers.ModelSerializer):
 #     class Meta:
 #         model = SpecialOfferForPatient
 #         fields = '__all__'
+
+
+def get_distance(lat1, lon1, lat2, lon2):
+    lat1 = float(lat1)
+    lon1 = float(lon1)
+    lat2 = float(lat2)
+    lon2 = float(lon2)
+    point1 = (lat1, lon1)
+    point2 = (lat2, lon2)
+    distance = geodesic(point1, point2).meters
+    return distance

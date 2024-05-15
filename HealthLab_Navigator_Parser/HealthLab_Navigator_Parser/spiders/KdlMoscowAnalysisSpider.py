@@ -43,5 +43,6 @@ class KdlMoscowAnalysisSpider(scrapy.Spider):
             'duration': duration,
             'research_material': research_material,
             'government_code_804n': government_code_804n,
-            'price': price
+            'price': price,
+            'url': response.url
         }

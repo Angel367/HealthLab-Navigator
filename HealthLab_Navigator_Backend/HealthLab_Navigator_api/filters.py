@@ -25,3 +25,14 @@ class ResearchMaterialFilter(filters.FilterSet):
     class Meta:
         model = ResearchMaterial
         fields = ['name']
+
+
+class MedicalInstitutionBranchFilter(filters.FilterSet):
+    metro_stations = filters.ModelMultipleChoiceFilter(
+        field_name='metro_stations',
+        queryset=MetroStation.objects.all()
+    )
+
+    class Meta:
+        model = MedicalInstitutionBranch
+        fields = ['metro_stations']

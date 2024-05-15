@@ -231,6 +231,9 @@ class MetroLine(models.Model):
         verbose_name = 'Линия метро'
         verbose_name_plural = 'Линии метро'
 
+    def __str__(self):
+        return self.name + ' ' + str(self.number)
+
 
 class MetroStation(models.Model):
     name = models.CharField(max_length=100, verbose_name='Название станции метро', null=False, blank=False)
@@ -247,6 +250,9 @@ class MetroStation(models.Model):
     class Meta:
         verbose_name = 'Станция метро'
         verbose_name_plural = 'Станции метро'
+
+    def __str__(self):
+        return self.name + ', ' + self.line.name + ' линия'
 
 
 # Модели для медицинских учреждений
@@ -311,6 +317,13 @@ class MedicalInstitutionBranch(models.Model):
         verbose_name='Ссылка на филиал',
         null=True,
         blank=True
+    )
+    address = models.CharField(
+        max_length=200,
+        verbose_name='Адрес',
+        null=True,
+        blank=True,
+        default=""
     )
 
     class Meta:
