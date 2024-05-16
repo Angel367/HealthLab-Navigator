@@ -73,6 +73,7 @@ class ServiceInMedicalInstitutionViewSet(viewsets.ModelViewSet):
     queryset = ServiceInMedicalInstitution.objects.all()
     serializer_class = ServiceInMedicalInstitutionSerializer
     permission_classes = [MedicalInstitutionBranchAndServicePermission]
+    filterset_class = ServiceInMedicalInstitutionFilter
 
     def create(self, request, *args, **kwargs):
         if 'medical_institution' not in request.data:

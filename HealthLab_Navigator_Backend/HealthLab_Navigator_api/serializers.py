@@ -39,12 +39,6 @@ class MedicalInstitutionBranchSerializer(serializers.ModelSerializer):
             )
 
 
-class ServiceInMedicalInstitutionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ServiceInMedicalInstitution
-        fields = '__all__'
-
-
 class ResearchMaterialSerializer(serializers.ModelSerializer):
     class Meta:
         model = ResearchMaterial
@@ -52,9 +46,19 @@ class ResearchMaterialSerializer(serializers.ModelSerializer):
 
 
 class MedicalServiceSerializer(serializers.ModelSerializer):
+    research_material = ResearchMaterialSerializer(many=True, read_only=True)
     class Meta:
         model = MedicalService
         fields = '__all__'
+
+
+class ServiceInMedicalInstitutionSerializer(serializers.ModelSerializer):
+    medical_institution = MedicalInstitutionSerializer(many=False, read_only=True)
+    service = MedicalServiceSerializer(many=False, read_only=True)
+    class Meta:
+        model = ServiceInMedicalInstitution
+        fields = '__all__'
+
 
 class ChangePasswordSerializer(serializers.Serializer):
     model = CustomUser

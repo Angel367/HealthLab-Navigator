@@ -14,5 +14,5 @@ python -Xutf8 manage.py dumpdata --indent=4 --exclude auth.permission --exclude 
 ```
 #### Импорт БД
 ```shell
-python -Xutf8 manage.py loaddata db.json
+python -Xutf8 manage.py loaddata current_good_db.json
 ```
