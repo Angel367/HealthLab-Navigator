@@ -11,7 +11,7 @@ import json
 
 
 class SaveToFilePipeline:
-    allowed_spiders = ['gemotest_spider', 'gemotest_moscow_branch_spider']
+    allowed_spiders = ['gemotest_spider', 'gemotest_moscow_branch_spider', 'KdlMoscowAnalysisSpider']
 
     def __init__(self):
         self.file = None

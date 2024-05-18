@@ -1,17 +1,6 @@
+from geopy.distance import geodesic
 from rest_framework import serializers
 from .models import *
-
-
-class PhoneSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Phone
-        fields = '__all__'
-
-
-class CitySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = City
-        fields = '__all__'
 
 
 class MetroLineSerializer(serializers.ModelSerializer):
@@ -19,130 +8,35 @@ class MetroLineSerializer(serializers.ModelSerializer):
         model = MetroLine
         fields = '__all__'
 
-
 class MetroStationSerializer(serializers.ModelSerializer):
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        representation['line'] = MetroLineSerializer(instance.line).data
-        return representation
-
+    line = MetroLineSerializer(read_only=True)
     class Meta:
         model = MetroStation
         fields = '__all__'
 
 
-class DistrictSerializer(serializers.ModelSerializer):
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        representation['city'] = CitySerializer(instance.city).data
-        # representation['metro_stations'] = MetroStationSerializer(instance.metro_stations, many=True).data
-        return representation
-    # todo
-    
-
-    class Meta:
-        model = District
-        fields = '__all__'
-
-
-class StreetSerializer(serializers.ModelSerializer):
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        representation['districts'] = DistrictSerializer(instance.districts, many=True).data
-
-        return representation
-
-    class Meta:
-        model = Street
-        fields = '__all__'
-
-
-class AddressSerializer(serializers.ModelSerializer):
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        representation['street'] = StreetSerializer(instance.street).data
-        return representation
-
-    class Meta:
-        model = Address
-        fields = '__all__'
-
-
-class MedicalInstitutionBranchSerializer(serializers.ModelSerializer):
-    address = AddressSerializer()
-
-    class Meta:
-        model = MedicalInstitutionBranch
-        fields = '__all__'
-
-
-class MedicalInstitutionServiceSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ServiceInMedicalInstitution
-        fields = '__all__'
-
-
-class PriceHistorySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = PriceHistory
-        fields = '__all__'
-
-
 class MedicalInstitutionSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = MedicalInstitution
         fields = '__all__'
 
 
-class ResearchMedicalSystemSerializer(serializers.ModelSerializer):
+class MedicalInstitutionBranchSerializer(serializers.ModelSerializer):
+    metro_stations = MetroStationSerializer(many=True, read_only=True)
+    distance_to_user = serializers.SerializerMethodField()
+
     class Meta:
-        model = ResearchMedicalSystem
+        model = MedicalInstitutionBranch
         fields = '__all__'
 
-
-class ResearchMedicalIllnessSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ResearchMedicalIllness
-        fields = '__all__'
-
-
-class FeedbackSerializerForAll(serializers.ModelSerializer):
-    class Meta:
-        model = Feedback
-        fields = ['email', 'text', 'status', 'create', 'id']
-        read_only_fields = ['status', 'create']
-
-
-class FeedbackSerializerModerator(serializers.ModelSerializer):
-    class Meta:
-        model = Feedback
-        fields = '__all__'
-        read_only_fields = ['create']
-
-
-class ReviewSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Review
-        fields = '__all__'
-
-
-class ReviewCommentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ReviewComment
-        fields = '__all__'
-
-
-class SpecialOfferSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = SpecialOffer
-        fields = '__all__'
-
-
-class SpecialOfferForPatientSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = SpecialOfferForPatient
-        fields = '__all__'
+    def get_distance_to_user(self, obj):
+        if self.context.get('user_latitude') and self.context.get('user_longitude'):
+            return get_distance(
+                self.context.get('user_latitude'),
+                self.context.get('user_longitude'),
+                obj.latitude,
+                obj.longitude
+            )
 
 
 class ResearchMaterialSerializer(serializers.ModelSerializer):
@@ -152,9 +46,19 @@ class ResearchMaterialSerializer(serializers.ModelSerializer):
 
 
 class MedicalServiceSerializer(serializers.ModelSerializer):
+    research_material = ResearchMaterialSerializer(many=True, read_only=True)
     class Meta:
         model = MedicalService
         fields = '__all__'
+
+
+class ServiceInMedicalInstitutionSerializer(serializers.ModelSerializer):
+    medical_institution = MedicalInstitutionSerializer(many=False, read_only=True)
+    service = MedicalServiceSerializer(many=False, read_only=True)
+    class Meta:
+        model = ServiceInMedicalInstitution
+        fields = '__all__'
+
 
 class ChangePasswordSerializer(serializers.Serializer):
     model = CustomUser
@@ -177,13 +81,11 @@ class ChangePasswordSerializer(serializers.Serializer):
         return instance
 
 
-
-
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['id', 'phone_number', 'email', 'first_name', 'last_name', 'user_type']
-        extra_kwargs = {'password': {'write_only': True}, 'user_type': {'read_only': True}}
+        fields = ['id', 'phone_number', 'email', 'first_name', 'last_name']
+        extra_kwargs = {'password': {'write_only': True}}
 
 
 class RegisterPatientSerializer(serializers.ModelSerializer):
@@ -198,10 +100,10 @@ class RegisterPatientSerializer(serializers.ModelSerializer):
         return user
 
     def validate(self, attrs):
-        if not attrs.get('phone_number').isdigit():
+        if not attrs.get('phone_number')[1:].isdigit():
             raise serializers.ValidationError('Phone number must contain only digits')
-        if len(attrs.get('phone_number')) != 10:
-            raise serializers.ValidationError('Phone number must be 10 characters long')
+        if 10 <= len(attrs.get('phone_number')) > 12:
+            raise serializers.ValidationError('Phone number must be more or equals 10 and less 12 characters long')
         if CustomUser.objects.filter(phone_number=attrs.get('phone_number')).exists():
             raise serializers.ValidationError('User with this phone number already exists')
         if len(attrs.get('password')) < 8:
@@ -222,3 +124,64 @@ class RegisterAgentSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = CustomUser.objects.create_agent(**validated_data)
         return user
+
+
+# class ResearchMedicalSystemSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = ResearchMedicalSystem
+#         fields = '__all__'
+#
+#
+# class ResearchMedicalIllnessSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = ResearchMedicalIllness
+#         fields = '__all__'
+#
+#
+# class FeedbackSerializerForAll(serializers.ModelSerializer):
+#     class Meta:
+#         model = Feedback
+#         fields = ['email', 'text', 'status', 'create', 'id']
+#         read_only_fields = ['status', 'create']
+#
+#
+# class FeedbackSerializerModerator(serializers.ModelSerializer):
+#     class Meta:
+#         model = Feedback
+#         fields = '__all__'
+#         read_only_fields = ['create']
+#
+#
+# class ReviewSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Review
+#         fields = '__all__'
+#
+#
+# class ReviewCommentSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = ReviewComment
+#         fields = '__all__'
+#
+#
+# class SpecialOfferSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = SpecialOffer
+#         fields = '__all__'
+#
+#
+# class SpecialOfferForPatientSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = SpecialOfferForPatient
+#         fields = '__all__'
+
+
+def get_distance(lat1, lon1, lat2, lon2):
+    lat1 = float(lat1)
+    lon1 = float(lon1)
+    lat2 = float(lat2)
+    lon2 = float(lon2)
+    point1 = (lat1, lon1)
+    point2 = (lat2, lon2)
+    distance = geodesic(point1, point2).meters
+    return distance
