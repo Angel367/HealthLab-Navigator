@@ -117,12 +117,14 @@ function Main() {
                 laboratories={laboratories}
             />
             <div>
+                {/*todo вызов разных карточек в зависимости от контекста*/}
                 {analysisInLaboratories !== undefined
                     &&
                     branches !== undefined
                     &&
                     branches.map((branch, index) => {
                     return (
+
                         <CardLaboratory key={index}
                                         laboratory={branch}
                                         laboratory_name={laboratories.find(laboratory => laboratory.id === branch.medical_institution)?.name}

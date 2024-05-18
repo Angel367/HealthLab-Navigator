@@ -53,6 +53,8 @@ function FilterForm({setSelectedLaboratory,
         fetchMetroStations();
     }, []);
      useEffect(() => {
+        //  todo дозагрузка всех
+
         metroLines !== undefined
             ? setMetroLinesOptions(metroLines.map(metroLine => {
                 console.log(metroLine.name)
