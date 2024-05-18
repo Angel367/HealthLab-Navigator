@@ -25,9 +25,15 @@ class MedicalServiceFilter(filters.FilterSet):
 
 
 class ServiceInMedicalInstitutionFilter(filters.FilterSet):
-    service = filters.CharFilter(field_name='service__name', lookup_expr='icontains')
+    service = filters.ModelMultipleChoiceFilter(
+        field_name='service',
+        queryset=MedicalService.objects.all(),
+    )
     is_active = filters.BooleanFilter()
-    medical_institution = filters.CharFilter(field_name='medical_institution__name', lookup_expr='icontains')
+    medical_institution = filters.ModelMultipleChoiceFilter(
+        field_name='medical_institution',
+        queryset=MedicalInstitution.objects.all(),
+    )
     is_available_oms = filters.BooleanFilter()
     is_available_dms = filters.BooleanFilter()
     is_available_at_home = filters.BooleanFilter()
