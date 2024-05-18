@@ -1,6 +1,6 @@
 import FilterForm from "./FilterForm";
 import HolderAdv from "./HolderAdv";
-import CardAgregator from "./CardAgregator";
+import CardAnalysis from "./CardAnalysis";
 import {useState} from "react";
 
 function Analysis() {
@@ -50,7 +50,7 @@ function Analysis() {
             <div className="analysis cards">
                 {selectedOption.map((analysis, index) => {
                     return (
-                        <CardAgregator key={index} {...analysis}/>
+                        <CardAnalysis key={index} {...analysis}/>
                     );
                 })}
             </div>

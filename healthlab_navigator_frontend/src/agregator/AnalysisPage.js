@@ -1,6 +1,6 @@
 import FilterForm from "./FilterForm";
 import HolderAdv from "./HolderAdv";
-import CardAgregator from "./CardAgregator";
+import CardAnalysis from "./CardAnalysis";
 import {Link, Navigate, useParams} from "react-router-dom";
 import analysis from "./Analysis";
 
@@ -60,7 +60,7 @@ function AnalysisPage() {
         <div>
             <h1>Analysis</h1>
             <div>
-                <CardAgregator {...analysis}/>
+                <CardAnalysis {...analysis}/>
                 <Link to={`/laboratory/${id_laboratory}`} > Перейти к лабе</Link>
             </div>
             <FilterForm/>

@@ -66,7 +66,7 @@ class MedicalInstitutionBranchViewSet(viewsets.ModelViewSet):
 
 class MedicalInstitutionServiceViewSet(viewsets.ModelViewSet):
     queryset = ServiceInMedicalInstitution.objects.all()
-    serializers_class = MedicalInstitutionServiceSerializer
+    serializer_class = MedicalInstitutionServiceSerializer
     permission_classes = [IsSuperuserOrReadOnly, MedicalAgentPermission]
 
     def create(self, request, *args, **kwargs):

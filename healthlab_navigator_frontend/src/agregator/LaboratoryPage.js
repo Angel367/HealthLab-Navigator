@@ -1,6 +1,6 @@
 import FilterForm from "./FilterForm";
 import HolderAdv from "./HolderAdv";
-import CardAgregator from "./CardAgregator";
+import CardAnalysis from "./CardAnalysis";
 import {Link, Navigate, useParams} from "react-router-dom";
 import {isRole} from "../hooks/user.actions";
 import {useEffect, useState} from "react";
@@ -53,23 +53,24 @@ function LaboratoryPage() {
                 null
             }
             <p>{laboratory.description}</p>
-            <a href={laboratory.website}>Перейти на сайт</a>ч
+            <a href={laboratory.website}>Перейти на сайт</a>
 
-            {offers.length > 0 ?
-                <div>
-                    <h2>Акции</h2>
-                    {offers.map((offer, index) => {
-                        return (
-                            <div key={index}>
-                                <h3>{offer.name}</h3>
-                                <p>{offer.description}</p>
-                                <p>{offer.date_start} - {offer.date_end}</p>
-                            </div>
-                        )
-                    })}
-                </div> :
-                null
-            }
+            {/*todo offers*/}
+            {/*{offers.length > 0 ?*/}
+            {/*    <div>*/}
+            {/*        <h2>Акции</h2>*/}
+            {/*        {offers.map((offer, index) => {*/}
+            {/*            return (*/}
+            {/*                <div key={index}>*/}
+            {/*                    <h3>{offer.name}</h3>*/}
+            {/*                    <p>{offer.description}</p>*/}
+            {/*                    <p>{offer.date_start} - {offer.date_end}</p>*/}
+            {/*                </div>*/}
+            {/*            )*/}
+            {/*        })}*/}
+            {/*    </div> :*/}
+            {/*    null*/}
+            {/*}*/}
 
             {/*todo reviews*/}
 
@@ -77,25 +78,28 @@ function LaboratoryPage() {
                 <div>
                     <h2>Филиалы</h2>
                     {branches.map((branch, index) => {
+                        let address = branch.address;
+                        let street = address !== undefined ? address.street : undefined;
+                        let addressStr = street !== undefined ?
+                            `${street.district?.city?.name}, ${street.name}, ${street.house}` : '';
                         return (
-                            <div key={index}>
+                            <div key={index} id={"branch"+branch.id}>
                                 <h3>{branch.is_main}</h3>
-                                <p>{branch.street}</p>
-                                <p>ПН: {branch.working_hours.пн}</p>
-                                <p>ВТ: {branch.working_hours.вт}</p>
-                                <p>СР: {branch.working_hours.ср}</p>
-                                <p>ЧТ: {branch.working_hours.чт}</p>
-                                <p>ПТ: {branch.working_hours.пт}</p>
-                                <p>СБ: {branch.working_hours.сб}</p>
-                                <p>ВС: {branch.working_hours.вс}</p>
-                                <p>{branch.phones}</p>
-
+                                <p>{addressStr}</p>
+                                <p>ПН: {branch?.working_hours?.пн}</p>
+                                <p>ВТ: {branch?.working_hours?.вт}</p>
+                                <p>СР: {branch?.working_hours?.ср}</p>
+                                <p>ЧТ: {branch?.working_hours?.чт}</p>
+                                <p>ПТ: {branch?.working_hours?.пт}</p>
+                                <p>СБ: {branch?.working_hours?.сб}</p>
+                                <p>ВС: {branch?.working_hours?.вс}</p>
                             </div>
                         )
                     })}
                 </div> :
                 null
             }
+        {/*  todo add filter by this lab */}
 
 
 

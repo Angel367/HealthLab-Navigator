@@ -77,11 +77,11 @@ const laboratory = {
                     }
                 ]
             },
-            {
-                index: true,
-                element: <Layout children={<Laboratories/>}/>,
-                errorElement: <Layout children={<Error/>}/>,
-            },
+            // {
+            //     index: true,
+            //     element: <Layout children={<Laboratories/>}/>,
+            //     errorElement: <Layout children={<Error/>}/>,
+            // },
             {
                 path: 'create',
                 element: <Layout children={<RoleMedInstLayout children_for_med_inst={<LaboratoryEdit/>}/>}/>,

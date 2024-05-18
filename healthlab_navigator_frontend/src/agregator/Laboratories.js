@@ -1,12 +1,6 @@
-import FilterForm from "./FilterForm";
-import HolderAdv from "./HolderAdv";
-import CardAgregator from "./CardAgregator";
-import {useState} from "react";
+
 
 function Laboratories() {
-    const [selectedItems, setSelectedItems] = useState([]);
-    // selectedItems is
-    // const []
     return (
         <main>
             {/*<h1>Лаборатории</h1>*/}
@@ -16,7 +10,7 @@ function Laboratories() {
             {/*<div className="laboratory cards">*/}
             {/*    {selectedItems.map((lab, index) => {*/}
             {/*        return (*/}
-            {/*           <CardAgregator key={index} {...lab}/>*/}
+            {/*           <CardAnalysis key={index} {...lab}/>*/}
             {/*        );*/}
             {/*    })}*/}
             {/*</div>*/}

@@ -35,7 +35,7 @@ class DistrictSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         representation['city'] = CitySerializer(instance.city).data
-        representation['metro_stations'] = MetroStationSerializer(instance.metro_stations, many=True).data
+        # representation['metro_stations'] = MetroStationSerializer(instance.metro_stations, many=True).data
         return representation
     # todo
     
