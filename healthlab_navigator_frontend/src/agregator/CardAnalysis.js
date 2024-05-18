@@ -1,27 +1,21 @@
 import {Link} from "react-router-dom";
 
-function CardAnalysis({id_analysis_in_laboratory, name_analysis, id_laboratory,
-    duration_analysis, price_analysis, fast_duration_analysis, fast_price_analysis,
-    is_available_oms, is_available_dms, is_available_fast, is_available_at_home,
-    price_at_home
-}) {
+function CardAnalysis({analysis_one}) {
 
 
     return (
 
             <div className="card">
-                <h3>{name_analysis}</h3>
-                <p>Стоимость: {price_analysis} руб.</p>
-                <p>Срок выполнения: {duration_analysis} дней</p>
-                {fast_duration_analysis && fast_price_analysis && is_available_fast ?
-                    <p>Срочно: {fast_price_analysis} руб. / {fast_duration_analysis} дней</p> :
-                    null
-                }
-                {is_available_oms ? <p>Доступен по ОМС</p> : null}
-                {is_available_dms ? <p>Доступен по ДМС</p> : null}
-                {is_available_at_home ? <p>Доступна сдача на дому
-                    {price_at_home ? `: за ${price_at_home} руб.` : null}</p> : null}
-                <Link to={`/laboratory/${id_laboratory}/analysis/${id_analysis_in_laboratory}`}>
+                <h3>{analysis_one.service?.name}</h3>
+                <p>Стоимость: {analysis_one.price} руб.</p>
+                <p>Срок выполнения: {analysis_one.time_to_complete} дней</p>
+
+                {analysis_one.is_available_fast_result ? <p>Доступен быстрый результат</p> : null}
+                {analysis_one.is_available_oms ? <p>Доступно по ОМС</p> : null}
+                {analysis_one.is_available_dms ? <p>Доступно по ДМС</p> : null}
+                {analysis_one.is_available_at_home ? <p>Выезд на дом</p> : null}
+
+                <Link to={`/laboratory/${analysis_one.medical_institution}/analysis/${analysis_one.id}`}>
                     Подробнее об анализе
                 </Link>
             </div>

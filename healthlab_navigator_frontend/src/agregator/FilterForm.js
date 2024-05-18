@@ -2,44 +2,79 @@ import React, {useEffect, useState} from "react";
 import makeAnimated from "react-select/animated";
 import Select from 'react-select';
 import getData from "../requests/getData";
+import InputRange from 'react-input-range';
+import 'react-input-range/lib/css/index.css';
 
+function FilterForm({setSelectedLaboratory,
+                        maxMinPrice,
+                        setSelectedMinMaxPrice,
+                        selectedMinMaxPrice,
+                        setAtHome,
+                        setFastResult,
+                        setSelectedAnalysis,
+                        laboratories,
+                        setSelectedMetroStations,
+                       setOms,
+                        setDms}) {
 
-function FilterForm({setSelectedLaboratory, setSelectedAnalysis, maxMinPrice, setSelectedMinMaxPrice,
-
-                      setSelectedLocation, setSelectedPeriod, setOms, setDms, setRating}) {
-    const [laboratories, setLaboratories] = useState([]);
     const [analysis, setAnalysis] = useState([]);
-    const [branches, setBranches] = useState([]);
     const [laboratoriesOptions, setLaboratoriesOptions] = useState([]);
-    // useEffect(() => {
-    //     const fetchAnalysis = async () => {
-    //         const resp = await getData('/api/analysis/')
-    //         setAnalysis(resp.data?.results);
-    //     }
-    //     fetchAnalysis();
-    // }, []);
+    const [analysisOptions, setAnalysisOptions] = useState([]);
+    const [metroStations, setMetroStations] = useState([]);
+
+    const [metroLines, setMetroLines] = useState([]);
+    const [metroLinesOptions, setMetroLinesOptions] = useState([]);
     useEffect(() => {
-        const fetchLaboratories = async () => {
-            const resp = await getData('/api/laboratory/')
-            setLaboratories(resp.data);
+        const fetchAnalysis = async () => {
+            const resp = await getData('/api/medical-service/')
+            setAnalysis(resp.data?.results);
         }
-        fetchLaboratories();
+        fetchAnalysis();
     }, []);
     useEffect(() => {
-        laboratories !== undefined ? setLaboratoriesOptions(laboratories.map(laboratory => {
-                // console.log(laboratory);
+        analysis !== undefined
+            ? setAnalysisOptions(analysis.map(analysis => {
+                return {value: analysis.id, label: analysis.name}
+            })) : setAnalysisOptions([]);
+    }, [analysis]);
+    useEffect(() => {
+        const fetchMetroLines = async () => {
+            const resp = await getData('/api/metro-line/')
+            setMetroLines(resp.data?.results);
+        }
+        fetchMetroLines();
+    }, []);
+
+    useEffect(() => {
+        const fetchMetroStations = async () => {
+            const resp = await getData('/api/metro-station/')
+            setMetroStations(resp.data?.results);
+        }
+        fetchMetroStations();
+    }, []);
+     useEffect(() => {
+        metroLines !== undefined
+            ? setMetroLinesOptions(metroLines.map(metroLine => {
+                console.log(metroLine.name)
+                return { label: metroLine.name,
+                    options: metroStations.filter(station => station.line?.id === metroLine.id).map(station => {
+
+                        return {value: station.id, label: station.name}
+                    })}
+            })) : setMetroLinesOptions([]);
+
+
+    }, [metroLines, metroStations]);
+
+
+
+    useEffect(() => {
+        laboratories !== undefined
+            ? setLaboratoriesOptions(laboratories.map(laboratory => {
                 return {value: laboratory.id, label: laboratory.name}
             })) : setLaboratoriesOptions([]);
     }, [laboratories]);
-    // useEffect(() => {
-    //     const fetchBranches = async () => {
-    //         const resp = await getData('/api/laboratory-branch/')
-    //         setBranches(resp.data?.results);
-    //     }
-    //     fetchBranches();
-    // }, []);
 
-    // console.log(laboratoriesOptions, laboratories);
     const animatedComponents = makeAnimated();
                 return (
                     <div>
@@ -51,57 +86,56 @@ function FilterForm({setSelectedLaboratory, setSelectedAnalysis, maxMinPrice, se
                                     name={"select-laboratory"}
                                     isMulti
                                     components={animatedComponents}
-                                    closeMenuOnSelect={false}
+
                                     onChange={(value) => setSelectedLaboratory(value)}
                                     isLoading={laboratories === undefined}
                                     options={laboratoriesOptions}
                                 />
-                                {/*<AsyncSelect*/}
-                                {/*    placeholder={"Выберите анализ"}*/}
-                                {/*    name={"select-analyses"}*/}
-                                {/*    isMulti*/}
-                                {/*    components={animatedComponents}*/}
-                                {/*    closeMenuOnSelect={false}*/}
-                                {/*    onChange={(value) => setSelectedAnalysis(value)}*/}
-                                {/*    options={analysis}*/}
-                                {/*/>*/}
-                                {/*<AsyncSelect*/}
-                                {/*    name={"select-location"}*/}
-                                {/*    isMulti*/}
-                                {/*    components={animatedComponents}*/}
-                                {/*    closeMenuOnSelect={false}*/}
-                                {/*    onChange={(value) => setSelectedLocation(value)}*/}
-                                {/*/>*/}
-                                {/*<InputRange*/}
-                                {/*  maxValue={maxMinPrice.max}*/}
-                                {/*  minValue={maxMinPrice.min}*/}
-                                {/*  formatLabel={value => `${value} ₽`}*/}
-                                {/*  value={{min: maxMinPrice.min, max: maxMinPrice.max}}*/}
-                                {/*  onChange={value => setSelectedMinMaxPrice(value)}*/}
-                                {/*/>*/}
-                                {/*<AsyncSelect*/}
-                                {/*    name={"select-period"}*/}
-                                {/*    isMulti*/}
-                                {/*    components={animatedComponents}*/}
-                                {/*    closeMenuOnSelect={false}*/}
-                                {/*    onChange={(value) => setSelectedPeriod(value)}*/}
-                                {/*/>*/}
+                                <Select
+                                    placeholder={"Выберите анализ"}
+                                    name={"select-analysis"}
+                                    isMulti
+
+                                    components={animatedComponents}
+                                    onChange={(value) => setSelectedAnalysis(value)}
+                                    isLoading={analysis === undefined}
+                                    options={analysisOptions}
+                                />
+                                <Select
+                                    placeholder={"Выберите метро"}
+                                    name={"select-metro"}
+                                    isMulti
+                                    components={animatedComponents}
+                                    onChange={(value) => setSelectedMetroStations(value)}
+                                    isLoading={metroStations === undefined}
+                                    options={metroLinesOptions}
+                                />
+
                                 <div>
+
                                     <input type="checkbox" id="oms" name="oms" value="oms"
                                            onChange={(e) => setOms(e.target.checked)}/>
                                     <label htmlFor="oms">ОМС</label>
                                     <input type="checkbox" id="dms" name="dms" value="dms"
                                            onChange={(e) => setDms(e.target.checked)}/>
                                     <label htmlFor="dms">ДМС</label>
+                                    <input type="checkbox" id="at-home" name="at-home" value="at-home"
+                                             onChange={(e) => setAtHome(e.target.checked)}/>
+                                    <label htmlFor="at-home">На дому</label>
+                                    <input type="checkbox" id="fast-result" name="fast-result" value="fast-result"
+                                           onChange={(e) => setFastResult(e.target.checked)}/>
+                                    <label htmlFor="fast-result">Быстрый результат</label>
+
                                 </div>
-                                {/*<InputRange*/}
-                                {/*    maxValue={5}*/}
-                                {/*    minValue={0}*/}
-                                {/*    formatLabel={value => `${value} ⭐`}*/}
-                                {/*    value={{ min: 0, max: 5 }}*/}
-                                {/*    onChange={value => setRating(value)}*/}
-                                {/*    onChangeComplete={value => console.log(value)}*/}
-                                {/*/>*/}
+                                <InputRange
+                                    maxValue={maxMinPrice.max}
+                                    minValue={maxMinPrice.min}
+                                    draggableTrack
+                                    formatLabel={value => `${value} руб.`}
+                                    value={selectedMinMaxPrice}
+                                    onChange={value => setSelectedMinMaxPrice(value)}
+                                    // onChangeComplete={value => console.log(value)}
+                                />
                             </div>
 
                         </div>

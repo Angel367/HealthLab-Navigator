@@ -1,73 +1,137 @@
 import FilterForm from "../agregator/FilterForm";
 import {useEffect, useState} from "react";
 import getData from "../requests/getData";
-import CardAnalysis from "../agregator/CardAnalysis";
+import URLSearchParams from "url-search-params";
 import CardLaboratory from "../agregator/CardLaboratory";
 
 function Main() {
-    const [minMaxPrice, setMinMaxPrice] = useState({min:0, max:100000});
-
     const [analysisInLaboratories, setAnalysisInLaboratories] = useState([]);
     const [selectedLaboratories, setSelectedLaboratories] = useState([]);
     const [selectedAnalysis, setSelectedAnalysis] = useState([]);
-    const [selectedLocation, setSelectedLocation] = useState([]);
-    const [selectedPeriod, setSelectedPeriod] = useState([]);
+
     const [oms, setOms] = useState(false);
     const [dms, setDms] = useState(false);
-    const [rating, setRating] = useState(0);
-    const [selectedMinMaxPrice, setSelectedMinMaxPrice] = useState(minMaxPrice);
-
-
-
+    const [at_home, setAtHome] = useState(false);
+    const [selectedMinMaxPrice, setSelectedMinMaxPrice] = useState(undefined);
+    const [fastResult, setFastResult] = useState(false);
+    const [selectedMetroStations, setSelectedMetroStations] = useState([]);
+    const [branches, setBranches] = useState([]);
+    const [laboratories, setLaboratories] = useState(undefined);
+    const [userLocation, setUserLocation] = useState({
+        'longitude': 37.617635,
+        'latitude': 55.755814
+    });
+    useEffect(() => {
+        const fetchLaboratories = async () => {
+            const resp = await getData('/api/medical-institution/')
+            setLaboratories(resp.data?.results);
+        }
+        fetchLaboratories();
+    }, []);
     useEffect(() => {
         const fetchAnalysisInLaboratories = async () => {
-            const resp = await getData('/api/laboratory-analysis/',
-                {id_laboratories: selectedLaboratories.map(laboratory => laboratory.value)},
-                {id_analysis: selectedAnalysis.map(analysis => analysis.value)},
-                {price: selectedMinMaxPrice},
-                // {id_location: selectedLocation.map(location => location.value)},
-                // {period: selectedPeriod.map(period => period.value)},
-                {oms: oms},
-                {dms: dms},
-                {rating: rating}
+            const params = new URLSearchParams();
+            if (selectedLaboratories.length > 0) {
+                selectedLaboratories.forEach(laboratory => {
+                    params.append('medical_institution', laboratory.value);
+                });
+            }
+            if (selectedAnalysis.length > 0) {
+                selectedAnalysis.forEach(analysis => {
+                    params.append('service', analysis.value);
+                });
+            }
+            if (oms === true) {
+                params['is_available_oms'] = oms;
+            }
+            if (dms === true) {
+                params['is_available_dms'] = dms;
+            }
+            if (at_home === true) {
+                params['is_available_at_home'] = at_home;
+            }
+            if (fastResult === true) {
+                params['is_available_fast_result'] = fastResult;
+            }
+            if (selectedMinMaxPrice !== undefined
+                && selectedMinMaxPrice.min !== undefined
+                && selectedMinMaxPrice.max !== undefined) {
+                params['price_min'] = selectedMinMaxPrice.min;
+                params['price_max'] = selectedMinMaxPrice.max;
+            }
+            const resp = await getData('/api/service-in-medical-institution/',
+                params
             )
             setAnalysisInLaboratories(resp.data?.results);
-            // setMinMaxPrice(analysisInLaboratories.reduce((acc, analysis) => {
-            //     return {min: Math.min(acc.min, analysis.price?.price_value || 0),
-            //         max: Math.max(acc.max, analysis.price?.price_value || 100000)}
-            // }));
+
         }
         fetchAnalysisInLaboratories();
-    }, [selectedLaboratories, selectedAnalysis, selectedMinMaxPrice,
-        selectedLocation, selectedPeriod, oms,
-        dms, rating, analysisInLaboratories]);
-
-
-
-
+    }, [selectedLaboratories, selectedAnalysis, selectedMinMaxPrice, oms, dms, at_home, fastResult]);
+    const calcMinMaxPrice = (analysisInLaboratories) => {
+        if (analysisInLaboratories?.length === 0 || true) {
+            return {min: 0, max: 100000};
+        }
+        let min = analysisInLaboratories[0].price;
+        let max = analysisInLaboratories[0].price;
+        analysisInLaboratories.forEach(analysis => {
+            if (analysis.price < min) {
+                min = analysis.price;
+            }
+            if (analysis.price > max) {
+                max = analysis.price;
+            }
+        });
+        return {min: min, max: max};
+    }
+    useEffect(() => {
+        const fetchBranches = async () => {
+            const params = new URLSearchParams();
+            if (selectedMetroStations.length > 0) {
+                selectedMetroStations.forEach(station => {
+                    params.append('metro_station', station.value);
+                });
+            }
+            if (userLocation !== undefined) {
+                params['latitude'] = userLocation.latitude;
+                params['longitude'] = userLocation.longitude;
+            }
+            const resp = await getData('/api/medical-institution-branch/')
+            setBranches(resp.data?.results);
+        }
+        fetchBranches();
+    }, [selectedMetroStations, userLocation]);
 
     return (
         <div>
             <FilterForm
                 setSelectedLaboratory={setSelectedLaboratories}
                 setSelectedAnalysis={setSelectedAnalysis}
-                maxMinPrice={minMaxPrice}
+                setSelectedMetroStations={setSelectedMetroStations}
+                maxMinPrice={calcMinMaxPrice(analysisInLaboratories)}
                 setSelectedMinMaxPrice={setSelectedMinMaxPrice}
-                setSelectedLocation={setSelectedLocation}
-                setSelectedPeriod={setSelectedPeriod}
+                setAtHome={setAtHome}
+                setFastResult={setFastResult}
                 setOms={setOms}
                 setDms={setDms}
-                setRating={setRating}
-
+                selectedMinMaxPrice={selectedMinMaxPrice}
+                laboratories={laboratories}
             />
             <div>
-                {analysisInLaboratories !== undefined && analysisInLaboratories.map((analysis, index) => {
+                {analysisInLaboratories !== undefined
+                    &&
+                    branches !== undefined
+                    &&
+                    branches.map((branch, index) => {
                     return (
-                        <div key={index}></div>
-                        // <CardLaboratory key={index}
-                        //                 // laboratory={branches.find(branch => branch.id_laboratory === analysis.id_laboratory)}
-                        //                 analysis={analysis}
-                        // />
+                        <CardLaboratory key={index}
+                                        laboratory={branch}
+                                        laboratory_name={laboratories.find(laboratory => laboratory.id === branch.medical_institution)?.name}
+
+                                        analysis={analysisInLaboratories.filter(
+                                            analysis => analysis.medical_institution?.id === branch.medical_institution
+                                        && selectedAnalysis.map(analysis => analysis.value).includes(analysis.service?.id)
+                                        )}
+                        />
                     )
                 })}
             </div>
