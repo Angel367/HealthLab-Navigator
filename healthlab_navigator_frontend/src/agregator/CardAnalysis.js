@@ -2,7 +2,7 @@ import {Link} from "react-router-dom";
 
 function CardAnalysis({analysis_one}) {
 
-
+    console.log(analysis_one, 'one')
     return (
 
             <div className="card">

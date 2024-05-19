@@ -22,7 +22,7 @@ function CardLaboratory({ laboratory, analysis, laboratory_name}) {
 
 
                 {analysis && analysis.map((analysis_one, index) => {
-                    return <CardAnalysis key={index} analysis_one={analysis}/>;
+                    return <CardAnalysis key={index} analysis_one={analysis_one}/>;
                 })}
                 <Link to={`/laboratory/${laboratory.medical_institution}#${laboratory.id}`}>
                     Подробнее об лаборатории

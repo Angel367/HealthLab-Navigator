@@ -3,6 +3,7 @@ import {useEffect, useState} from "react";
 import getData from "../requests/getData";
 import URLSearchParams from "url-search-params";
 import CardLaboratory from "../agregator/CardLaboratory";
+import {useGeolocated} from "react-geolocated";
 
 function Main() {
     const [analysisInLaboratories, setAnalysisInLaboratories] = useState([]);
@@ -17,10 +18,14 @@ function Main() {
     const [selectedMetroStations, setSelectedMetroStations] = useState([]);
     const [branches, setBranches] = useState([]);
     const [laboratories, setLaboratories] = useState(undefined);
-    const [userLocation, setUserLocation] = useState({
-        'longitude': 37.617635,
-        'latitude': 55.755814
-    });
+    const { coords, isGeolocationAvailable, isGeolocationEnabled } =
+        useGeolocated({
+            positionOptions: {
+                enableHighAccuracy: false,
+            },
+            userDecisionTimeout: 5000,
+        });
+
     useEffect(() => {
         const fetchLaboratories = async () => {
             const resp = await getData('/api/medical-institution/')
@@ -42,22 +47,22 @@ function Main() {
                 });
             }
             if (oms === true) {
-                params['is_available_oms'] = oms;
+                params.append('is_available_oms', oms);
             }
             if (dms === true) {
-                params['is_available_dms'] = dms;
+                params.append('is_available_dms', dms);
             }
             if (at_home === true) {
-                params['is_available_at_home'] = at_home;
+                params.append('is_available_at_home', at_home);
             }
             if (fastResult === true) {
-                params['is_available_fast_result'] = fastResult;
+                params.append('is_available_fast_result', fastResult);
             }
             if (selectedMinMaxPrice !== undefined
                 && selectedMinMaxPrice.min !== undefined
                 && selectedMinMaxPrice.max !== undefined) {
-                params['price_min'] = selectedMinMaxPrice.min;
-                params['price_max'] = selectedMinMaxPrice.max;
+                params.append('price_min', selectedMinMaxPrice.min);
+                params.append('price_max', selectedMinMaxPrice.max);
             }
             const resp = await getData('/api/service-in-medical-institution/',
                 params
@@ -86,20 +91,23 @@ function Main() {
     useEffect(() => {
         const fetchBranches = async () => {
             const params = new URLSearchParams();
+
             if (selectedMetroStations.length > 0) {
                 selectedMetroStations.forEach(station => {
-                    params.append('metro_station', station.value);
+                    params.append('metro_stations', station.value);
                 });
             }
-            if (userLocation !== undefined) {
-                params['latitude'] = userLocation.latitude;
-                params['longitude'] = userLocation.longitude;
+            if (coords !== undefined) {
+                params.append('longitude', coords.longitude)
+                params.append('latitude', coords.latitude)
             }
-            const resp = await getData('/api/medical-institution-branch/')
+            console.log(params)
+            const resp = await getData('/api/medical-institution-branch/',
+            params);
             setBranches(resp.data?.results);
         }
         fetchBranches();
-    }, [selectedMetroStations, userLocation]);
+    }, [selectedMetroStations, coords]);
 
     return (
         <div>
@@ -120,6 +128,7 @@ function Main() {
                 {/*todo вызов разных карточек в зависимости от контекста*/}
                 {analysisInLaboratories !== undefined
                     &&
+                    analysisInLaboratories.length !== 0 &&
                     branches !== undefined
                     &&
                     branches.map((branch, index) => {

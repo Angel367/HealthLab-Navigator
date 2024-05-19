@@ -39,21 +39,40 @@ function FilterForm({setSelectedLaboratory,
     }, [analysis]);
     useEffect(() => {
         const fetchMetroLines = async () => {
-            const resp = await getData('/api/metro-line/')
-            setMetroLines(resp.data?.results);
+            let page_l = 1;
+            let metro_lines=[];
+            while (true){
+                const resp = await getData('/api/metro-line/?page='+page_l)
+                metro_lines.push(resp.data?.results);
+                if (resp.data?.next === null){
+                    break;
+                }
+                page_l++;
+            }
+
+            setMetroLines(metro_lines.flat());
         }
         fetchMetroLines();
     }, []);
 
     useEffect(() => {
         const fetchMetroStations = async () => {
-            const resp = await getData('/api/metro-station/')
-            setMetroStations(resp.data?.results);
+            let page = 1;
+            let metro_stations=[];
+            while (true){
+                const resp = await getData('/api/metro-station/?page='+page);
+                metro_stations.push(resp.data?.results);
+                if (resp.data?.next === null){
+                    break;
+                }
+                page++;
+            }
+            setMetroStations(metro_stations.flat());
         }
         fetchMetroStations();
     }, []);
      useEffect(() => {
-        //  todo дозагрузка всех
+
 
         metroLines !== undefined
             ? setMetroLinesOptions(metroLines.map(metroLine => {
@@ -129,15 +148,15 @@ function FilterForm({setSelectedLaboratory,
                                     <label htmlFor="fast-result">Быстрый результат</label>
 
                                 </div>
-                                <InputRange
-                                    maxValue={maxMinPrice.max}
-                                    minValue={maxMinPrice.min}
-                                    draggableTrack
-                                    formatLabel={value => `${value} руб.`}
-                                    value={selectedMinMaxPrice}
-                                    onChange={value => setSelectedMinMaxPrice(value)}
-                                    // onChangeComplete={value => console.log(value)}
-                                />
+                                {/*<InputRange*/}
+                                {/*    maxValue={maxMinPrice.max}*/}
+                                {/*    minValue={maxMinPrice.min}*/}
+                                {/*    draggableTrack*/}
+                                {/*    formatLabel={value => `${value} руб.`}*/}
+                                {/*    value={selectedMinMaxPrice}*/}
+                                {/*    onChange={value => setSelectedMinMaxPrice(value)}*/}
+                                {/*    // onChangeComplete={value => console.log(value)}*/}
+                                {/*/>*/}
                             </div>
 
                         </div>
