@@ -13,7 +13,7 @@ ENV PIP_TIMEOUT=100
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the current directory contents into the container at /code/
-COPY cosmetic_meow_backend/ /backend/
+COPY HealthLab_Navigator_Backend/ /backend/
 
 # Run migrations
 RUN python manage.py makemigrations
