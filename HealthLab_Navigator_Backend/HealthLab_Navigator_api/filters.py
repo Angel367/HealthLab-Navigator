@@ -71,7 +71,6 @@ class ServiceInMedicalInstitutionFilter(filters.FilterSet):
                   'time_to_complete_for_fast_result', 'internal_code', 'url', 'ordering']
 
 
-
 class MetroStationFilter(filters.FilterSet):
     name = filters.CharFilter(field_name='name', lookup_expr='iexact')
 
@@ -83,7 +82,6 @@ class MetroStationFilter(filters.FilterSet):
 class ResearchMaterialFilter(filters.FilterSet):
     name = filters.CharFilter(field_name='name', lookup_expr='iexact')
 
-
     class Meta:
         model = ResearchMaterial
         fields = ['name']
@@ -93,6 +91,11 @@ class MedicalInstitutionBranchFilter(filters.FilterSet):
     metro_stations = filters.ModelMultipleChoiceFilter(
         field_name='metro_stations',
         queryset=MetroStation.objects.all()
+    )
+    address = filters.CharFilter(field_name='address', lookup_expr='icontains')
+    medical_institution = filters.ModelMultipleChoiceFilter(
+        field_name='medical_institution',
+        queryset=MedicalInstitution.objects.all()
     )
 
     class Meta:
