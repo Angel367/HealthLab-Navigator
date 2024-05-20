@@ -118,17 +118,17 @@ const router = createBrowserRouter([
         element: <Layout children={<Partners/>}/>,
         errorElement: <Layout children={<Error/>}/>,
     },
-    analysis,
+    // analysis,
     laboratory,
     {
         path: '/profile/',
         errorElement: <Layout children={<Error/>}/>,
         children: [
-            {
-                path: 'edit',
-                element: <Layout children={<UserLayout children_for_user={<ProfileEdit/>}/>}/>,
-                errorElement: <Layout children={<Error/>}/>,
-            },
+            // {
+            //     path: 'edit',
+            //     element: <Layout children={<UserLayout children_for_user={<ProfileEdit/>}/>}/>,
+            //     errorElement: <Layout children={<Error/>}/>,
+            // },
             {
                 index: true,
                 element: <Layout children={<UserLayout children_for_user={<Profile/>}/>}/>,

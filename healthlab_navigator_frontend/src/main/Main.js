@@ -9,7 +9,6 @@ function Main() {
     const [analysisInLaboratories, setAnalysisInLaboratories] = useState([]);
     const [selectedLaboratories, setSelectedLaboratories] = useState([]);
     const [selectedAnalysis, setSelectedAnalysis] = useState([]);
-
     const [oms, setOms] = useState(false);
     const [dms, setDms] = useState(false);
     const [at_home, setAtHome] = useState(false);
@@ -18,6 +17,7 @@ function Main() {
     const [selectedMetroStations, setSelectedMetroStations] = useState([]);
     const [branches, setBranches] = useState([]);
     const [page, setPage] = useState(1);
+    const [count, setCount] = useState(0);
     const [laboratories, setLaboratories] = useState(undefined);
     const { coords, isGeolocationAvailable, isGeolocationEnabled, positionError}=
         useGeolocated({
@@ -108,7 +108,8 @@ function Main() {
             params.append('page', page);
             const resp = await getData('/api/medical-institution-branch/',
             params);
-            setBranches(resp.data || []);
+            setBranches(resp.data?.results);
+            setCount(resp.data?.count);
         }
         fetchBranches();
     }, [selectedMetroStations, coords, selectedLaboratories, page, isGeolocationAvailable, isGeolocationEnabled]);
@@ -122,8 +123,11 @@ function Main() {
         setPage(1);
     }
     const lastPage = () => {
-        setPage(Math.ceil(branches.count / 10));
+
+        setPage(Math.ceil(count / 10));
     }
+
+
     return (
         <div>
             <FilterForm
@@ -143,52 +147,58 @@ function Main() {
             />
             <div>
                 <div>
+                    {branches!== undefined && branches.length > 0 ?
+                        <>
+                        {analysisInLaboratories.length > 0 ?
 
-                    {branches.results !== undefined && branches.results.length > 0 &&
-                        selectedAnalysis?.length >= 0 &&
-                        branches.results.map((branch, index) => {
-                            if (selectedAnalysis.length > 0 && analysisInLaboratories?.length>0 &&
-                                analysisInLaboratories.find(analysis => analysis.medical_institution === branch.medical_institution)) {
-                                // console.log(analysisInLaboratories.find(analysis => analysis.medical_institution === branch.medical_institution));
-                                return null;
-                            }
+                            branches
+                                .filter(branch => analysisInLaboratories.some(analysis => analysis.medical_institution?.id === branch.medical_institution))
+                                .map((branch, index) => {
+                                return <CardLaboratory key={index} laboratory={branch}
+                                    analysis={analysisInLaboratories
+                                        .filter(analysis_one =>
+                                            analysis_one.medical_institution?.id === branch.medical_institution)}
+                                                           laboratory_name={branch.name}/>
 
-                            const lab_name = laboratories.find(laboratory => laboratory.id === branch.medical_institution).name || '';
-                            return (
-                                <CardLaboratory key={index}
-                                                laboratory={branch}
-                                                laboratory_name={lab_name}
-                                                analysis={analysisInLaboratories.filter(analysis => analysis.medical_institution === branch.medical_institution)}
-                                />
-                            )
-                        }
-                        )}
+                            })
+                            :
+                            branches.map((branch, index) => {
+                                return <CardLaboratory key={index} laboratory={branch} analysis={[]} laboratory_name={branch.name}/>
+                            })}
 
-                    {branches.results?.length === 0 &&
-                        <p>Ничего не найдено</p>
-                        }
-                     </div>
-                         <div>
-                             {page > 1 &&
-                                 <>
-                                    <button onClick={firstPage}>Первая</button>
-                                     <button onClick={prevPage}>Назад</button>
-                                 </>
-                             }
-                             {page}
-                                {page < Math.ceil(branches.count / 10) &&
+
+                            <div>
+                                {page > 1 &&
+                                    <>
+                                        <button onClick={firstPage}>Первая</button>
+                                        <button onClick={prevPage}>Назад</button>
+                                    </>
+                                }
+                                {page}
+                                {page < Math.ceil(count / 10)
+                                    ?
                                     <>
                                         <button onClick={nextPage}>Вперед</button>
                                         <button onClick={lastPage}>Последняя</button>
-                                    </>
+                                    </> : null
                                 }
-                         </div>
+                            </div>
+                        </>
+
+
+                        :
+
+                        <p>Ничего не найдено</p>}
 
                 </div>
 
+
             </div>
+
+        </div>
 
     );
 
 }
+
 export default Main;
