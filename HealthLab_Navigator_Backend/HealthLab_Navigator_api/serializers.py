@@ -24,6 +24,7 @@ class MedicalInstitutionSerializer(serializers.ModelSerializer):
 class MedicalInstitutionBranchSerializer(serializers.ModelSerializer):
     metro_stations = MetroStationSerializer(many=True, read_only=True)
     distance_to_user = serializers.SerializerMethodField()
+    services = serializers.SerializerMethodField()
 
     class Meta:
         model = MedicalInstitutionBranch
@@ -37,6 +38,23 @@ class MedicalInstitutionBranchSerializer(serializers.ModelSerializer):
                 obj.latitude,
                 obj.longitude
             )
+
+    def get_services(self, obj):
+        # Получить параметры запроса
+        request = self.context.get('request')
+        if request:
+            service_ids = request.query_params.getlist('service')
+            # Фильтровать услуги по переданным параметрам
+            services = ServiceInMedicalInstitution.objects.filter(
+                medical_institution=obj.medical_institution,
+                service__id__in=service_ids,
+                is_active=True
+            )
+            data = ServiceInMedicalInstitutionSerializer(services, many=True).data
+            for service in data:
+                service['adelina'] = "ya v ahye s tvoih zaprosov"
+            return data
+        return []
 
 
 class ResearchMaterialSerializer(serializers.ModelSerializer):
