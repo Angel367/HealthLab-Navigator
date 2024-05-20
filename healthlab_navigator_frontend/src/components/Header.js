@@ -10,7 +10,7 @@ const Header = () => (
     <nav className="navbar navbar-expand-lg navbar-light bg-light py-3 border-bottom">
       <div className="container">
         <Link to="/" className="navbar-brand">
-          <img src={logo_inline} alt="MedLabNaV" height="40"/>
+          <img src={logo_inline} alt="MedLabNaV" height="80"/>
         </Link>
         <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span className="navbar-toggler-icon"></span>

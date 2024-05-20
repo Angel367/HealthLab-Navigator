@@ -1,21 +1,24 @@
-import Header from "./Header";
-import Footer from "./Footer";
-import NotificationContainer from "react-notifications/lib/NotificationContainer";
-import { useGeolocated } from "react-geolocated";
+import React from 'react';
+import Header from './Header';
+import Footer from './Footer';
+import { NotificationContainer } from 'react-notifications';
 
-function Layout({children, title="HealthLab Navigator"}) {
-
+function Layout({ children, title = "HealthLab Navigator" }) {
+  React.useEffect(() => {
     document.title = title;
-
+  }, [title]);
 
   return (
-    <div className="App">
-        <Header/>
-        <NotificationContainer/>
+    <div className="d-flex flex-column min-vh-100">
+      <Header />
+      <NotificationContainer />
+      <main className="flex-grow-1">
         {children}
-        <Footer/>
+      </main>
+      <Footer />
     </div>
   );
 }
 
 export default Layout;
+

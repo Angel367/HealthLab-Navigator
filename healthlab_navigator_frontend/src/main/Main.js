@@ -4,6 +4,7 @@ import getData from "../requests/getData";
 import URLSearchParams from "url-search-params";
 import CardLaboratory from "../agregator/CardLaboratory";
 import {useGeolocated} from "react-geolocated";
+import Loading from "../components/Loading";
 
 function Main() {
     const [analysisInLaboratories, setAnalysisInLaboratories] = useState([]);
@@ -15,7 +16,7 @@ function Main() {
     const [selectedMinMaxPrice, setSelectedMinMaxPrice] = useState(undefined);
     const [fastResult, setFastResult] = useState(false);
     const [selectedMetroStations, setSelectedMetroStations] = useState([]);
-    const [branches, setBranches] = useState([]);
+    const [branches, setBranches] = useState(undefined);
     const [page, setPage] = useState(1);
     const [count, setCount] = useState(0);
     const [laboratories, setLaboratories] = useState(undefined);
@@ -187,8 +188,14 @@ function Main() {
 
 
                         :
-
-                        <p>Ничего не найдено</p>}
+                        <div>
+                            {branches?.length === 0 ?
+                                <div>Ничего не найдено</div>
+                                :
+                                <Loading/>
+                            }
+                            </div>
+                    }
 
                 </div>
 
