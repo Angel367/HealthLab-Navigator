@@ -9,10 +9,12 @@ function FilterForm({setSelectedLaboratory,
                         maxMinPrice,
                         setSelectedMinMaxPrice,
                         selectedMinMaxPrice,
+                        setPage,
                         setAtHome,
                         setFastResult,
                         setSelectedAnalysis,
                         laboratories,
+                        setLaboratories,
                         setSelectedMetroStations,
                        setOms,
                         setDms}) {
@@ -21,15 +23,27 @@ function FilterForm({setSelectedLaboratory,
     const [laboratoriesOptions, setLaboratoriesOptions] = useState([]);
     const [analysisOptions, setAnalysisOptions] = useState([]);
     const [metroStations, setMetroStations] = useState([]);
-
     const [metroLines, setMetroLines] = useState([]);
     const [metroLinesOptions, setMetroLinesOptions] = useState([]);
+    const [selectedInputAnalysis, setSelectedInputAnalysis] = useState('');
     useEffect(() => {
         const fetchAnalysis = async () => {
-            const resp = await getData('/api/medical-service/')
-            setAnalysis(resp.data?.results);
+                const resp = await getData('/api/medical-service/',
+                    {name__icontains: selectedInputAnalysis})
+                setAnalysis(resp.data?.results);
+                setPage(1)
         }
         fetchAnalysis();
+    }, [selectedInputAnalysis]);
+    useEffect(() => {
+        const fetchLaboratories = async () => {
+
+                const resp = await getData('/api/medical-institution/')
+                setLaboratories(resp.data?.results);
+
+
+        }
+        fetchLaboratories();
     }, []);
     useEffect(() => {
         analysis !== undefined
@@ -48,9 +62,10 @@ function FilterForm({setSelectedLaboratory,
                     break;
                 }
                 page_l++;
+                setMetroLines(metro_lines.flat());
             }
 
-            setMetroLines(metro_lines.flat());
+
         }
         fetchMetroLines();
     }, []);
@@ -66,25 +81,23 @@ function FilterForm({setSelectedLaboratory,
                     break;
                 }
                 page++;
+
             }
+
             setMetroStations(metro_stations.flat());
         }
         fetchMetroStations();
     }, []);
      useEffect(() => {
-
-
         metroLines !== undefined
             ? setMetroLinesOptions(metroLines.map(metroLine => {
-                console.log(metroLine.name)
-                return { label: metroLine.name,
+
+                return { label: metroLine?.name || '',
                     options: metroStations.filter(station => station.line?.id === metroLine.id).map(station => {
 
-                        return {value: station.id, label: station.name}
+                        return {value: station?.id, label: station?.name || ''}
                     })}
             })) : setMetroLinesOptions([]);
-
-
     }, [metroLines, metroStations]);
 
 
@@ -108,7 +121,10 @@ function FilterForm({setSelectedLaboratory,
                                     isMulti
                                     components={animatedComponents}
 
-                                    onChange={(value) => setSelectedLaboratory(value)}
+                                    onChange={(value) =>{
+                                    setSelectedLaboratory(value);
+                                    setPage(1)
+                                        ;}}
                                     isLoading={laboratories === undefined}
                                     options={laboratoriesOptions}
                                 />
@@ -116,9 +132,13 @@ function FilterForm({setSelectedLaboratory,
                                     placeholder={"Выберите анализ"}
                                     name={"select-analysis"}
                                     isMulti
-
+                                    onInputChange={(value)=>
+                                    {setSelectedInputAnalysis(value);}}
                                     components={animatedComponents}
-                                    onChange={(value) => setSelectedAnalysis(value)}
+                                    onChange={(value) =>{ setSelectedAnalysis(value);
+                                    setPage(1)}
+
+                                }
                                     isLoading={analysis === undefined}
                                     options={analysisOptions}
                                 />
@@ -127,12 +147,20 @@ function FilterForm({setSelectedLaboratory,
                                     name={"select-metro"}
                                     isMulti
                                     components={animatedComponents}
-                                    onChange={(value) => setSelectedMetroStations(value)}
+                                    onChange={(value) =>
+                                    {setSelectedMetroStations(value);
+                                    setPage(1)
+                                    }}
                                     isLoading={metroStations === undefined}
                                     options={metroLinesOptions}
+
+                                    onMenuScrollToBottom={(e) =>
+                                    /*todo scrolll догрузка по скролу*/
+                                        console.log(e)}
                                 />
 
                                 <div>
+
 
                                     <input type="checkbox" id="oms" name="oms" value="oms"
                                            onChange={(e) => setOms(e.target.checked)}/>

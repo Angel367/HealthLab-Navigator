@@ -17,22 +17,17 @@ function Main() {
     const [fastResult, setFastResult] = useState(false);
     const [selectedMetroStations, setSelectedMetroStations] = useState([]);
     const [branches, setBranches] = useState([]);
+    const [page, setPage] = useState(1);
     const [laboratories, setLaboratories] = useState(undefined);
-    const { coords, isGeolocationAvailable, isGeolocationEnabled } =
+    const { coords, isGeolocationAvailable, isGeolocationEnabled, positionError}=
         useGeolocated({
             positionOptions: {
-                enableHighAccuracy: false,
+                enableHighAccuracy: true,
             },
-            userDecisionTimeout: 5000,
+            userDecisionTimeout: 10000,
         });
+    // console.log(positionError)
 
-    useEffect(() => {
-        const fetchLaboratories = async () => {
-            const resp = await getData('/api/medical-institution/')
-            setLaboratories(resp.data?.results);
-        }
-        fetchLaboratories();
-    }, []);
     useEffect(() => {
         const fetchAnalysisInLaboratories = async () => {
             const params = new URLSearchParams();
@@ -45,6 +40,9 @@ function Main() {
                 selectedAnalysis.forEach(analysis => {
                     params.append('service', analysis.value);
                 });
+            }
+            else {
+                return;
             }
             if (oms === true) {
                 params.append('is_available_oms', oms);
@@ -80,10 +78,10 @@ function Main() {
         let max = analysisInLaboratories[0].price;
         analysisInLaboratories.forEach(analysis => {
             if (analysis.price < min) {
-                min = analysis.price;
+                min = analysis.price || 0;
             }
             if (analysis.price > max) {
-                max = analysis.price;
+                max = analysis.price || 100000;
             }
         });
         return {min: min, max: max};
@@ -91,24 +89,41 @@ function Main() {
     useEffect(() => {
         const fetchBranches = async () => {
             const params = new URLSearchParams();
+            if (selectedLaboratories.length > 0) {
+                selectedLaboratories.forEach(laboratory => {
+                    params.append('medical_institution', laboratory.value);
+                });
 
+            }
             if (selectedMetroStations.length > 0) {
                 selectedMetroStations.forEach(station => {
                     params.append('metro_stations', station.value);
                 });
             }
-            if (coords !== undefined) {
-                params.append('longitude', coords.longitude)
-                params.append('latitude', coords.latitude)
+            if (isGeolocationAvailable && isGeolocationEnabled && coords !== undefined) {
+                params.append('longitude', coords?.longitude)
+                params.append('latitude', coords?.latitude)
+
             }
-            console.log(params)
+            params.append('page', page);
             const resp = await getData('/api/medical-institution-branch/',
             params);
-            setBranches(resp.data?.results);
+            setBranches(resp.data || []);
         }
         fetchBranches();
-    }, [selectedMetroStations, coords]);
-
+    }, [selectedMetroStations, coords, selectedLaboratories, page, isGeolocationAvailable, isGeolocationEnabled]);
+    const nextPage = () => {
+        setPage(page + 1);
+    }
+    const prevPage = () => {
+        setPage(page - 1);
+    }
+    const firstPage = () => {
+        setPage(1);
+    }
+    const lastPage = () => {
+        setPage(Math.ceil(branches.count / 10));
+    }
     return (
         <div>
             <FilterForm
@@ -123,30 +138,56 @@ function Main() {
                 setDms={setDms}
                 selectedMinMaxPrice={selectedMinMaxPrice}
                 laboratories={laboratories}
+                setLaboratories={setLaboratories}
+                setPage={setPage}
             />
             <div>
-                {/*todo вызов разных карточек в зависимости от контекста*/}
-                {analysisInLaboratories !== undefined
-                    &&
-                    analysisInLaboratories.length !== 0 &&
-                    branches !== undefined
-                    &&
-                    branches.map((branch, index) => {
-                    return (
+                <div>
 
-                        <CardLaboratory key={index}
-                                        laboratory={branch}
-                                        laboratory_name={laboratories.find(laboratory => laboratory.id === branch.medical_institution)?.name}
+                    {branches.results !== undefined && branches.results.length > 0 &&
+                        selectedAnalysis?.length >= 0 &&
+                        branches.results.map((branch, index) => {
+                            if (selectedAnalysis.length > 0 && analysisInLaboratories?.length>0 &&
+                                analysisInLaboratories.find(analysis => analysis.medical_institution === branch.medical_institution)) {
+                                // console.log(analysisInLaboratories.find(analysis => analysis.medical_institution === branch.medical_institution));
+                                return null;
+                            }
 
-                                        analysis={analysisInLaboratories.filter(
-                                            analysis => analysis.medical_institution?.id === branch.medical_institution
-                                        && selectedAnalysis.map(analysis => analysis.value).includes(analysis.service?.id)
-                                        )}
-                        />
-                    )
-                })}
+                            const lab_name = laboratories.find(laboratory => laboratory.id === branch.medical_institution).name || '';
+                            return (
+                                <CardLaboratory key={index}
+                                                laboratory={branch}
+                                                laboratory_name={lab_name}
+                                                analysis={analysisInLaboratories.filter(analysis => analysis.medical_institution === branch.medical_institution)}
+                                />
+                            )
+                        }
+                        )}
+
+                    {branches.results?.length === 0 &&
+                        <p>Ничего не найдено</p>
+                        }
+                     </div>
+                         <div>
+                             {page > 1 &&
+                                 <>
+                                    <button onClick={firstPage}>Первая</button>
+                                     <button onClick={prevPage}>Назад</button>
+                                 </>
+                             }
+                             {page}
+                                {page < Math.ceil(branches.count / 10) &&
+                                    <>
+                                        <button onClick={nextPage}>Вперед</button>
+                                        <button onClick={lastPage}>Последняя</button>
+                                    </>
+                                }
+                         </div>
+
+                </div>
+
             </div>
-        </div>
+
     );
 
 }
