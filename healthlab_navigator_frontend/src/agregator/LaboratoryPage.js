@@ -1,112 +1,94 @@
-import FilterForm from "./FilterForm";
-import HolderAdv from "./HolderAdv";
 import CardAnalysis from "./CardAnalysis";
-import {Link, Navigate, useParams} from "react-router-dom";
-import {isRole} from "../hooks/user.actions";
+import { useNavigate, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import getData from "../requests/getData";
-
+import CardLaboratory from "./CardLaboratory";
+import {useGeolocated} from "react-geolocated";
+import Loading from "../components/Loading";
+import {isRole} from "../hooks/user.actions";
+import Main from "../main/Main";
 
 function LaboratoryPage() {
     const {id_laboratory} = useParams();
-    const [laboratory, setLaboratory] = useState({});
+    const navigate = useNavigate();
+    const [laboratory, setLaboratory] = useState(undefined);
     const [branches, setBranches] = useState([]);
-    const [offers, setOffers] = useState([]);
-    const [reviews, setReviews] = useState([]);
+    const {coords} = useGeolocated();
 
     useEffect(() => {
         const fetchLaboratory = async () => {
-            const resp = await getData(`/api/laboratory/${id_laboratory}/`);
-            setLaboratory(resp.data);
-        }
+            const response = await getData(`/api/medical-institution/${id_laboratory}/`);
+            setLaboratory(response.data);
+            if (response.status !== 200) {
+                navigate('/error', {replace: true});
+            }
+        };
         fetchLaboratory();
     }, [id_laboratory]);
+
     useEffect(() => {
         const fetchBranches = async () => {
-            const resp = await getData(`/api/laboratory-branch/`, {id_laboratory: id_laboratory});
-            setBranches(resp.data);
+            const params = new URLSearchParams();
+            if (coords !== undefined) {
+                params.append('latitude', coords.latitude);
+                params.append('longitude', coords.longitude);
+            }
+            const response = await getData(`/api/medical-institution-branch/?medical_institution=${id_laboratory}`,
+                params);
+            setBranches(response.data?.results);
         }
         fetchBranches();
-    }, [id_laboratory]);
-    useEffect(() => {
-        const fetchOffers = async () => {
-            const resp = await getData(`/api/special-offer/`, {id_laboratory: id_laboratory});
-            setOffers(resp.data);
-        }
-        fetchOffers();
-    }, [id_laboratory]);
-    useEffect(() => {
-        const fetchReviews = async () => {
-            const resp = await getData(`api/reviews/`, {id_laboratory: id_laboratory});
-            setReviews(resp.data);
-        }
-        fetchReviews();
-    }, [id_laboratory]);
+    }, [id_laboratory, coords]);
 
+    if (laboratory === undefined) {
+        return <Loading/>
+    }
 
 
     return (
-        <div>
-            <h1>{laboratory.name}</h1>
-            {isRole("medical_institution_agent") ?
-                <Link to={`/laboratory/${id_laboratory}/edit`} > Редактировать </Link> :
-                null
-            }
-            <p>{laboratory.description}</p>
-            <a href={laboratory.website}>Перейти на сайт</a>
+        <div className={"container d-flex flex-column"}>
+            <div className="d-flex flex-column flex-grow-1">
+                <div className="d-flex flex-row justify-content-between align-items-center">
+                <h1>{laboratory.name}</h1>
+                <a href={laboratory.website} target="_blank" rel="noreferrer"
+                                          className={"btn btn-primary flex-grow-0"
+                                              }>Сайт лаборатории</a>
+                    {isRole("med_inst") && <a href={`/laboratory/${laboratory.id}/edit`} className={"btn btn-primary flex-grow-0"}>Редактировать</a>}
+                </div>
+                <p>{laboratory.description}</p>
 
-            {/*todo offers*/}
-            {/*{offers.length > 0 ?*/}
-            {/*    <div>*/}
-            {/*        <h2>Акции</h2>*/}
-            {/*        {offers.map((offer, index) => {*/}
-            {/*            return (*/}
-            {/*                <div key={index}>*/}
-            {/*                    <h3>{offer.name}</h3>*/}
-            {/*                    <p>{offer.description}</p>*/}
-            {/*                    <p>{offer.date_start} - {offer.date_end}</p>*/}
-            {/*                </div>*/}
-            {/*            )*/}
-            {/*        })}*/}
-            {/*    </div> :*/}
-            {/*    null*/}
-            {/*}*/}
-
-            {/*todo reviews*/}
-
-            {branches !== undefined && branches.length > 0  ?
-                <div>
-                    <h2>Филиалы</h2>
-                    {branches.map((branch, index) => {
-                        let address = branch.address;
-                        let street = address !== undefined ? address.street : undefined;
-                        let addressStr = street !== undefined ?
-                            `${street.district?.city?.name}, ${street.name}, ${street.house}` : '';
+                <div className="d-flex flex-row justify-content-center align-items-center">
+                    <a href="#laboratory-branches" className={"btn btn-link flex-grow-0"}>Филиалы</a>
+                    <a href="#laboratory-analysis" className={"btn btn-link flex-grow-0"}>Анализы</a>
+                </div>
+            </div>
+            {branches !== undefined && branches.length > 0 &&
+            <div className="col g-4" id="laboratory-branches">
+                <h2>Филиалы</h2>
+                <div className="col g-4" style={{width: "100%"}}>
+                {branches.map((branch, index) => {
                         return (
-                            <div key={index} id={"branch"+branch.id}>
-                                <h3>{branch.is_main}</h3>
-                                <p>{addressStr}</p>
-                                <p>ПН: {branch?.working_hours?.пн}</p>
-                                <p>ВТ: {branch?.working_hours?.вт}</p>
-                                <p>СР: {branch?.working_hours?.ср}</p>
-                                <p>ЧТ: {branch?.working_hours?.чт}</p>
-                                <p>ПТ: {branch?.working_hours?.пт}</p>
-                                <p>СБ: {branch?.working_hours?.сб}</p>
-                                <p>ВС: {branch?.working_hours?.вс}</p>
-                            </div>
+                           <CardLaboratory
+                                style={{width: "100%"}}
+                               id={branch.id}
+                               no_img={true} key={index} laboratory={branch} laboratory_name={branch.name}/>
                         )
-                    })}
-                </div> :
-                null
+                    })
+                    }
+                </div>
+            </div>
             }
-        {/*  todo add filter by this lab */}
 
+            <div className="col g-4" id="laboratory-analysis">
 
+                <h2>Анализы</h2>
+                <Main fixedLaboratories={laboratory} />
+            </div>
 
         </div>
-    )
+            );
 
 
-}
+            }
 
-export default LaboratoryPage;
+            export default LaboratoryPage;

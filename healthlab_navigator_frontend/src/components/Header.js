@@ -18,11 +18,12 @@ const Header = () => (
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav ms-auto">
             <li className="nav-item">
-              <Link to="/laboratory" className="nav-link">Лаборатория</Link>
+                <Link to="/" className="nav-link">Поиск</Link>
             </li>
             <li className="nav-item">
-              <Link to="/analysis" className="nav-link">Анализы</Link>
+              <Link to="/laboratory" className="nav-link">Лаборатории</Link>
             </li>
+
             <li className="nav-item">
               <Link to="/about" className="nav-link">О нас</Link>
             </li>

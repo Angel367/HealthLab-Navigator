@@ -11,7 +11,14 @@ function Footer() {
             <ul className="list-unstyled">
               <li><Link to="/">Главная</Link></li>
               <li><Link to="/about">О нас</Link></li>
-              <li><Link to="/partners">Партнеры</Link></li>
+              {/*<li><Link to="/partners">Партнеры</Link></li>*/}
+            </ul>
+          </div>
+          <div className="col-md-3 mb-3">
+            <h5>Поиск по сайту</h5>
+            <ul className="list-unstyled">
+              <li><Link to="/laboratory">Лаборатории</Link></li>
+              <li><Link to="/">Агрегатор</Link></li>
             </ul>
           </div>
           <div className="col-md-3 mb-3">
@@ -24,18 +31,12 @@ function Footer() {
           <div className="col-md-3 mb-3">
             <h5>Пользователям</h5>
             <ul className="list-unstyled">
-              <li><Link to="/">Политика конфиденциальности</Link></li>
-              <li><Link to="/">Пользовательское соглашение</Link></li>
+              {/*<li><Link to="/">Политика конфиденциальности</Link></li>*/}
+              {/*<li><Link to="/">Пользовательское соглашение</Link></li>*/}
               <li><Link to="/">Помощь</Link></li>
             </ul>
           </div>
-          <div className="col-md-3 mb-3">
-            <h5>Поиск по сайту</h5>
-            <ul className="list-unstyled">
-              <li><Link to="/laboratory">Лаборатории</Link></li>
-              <li><Link to="/analysis">Анализы</Link></li>
-            </ul>
-          </div>
+
         </div>
         <div className="text-center mt-4">
           &copy; 2024 HealthLab Navigator

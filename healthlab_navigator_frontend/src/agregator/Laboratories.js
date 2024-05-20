@@ -29,8 +29,8 @@ function Laboratories() {
                                 laboratory_img = "https://p2.zoon.ru/1/e/5a6489a5a24fd9100f094bbf_628b05e7b38a94.19357826.jpg"
                             }
                             return (
-                                <div className="col-md-3 d-flex align-items-stretch">
-                                    <div className="card">
+                                <div className="col-md-3 d-flex align-items-stretch" key={index}>
+                                    <div className="card" style={{width: "18rem"}}>
                                         <img src={laboratory_img} className="card-img-top" alt="..."
                                              style={{height: '150px', objectFit: 'cover'}}/>
                                         <div
