@@ -177,11 +177,14 @@ class RegisterAgentSerializer(serializers.ModelSerializer):
 
 
 def get_distance(lat1, lon1, lat2, lon2):
-    lat1 = float(lat1)
-    lon1 = float(lon1)
-    lat2 = float(lat2)
-    lon2 = float(lon2)
-    point1 = (lat1, lon1)
-    point2 = (lat2, lon2)
-    distance = geodesic(point1, point2).meters
-    return distance
+    try:
+        lat1 = float(lat1)
+        lon1 = float(lon1)
+        lat2 = float(lat2)
+        lon2 = float(lon2)
+        point1 = (lat1, lon1)
+        point2 = (lat2, lon2)
+        distance = geodesic(point1, point2).meters
+        return distance
+    except Exception as e:
+        return None
