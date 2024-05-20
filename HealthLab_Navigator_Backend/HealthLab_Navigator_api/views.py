@@ -49,12 +49,26 @@ class MedicalInstitutionBranchViewSet(viewsets.ModelViewSet):
         params = self.request.query_params
         latitude = params.get('latitude')
         longitude = params.get('longitude')
-
+        services = self.request.query_params.getlist('service')
         if latitude and longitude:
             context['user_latitude'] = latitude
             context['user_longitude'] = longitude
 
+        if services:
+            context['services'] = services
+
         return context
+
+    def get_queryset(self):
+        queryset = MedicalInstitutionBranch.objects.all()
+        services = self.request.query_params.getlist('service')
+
+        if services:
+            queryset = queryset.filter(
+                medical_institution__serviceinmedicalinstitution__service__id__in=services,
+                medical_institution__serviceinmedicalinstitution__is_active=True
+            ).distinct()
+        return queryset
 
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
