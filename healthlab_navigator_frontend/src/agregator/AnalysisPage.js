@@ -1,74 +1,75 @@
-import FilterForm from "./FilterForm";
-import HolderAdv from "./HolderAdv";
-import CardAgregator from "./CardAgregator";
-import {Link, Navigate, useParams} from "react-router-dom";
-import analysis from "./Analysis";
+import {useNavigate, useParams} from "react-router-dom";
+import {useEffect, useState} from "react";
+import getData from "../requests/getData";
+import Loading from "../components/Loading";
 
 function AnalysisPage() {
-    const {id_analysis, id_laboratory} = useParams();
-    const advList = [
-        {
-            img: "https://via.placeholder.com/150",
-            title: "Adv 1"
-        },
-        {
-            img: "https://via.placeholder.com/150",
-            title: "Adv 2"
-        },
-        {
-            img: "https://via.placeholder.com/150",
-            title: "Adv 3"
-        }
-    ];
-    const labsList = [
-        {
-            id_analysis: 1,
-            name: 'Analysis 1',
-            price: 100,
-            duration: 1,
-            id_laboratory: 1
-        },
-        {
-            id_analysis: 2,
-            name: 'Analysis 2',
-            price: 200,
-            duration: 2,
-            id_laboratory: 2
-        },
-        {
-            id_analysis: 3,
-            name: 'Analysis 3',
-            price: 300,
-            duration: 3,
-            id_laboratory: 3
-        }];
-    let analysis;
-    if (id_analysis !== undefined && id_laboratory !== undefined)
-     analysis = labsList.find(
-        lab => lab.id_analysis == id_analysis && lab.id_laboratory == id_laboratory
-    )
-    else if (id_analysis !== undefined)
-     analysis = labsList.find(
-        lab => lab.id_analysis == id_analysis
-    )
-    else
-        return (
-            <Navigate to={'error'}/>
-        )
+    const {id_analysis} = useParams();
+    const navigate = useNavigate();
+    const [analysis, setAnalysis] = useState(undefined);
+    useEffect(() => {
+        const fetchAnalysis = async () => {
+            const response = await getData(`/api/service-in-medical-institution/${id_analysis}/`);
+            if (response.status !== 200) {
+                navigate('/error', {replace: true});
+            }
+            setAnalysis(response.data);
 
+        };
+        fetchAnalysis();
+    }, [id_analysis]);
+    if (analysis === undefined) {
+        return <Loading/>
+    }
     return (
-        <div>
-            <h1>Analysis</h1>
-            <div>
-                <CardAgregator {...analysis}/>
-                <Link to={`/laboratory/${id_laboratory}`} > Перейти к лабе</Link>
+        <div className={"container d-flex flex-column"}>
+            <div className="d-flex flex-column flex-grow-1">
+                <div className="d-flex flex-row justify-content-between align-items-center flex-wrap">
+                    <h1>{analysis.service?.name}</h1> <h2>{analysis.price}руб</h2>
+                    <a className={"btn btn-primary"} href={analysis.url}
+                          target="_blank" rel="noreferrer">Записаться</a>
+                </div>
+
+                <div>
+                    <div className="d-flex flex-row">
+                    <h3>Материал исследования:</h3>
+                    {analysis.service?.research_material?.map((material, index) => {
+
+                        return (
+                            <div key={index}>
+                                <h3>{material.name}</h3>
+                                <p>{material.description}</p>
+                            </div>
+                        )
+                    }
+                    )}
+                    </div>
+
+                <p>{analysis.service.main_description}</p>
+                <div className="d-flex flex-row">
+                    <p>Срок выполнения: {analysis.time_to_complete} дней</p>
+                    {analysis?.is_available_fast_result ? <p>Доступен быстрый результат за
+                    {analysis?.price_for_fast_result} руб в течение {analysis.time_to_complete_fast_result} часов</p> : null}
+
+                    {analysis?.is_available_oms ? <p>Доступно по ОМС</p> : null}
+                    {analysis?.is_available_dms ? <p>Доступно по ДМС</p> : null}
+                    {analysis?.is_available_at_home ? <div>
+                        <p>Выезд на дом</p>
+                        {analysis.price_for_at_home !== null ? <p>
+                        {analysis.price_for_at_home} руб. за выезд
+                        </p> : null}
+
+                    </div>
+                        : null}
+                </div>
+
+
+
             </div>
-            <FilterForm/>
-            <HolderAdv advList={advList}/>
-
-
         </div>
-    )
-}
+        </div>
 
-export default AnalysisPage;
+            )
+            }
+
+            export default AnalysisPage;

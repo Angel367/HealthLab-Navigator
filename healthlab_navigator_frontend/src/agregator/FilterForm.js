@@ -1,119 +1,236 @@
-import makeAnimated from "react-select/animated";
-import { useState} from "react";
+import React, { useEffect, useState } from 'react';
+import makeAnimated from 'react-select/animated';
 import Select from 'react-select';
+import getData from '../requests/getData';
+import InputRange from 'react-input-range';
+import 'react-input-range/lib/css/index.css';
 
-function updateSelected(value, labs) {
-    console.log(value);
-    return labs.filter((lab)=> value.some((v) => v.value === lab.id_laboratory ));
+function FilterForm({
+  setSelectedLaboratory,
+  maxMinPrice,
+  setSelectedMinMaxPrice,
+  setOrdering,
+  setAtHome,
+  setFastResult,
+  setSelectedAnalysis,
+  laboratories,
+  setLaboratories,
+  setSelectedMetroStations,
+  setOms,
+    selectedMinMaxPrice,
+  setDms, fixedAnalysis,  fixedLaboratories
+}) {
+  const [analysis, setAnalysis] = useState([]);
+  const [laboratoriesOptions, setLaboratoriesOptions] = useState([]);
+  const [analysisOptions, setAnalysisOptions] = useState([]);
+  const [metroStations, setMetroStations] = useState([]);
+  const [metroLines, setMetroLines] = useState([]);
+  const [metroLinesOptions, setMetroLinesOptions] = useState([]);
+  const [selectedInputAnalysis, setSelectedInputAnalysis] = useState('');
+  // console.log(fixedAnalysis, fixedLaboratory);
+  useEffect(() => {
+    const fetchAnalysis = async () => {
+      const resp = await getData('/api/medical-service/', { name__icontains: selectedInputAnalysis });
+      setAnalysis(resp.data?.results);
 
-}
+    };
+    fetchAnalysis();
+  }, [selectedInputAnalysis]);
 
-const styles = {
-  multiValue: (base, state) => {
-    return state.data.isFixed ? { ...base, backgroundColor: 'gray' } : base;
-  },
-  multiValueLabel: (base, state) => {
-    return state.data.isFixed
-      ? { ...base, fontWeight: 'bold', color: 'white', paddingRight: 6 }
-      : base;
-  },
-  multiValueRemove: (base, state) => {
-    return state.data.isFixed ? { ...base, display: 'none' } : base;
-  },
-};
+  useEffect(() => {
+    const fetchLaboratories = async () => {
+      const resp = await getData('/api/medical-institution/');
+      setLaboratories(resp.data?.results);
+    };
+    fetchLaboratories();
+  }, [setLaboratories]);
 
-
-
-function makeOptions(labList, labelName, valueName) {
-        let options = [];
-        for (let i = 0; i < labList.length; i++) {
-            options.push({
-                value: labList[i][valueName],
-                label: labList[i][labelName],
-                isDisabled: false,
-                isFixed: labList[i][valueName] === 1,
-            });
-        }
-        console.log(options);
-        return options;
+  useEffect(() => {
+    if (analysis) {
+      setAnalysisOptions(analysis.map(a => ({ value: a.id, label: a.name })));
+    } else {
+      setAnalysisOptions([]);
     }
-function FilterForm({options = [], setSelectedOption, labelName = 'name', valueName = 'id'}){
-    const animatedComponents = makeAnimated();
-    const [value, setValue] = useState(makeOptions(options, labelName, valueName).filter((v) => v.isFixed));
+  }, [analysis]);
 
+  useEffect(() => {
+    const fetchMetroLines = async () => {
+      let page_l = 1;
+      let metro_lines = [];
+      while (true) {
+        const resp = await getData(`/api/metro-line/?page=${page_l}`);
+        metro_lines.push(resp.data?.results);
+        if (resp.data?.next === null) break;
+        page_l++;
+      }
+      setMetroLines(metro_lines.flat());
+    };
+    fetchMetroLines();
+  }, []);
 
-    const onChangeSelect = (
-    newValue,
-    actionMeta
-  ) => {
-    switch (actionMeta.action) {
-      case 'remove-value':
-      case 'pop-value':
-        if (actionMeta.removedValue.isFixed) {
-          return;
-        }
-        break;
-      case 'clear':
-        newValue = value.filter((v) => v.isFixed);
-        break;
+  useEffect(() => {
+    const fetchMetroStations = async () => {
+      let page = 1;
+      let metro_stations = [];
+      while (true) {
+        const resp = await getData(`/api/metro-station/?page=${page}`);
+        metro_stations.push(resp.data?.results);
+        if (resp.data?.next === null) break;
+        page++;
+      }
+      setMetroStations(metro_stations.flat());
+    };
+    fetchMetroStations();
+  }, []);
+
+  useEffect(() => {
+    if (metroLines) {
+      setMetroLinesOptions(
+        metroLines.map(metroLine => ({
+          label: metroLine?.name || '',
+          options: metroStations.filter(station => station.line?.id === metroLine.id).map(station => ({
+            value: station?.id,
+            label: station?.name || ''
+          }))
+        }))
+      );
+    } else {
+      setMetroLinesOptions([]);
     }
-    setValue(newValue);
+  }, [metroLines, metroStations]);
+
+  useEffect(() => {
+    if (laboratories) {
+      setLaboratoriesOptions(
+        laboratories.map(laboratory => ({ value: laboratory.id, label: laboratory.name }))
+      );
+    } else {
+      setLaboratoriesOptions([]);
+    }
+  }, [laboratories]);
+
+  const animatedComponents = makeAnimated();
+
+  return (
+    <div className="container mt-4">
+      <div className="row">
+
+        <div className="col-12 mb-3">
+          <Select
+              placeholder="Начни вводить название анализа"
+              name="select-analysis"
+              isMulti
+              onInputChange={value => setSelectedInputAnalysis(value)}
+              components={animatedComponents}
+              onChange={value => {
+                setSelectedAnalysis(value);
 
 
-  };
-    return (
-        <div>
-            <h2>Фильтр</h2>
-            <div>
-                <div>
-                    <Select
-      value={value}
-      isMulti
-      styles={styles}
-      isClearable={value.some((v) => !v.isFixed)}
-      onChange={(newValue, actionMeta) => {
-        onChangeSelect(newValue, actionMeta);
-        if (newValue.length > 0) {
-          setSelectedOption(updateSelected(newValue, options));
-        } else {
-            setSelectedOption(updateSelected(value.filter((v) => v.isFixed), options));
-        }
-      }}
-      options={makeOptions(options, labelName, valueName)}
-      components={animatedComponents}
-      closeMenuOnSelect={false}
-    />
+              }}
+              value={fixedAnalysis && {value: fixedAnalysis.id, label: fixedAnalysis.name}}
+              defaultValue={fixedAnalysis ? {value: fixedAnalysis.id, label: fixedAnalysis.name} : null}
+              isDisabled={fixedAnalysis !== undefined}
+              isLoading={analysis === undefined && fixedAnalysis === undefined}
+              options={analysisOptions}
+              className="basic-multi-select"
+              classNamePrefix="select"
 
-                    {/* select for analysis */}
-                    {/* select for lab name*/}
-                    {/* время работы*/}
-                    {/* рейтинг */}
-                    {/* for location*/}
-                    {/* price*/}
-                    {/* duration (доплата?)*/}
-                    {/* oms dms*/}
-                    {/* */}
-
-                </div>
-
-
-
-
-
-                {/*<Select*/}
-                {/*    isMulti*/}
-                {/*    components={animatedComponents}*/}
-                {/*    closeMenuOnSelect={false}*/}
-                {/*    */}
-                {/*    */}
-                {/*    options={makeOptions(options, labelName, valueName)}*/}
-                {/*    onInputChange={(e) => {console.log(e);}}*/}
-                {/*    onChange={(selectedOption) => {*/}
-
-                {/*    }}*/}
-                {/*/>*/}
-            </div>
+          />
         </div>
-    );
+        <div className="col-6 mb-3">
+          <Select
+              placeholder="Выберите лабораторию"
+              name="select-laboratory"
+              isMulti
+              components={animatedComponents}
+              onChange={value => {
+                setSelectedLaboratory(value);
+                // setPage(1);
+              }}
+              value={fixedLaboratories && {value: fixedLaboratories.id, label: fixedLaboratories.name}}
+              defaultValue={fixedLaboratories ? {value: fixedLaboratories.id, label: fixedLaboratories.name} : null}
+              isDisabled={fixedLaboratories !== undefined}
+              isLoading={laboratories === undefined && fixedLaboratories === undefined}
+              options={laboratoriesOptions}
+              className="basic-multi-select"
+              classNamePrefix="select"
+          />
+        </div>
+        <div className="col-6 mb-3">
+          <Select
+              placeholder="Выберите метро"
+              name="select-metro"
+              isMulti
+              components={animatedComponents}
+              onChange={value => {
+                setSelectedMetroStations(value);
+                // setPage(1);
+              }}
+              isLoading={metroStations === undefined}
+              options={metroLinesOptions}
+              className="basic-multi-select"
+              classNamePrefix="select"
+              onMenuScrollToBottom={e => console.log(e)} // Placeholder for infinite scroll functionality
+          />
+        </div>
+        <div className="col-6 mb-3">
+
+          <Select
+              placeholder="Выберите сортировку"
+              name="select-sort"
+                onChange={value => {
+                    setOrdering(value);
+                    // setPage(1);
+                }
+                }
+              options={[
+                {value: 'price', label: 'Цена (по возрастанию)'},
+                {value: '-price', label: 'Цена (по убыванию)'},
+                {value: 'time_to_complete', label: 'Время'},
+              ]}
+          />
+        </div>
+        <div className="col-6 mb-3 d-flex flex-wrap">
+          <div className="form-check col-5">
+            <input type="checkbox" id="oms" name="oms" className="form-check-input"
+                   onChange={e => setOms(e.target.checked)}/>
+            <label className="form-check-label" htmlFor="oms">ОМС</label>
+          </div>
+          <div className="form-check col-5">
+            <input type="checkbox" id="at-home" name="at-home" className="form-check-input"
+                   onChange={e => setAtHome(e.target.checked)}/>
+            <label className="form-check-label" htmlFor="at-home">На дому</label>
+          </div>
+          <div className="form-check col-5">
+            <input type="checkbox" id="dms" name="dms" className="form-check-input"
+                   onChange={e => setDms(e.target.checked)}/>
+            <label className="form-check-label" htmlFor="dms">ДМС</label>
+          </div>
+
+          <div className="form-check col-5">
+            <input type="checkbox" id="fast-result" name="fast-result" className="form-check-input"
+                   onChange={e => setFastResult(e.target.checked)}/>
+            <label className="form-check-label" htmlFor="fast-result">Быстрый результат</label>
+          </div>
+        </div>
+
+
+        <div className="col-12 mb-3">
+          {maxMinPrice.max !== null && maxMinPrice.min !== null ? (
+              <InputRange
+                  maxValue={maxMinPrice.max}
+                  minValue={maxMinPrice.min}
+                  value={selectedMinMaxPrice}
+                  step={100}
+                  onChange={value => setSelectedMinMaxPrice(value)}
+                  formatLabel={value => `${value} руб.`}
+              />
+          ) : null}
+        </div>
+
+      </div>
+    </div>
+  );
 }
+
 export default FilterForm;

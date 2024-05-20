@@ -1,78 +1,94 @@
-import FilterForm from "./FilterForm";
-import HolderAdv from "./HolderAdv";
-import CardAgregator from "./CardAgregator";
-import {Link, Navigate, useParams} from "react-router-dom";
-import {isAuth, isRole} from "../hooks/user.actions";
-import RoleMedInstLayout from "../router/RoleMedInstLayout";
+import CardAnalysis from "./CardAnalysis";
+import { useNavigate, useParams} from "react-router-dom";
+import {useEffect, useState} from "react";
+import getData from "../requests/getData";
+import CardLaboratory from "./CardLaboratory";
+import {useGeolocated} from "react-geolocated";
+import Loading from "../components/Loading";
+import {isRole} from "../hooks/user.actions";
+import Main from "../main/Main";
 
 function LaboratoryPage() {
     const {id_laboratory} = useParams();
-    const advList = [
-        {
-            img: "https://via.placeholder.com/150",
-            title: "Adv 1"
-        },
-        {
-            img: "https://via.placeholder.com/150",
-            title: "Adv 2"
-        },
-        {
-            img: "https://via.placeholder.com/150",
-            title: "Adv 3"
+    const navigate = useNavigate();
+    const [laboratory, setLaboratory] = useState(undefined);
+    const [branches, setBranches] = useState([]);
+    const {coords} = useGeolocated();
+
+    useEffect(() => {
+        const fetchLaboratory = async () => {
+            const response = await getData(`/api/medical-institution/${id_laboratory}/`);
+            setLaboratory(response.data);
+            if (response.status !== 200) {
+                navigate('/error', {replace: true});
+            }
+        };
+        fetchLaboratory();
+    }, [id_laboratory]);
+
+    useEffect(() => {
+        const fetchBranches = async () => {
+            const params = new URLSearchParams();
+            if (coords !== undefined) {
+                params.append('latitude', coords.latitude);
+                params.append('longitude', coords.longitude);
+            }
+            const response = await getData(`/api/medical-institution-branch/?medical_institution=${id_laboratory}`,
+                params);
+            setBranches(response.data?.results);
         }
-    ];
-    const labsList = [
-        {
-            id_analysis: 1,
-            name: 'Analysis 1',
-            price: 100,
-            duration: 1,
-            id_laboratory: 1
-        },
-        {
-            id_analysis: 2,
-            name: 'Analysis 2',
-            price: 200,
-            duration: 2,
-            id_laboratory: 2
-        },
-        {
-            id_analysis: 3,
-            name: 'Analysis 3',
-            price: 300,
-            duration: 3,
-            id_laboratory: 3
-        }];
-    let laboratory;
-    if (id_laboratory !== undefined)
-        laboratory = labsList.find(
-            lab => lab.id_laboratory == id_laboratory
-        )
-    else
-        return (
-            <Navigate to={'error'}/>
-        )
+        fetchBranches();
+    }, [id_laboratory, coords]);
+
+    if (laboratory === undefined) {
+        return <Loading/>
+    }
+
 
     return (
-        <div>
-
-            <h1>{laboratory.name}</h1>
-
-            {isRole("medical_institution_agent") ?
-                <Link to={`/laboratory/${id_laboratory}/edit`} > Редактировать </Link> :
-                <div>
-                    ПОТОМ ДОБАВЛЮ КОММЕТАРИИ
+        <div className={"container d-flex flex-column"}>
+            <div className="d-flex flex-column flex-grow-1">
+                <div className="d-flex flex-row justify-content-between align-items-center">
+                <h1>{laboratory.name}</h1>
+                <a href={laboratory.website} target="_blank" rel="noreferrer"
+                                          className={"btn btn-primary flex-grow-0"
+                                              }>Сайт лаборатории</a>
+                    {isRole("med_inst") && <a href={`/laboratory/${laboratory.id}/edit`} className={"btn btn-primary flex-grow-0"}>Редактировать</a>}
                 </div>
-            }
-            <div>
-                <CardAgregator {...laboratory}/>
+                <p>{laboratory.description}</p>
+
+                <div className="d-flex flex-row justify-content-center align-items-center">
+                    <a href="#laboratory-branches" className={"btn btn-link flex-grow-0"}>Филиалы</a>
+                    <a href="#laboratory-analysis" className={"btn btn-link flex-grow-0"}>Анализы</a>
+                </div>
             </div>
-            <FilterForm/>
-            <HolderAdv advList={advList}/>
+            {branches !== undefined && branches.length > 0 &&
+            <div className="col g-4" id="laboratory-branches">
+                <h2>Филиалы</h2>
+                <div className="col g-4" style={{width: "100%"}}>
+                {branches.map((branch, index) => {
+                        return (
+                           <CardLaboratory
+                                style={{width: "100%"}}
+                               id={branch.id}
+                               no_img={true} key={index} laboratory={branch} laboratory_name={branch.name}/>
+                        )
+                    })
+                    }
+                </div>
+            </div>
+            }
+
+            <div className="col g-4" id="laboratory-analysis">
+
+                <h2>Анализы</h2>
+                <Main fixedLaboratories={laboratory} />
+            </div>
+
         </div>
-    )
+            );
 
 
-}
+            }
 
-export default LaboratoryPage;
+            export default LaboratoryPage;

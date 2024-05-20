@@ -24,16 +24,21 @@ async function getData(urlPart, params) {
 
     return await ax.get(url, config)
         .then((res) => {
-            return {
-                status: res.status,
-                data: res.data
-            };
+            if (res?.status === 200) {
+
+                return {
+                    status: res.status,
+                    data: res.data
+                };
+            }
+
         })
         .catch((err) => {
         if (err instanceof AxiosError) {
-            const errors = err.response.data
+            // console.log(err)
+            const errors = err.response?.data || err.message
             return {
-                status: err.response.status,
+                status: err.response?.status || 500,
                 data: errors
             }
         }

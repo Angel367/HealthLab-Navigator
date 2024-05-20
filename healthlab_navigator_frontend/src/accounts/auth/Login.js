@@ -1,7 +1,4 @@
-import {useState} from "react";
-import postData from "../../requests/postData";
-import {NotificationManager} from "react-notifications";
-import {useNavigate} from "react-router-dom";
+
 import AuthForm from "./AuthForm";
 
 function Login() {

@@ -13,6 +13,49 @@ from HealthLab_Navigator_api.models import *
 fake = Faker('ru_RU')
 
 
+def fake_metro_lines(num):
+    for _ in range(num):
+        MetroLine.objects.create(
+            name=fake.word(),
+            color=fake.color(),
+            city=City.objects.get(id=fake.random_int(min=1, max=City.objects.count())),
+        )
+
+
+def fake_metro_stations(num):
+    for _ in range(num):
+        MetroStation.objects.create(
+            name=fake.word(),
+            district=District.objects.get(id=fake.random_int(min=1, max=District.objects.count())),
+            line=MetroLine.objects.get(id=fake.random_int(min=1, max=MetroLine.objects.count())),
+        )
+
+
+def fake_cities(num):
+    for _ in range(num):
+        City.objects.create(
+            name=fake.city(),
+        )
+
+
+def fake_districts(num):
+    for _ in range(num):
+        District.objects.create(
+            name=fake.word(),
+            city=City.objects.get(id=fake.random_int(min=1, max=City.objects.count())),
+        )
+
+
+def fake_streets(num):
+    for _ in range(num):
+        street = Street.objects.create(
+            name=fake.street_name(),
+        )
+        street.districts.set(fake.random_elements(elements=District.objects.all(),
+                                                  length=fake.random_int(min=1, max=3)))
+
+
+
 def fake_medical_institutions(num):
     for _ in range(num):
         med = MedicalInstitution.objects.create(
@@ -21,30 +64,78 @@ def fake_medical_institutions(num):
             description=fake.paragraph(nb_sentences=3),
         )
         for _ in range(fake.random_int(min=1, max=3)):
-            phone = Phone.objects.create(number=fake.phone_number(), institution=med)
+            try:
+                phone = Phone.objects.create(number=fake.phone_number(), institution=med)
+            except Exception as e:
+                print(e)
+                continue
+
 
 
 def fake_branches(num):
     for i in range(num):
+        address = Address.objects.create(
+            street=Street.objects.get(id=fake.random_int(min=1, max=Street.objects.count())),
+            house=fake.building_number(),
+            office=fake.random_int(min=1, max=100),
+            latitude=fake.latitude(),
+            longitude=fake.longitude())
+
         branch = MedicalInstitutionBranch.objects.create(
             medical_institution=MedicalInstitution.objects.get(id=fake.random_int(min=1,
                                                                                   max=MedicalInstitution.objects.count())),
-            latitude=fake.latitude(),
-            # street=Street.objects.create(name=fake.street_name()),
-            house=fake.building_number(),
-            office=fake.random_int(min=1, max=100),
+            address=address,
             is_main=i == 0,
             url=fake.url(),
-            longitude=fake.longitude(),
-            working_hours=fake.json(),
+            working_hours={
+                'пн': '09:00-18:00',
+                'вт': '09:00-18:00',
+                'ср': '09:00-18:00',
+                'чт': '09:00-18:00',
+                'пт': '09:00-18:00',
+                'сб': '09:00-18:00',
+                'вс': '09:00-18:00',
+            }
         )
-        for _ in range(fake.random_int(min=0, max=3)):
-            Phone.objects.create(number=fake.phone_number(), branch=branch)
 
+        for _ in range(fake.random_int(min=1, max=3)):
+            try:
+                phone = Phone.objects.create(number=fake.phone_number(), branch=branch, institution=branch.medical_institution)
+            except Exception as e:
+                print(e)
+                continue
+
+
+def fake_reviews(num):
+    for _ in range(num):
+        review = Review.objects.create(
+            text=fake.paragraph(nb_sentences=3),
+            rating_in_general=fake.random_int(min=1, max=5),
+            user=get_user_model().objects.get(id=fake.random_int(min=1, max=get_user_model().objects.count())),
+            medical_institution=MedicalInstitution.objects.get(
+                id=fake.random_int(min=1, max=MedicalInstitution.objects.count())),
+        )
+        if fake.boolean():
+            review.rating_for_service = fake.random_int(min=1, max=5)
+            services = ServiceInMedicalInstitution.objects.filter(medical_institution=review.medical_institution)
+            review.service = services[fake.random_int(min=0, max=len(services) - 1)]
+        if fake.boolean():
+            review.rating_for_branch = fake.random_int(min=1, max=5)
+            branches = (MedicalInstitutionBranch.objects.filter(medical_institution=review.medical_institution))
+            review.branch = branches[fake.random_int(min=0, max=len(branches) - 1)]
+        review.save()
+        for _ in range(fake.random_int(min=0, max=3)):
+            ReviewComment.objects.create(
+                text=fake.paragraph(nb_sentences=3),
+                user=get_user_model().objects.get(id=fake.random_int(min=1, max=get_user_model().objects.count())),
+                review=Review.objects.get(id=fake.random_int(min=1, max=Review.objects.count())),
+            )
 
 
 def fake_users(num):
     custom_user = get_user_model()
+    phone_number = fake.phone_number()
+    email = fake.email()
     for _ in range(num):
         gender = fake.random_element(elements=('male', 'female', 'unknown'))
         if gender == 'unknown':
@@ -60,16 +151,19 @@ def fake_users(num):
             last_name = fake.last_name_female(),
             middle_name = fake.middle_name_female()
         user_type = fake.random_element(elements=USER_TYPE_CHOICES)
+        while custom_user.objects.filter(phone_number=phone_number).exists():
+            phone_number = fake.phone_number()
+        while custom_user.objects.filter(email=fake.email()).exists():
+            email = fake.email()
         user = custom_user.objects.create_user(
-            email=fake.email(),
-
+            email=email,
             date_of_birth=fake.date_of_birth(minimum_age=18, maximum_age=100),
             gender=gender,
             first_name=first_name,
             last_name=last_name,
             middle_name=middle_name,
             user_type=user_type,
-            phone_number=fake.phone_number(),)
+            phone_number=phone_number )
 
         user.set_password('12345678')
         if user_type == 'patient':
@@ -111,7 +205,7 @@ def fake_medical_services(num):
         MedicalService.objects.create(
             name=fake.text(max_nb_chars=40),
             main_description=fake.paragraph(nb_sentences=3),
-            government_code_804n = fake.word(),
+            government_code_804n=fake.word(),
         )
 
 
@@ -124,7 +218,7 @@ def fake_service_in_medical_institution(num):
             medical_institution=MedicalInstitution.objects.get(id=fake.random_int(min=1,
                                                                                   max=MedicalInstitution.objects.count())),
             service=MedicalService.objects.get(id=fake.random_int(min=1,
-                                                                          max=MedicalService.objects.count())),
+                                                                  max=MedicalService.objects.count())),
             is_available_dms=fake.boolean(),
             is_available_oms=fake.boolean(),
             is_available_at_home=is_available_at_home,
@@ -168,24 +262,49 @@ def fake_special_offer(num):
 
 
 if __name__ == '__main__':
-    if not MedicalInstitution.objects.exists():
+    if City.objects.all().count() < 10:
+        fake_cities(10)
+        print('Cities have been added')
+    if District.objects.all().count() < 10:
+        fake_districts(10)
+        print('Districts have been added')
+    if Street.objects.all().count() < 10:
+        fake_streets(10)
+        print('Streets have been added')
+    if MetroLine.objects.all().count() < 10:
+        fake_metro_lines(10)
+        print('Metro lines have been added')
+    if MetroStation.objects.all().count() < 10:
+        fake_metro_stations(10)
+        print('Metro stations have been added')
+    if MedicalInstitution.objects.all().count() < 10:
         fake_medical_institutions(10)
-    if not MedicalInstitutionBranch.objects.exists():
+        print('Medical institutions have been added')
+    if MedicalInstitutionBranch.objects.all().count() < 10:
         fake_branches(10)
-    if not get_user_model().objects.exists():
-        fake_users(10)
-    if not ResearchMedicalSystem.objects.exists():
-        fake_research_systems(10)
-    if not ResearchMaterial.objects.exists():
-        fake_research_materials(10)
-    if not ResearchMedicalIllness.objects.exists():
-        fake_research_illnesses(10)
-    if not MedicalService.objects.exists():
+        print('Branches have been added')
+    if MedicalService.objects.all().count() < 10:
         fake_medical_services(10)
-    if not ServiceInMedicalInstitution.objects.exists():
+        print('Medical services have been added')
+    if ServiceInMedicalInstitution.objects.all().count() < 10:
         fake_service_in_medical_institution(10)
-    if not SpecialOffer.objects.exists():
+        print('Services in medical institutions have been added')
+    if ResearchMedicalSystem.objects.all().count() < 10:
+        fake_research_systems(10)
+        print('Research systems have been added')
+    if ResearchMaterial.objects.all().count() < 10:
+        fake_research_materials(10)
+        print('Research materials have been added')
+    if ResearchMedicalIllness.objects.all().count() < 10:
+        fake_research_illnesses(10)
+        print('Research illnesses have been added')
+    if SpecialOffer.objects.all().count() < 10:
         fake_special_offer(10)
+        print('Special offers have been added')
+    if get_user_model().objects.all().count() < 10:
+        fake_users(10)
+        print('Users have been added')
+    if Review.objects.all().count() < 100:
+        fake_reviews(100)
+        print('Reviews have been added')
     print('Data has been added')
-
-
