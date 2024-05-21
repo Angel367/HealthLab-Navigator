@@ -16,7 +16,7 @@ function Layout({ children, title = "HealthLab Navigator" }) {
       if (el) {
         el.scrollIntoView({behavior: "smooth", block: "start"});
       } else {
-        // window.scrollTo(0, 0);
+        window.scrollTo(0, 0);
       }
     }
   };

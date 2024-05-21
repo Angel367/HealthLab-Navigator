@@ -5,12 +5,10 @@ import Error from './components/Error';
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import AnonymousLayout from "./router/AnonymousLayout";
 import UserLayout from "./router/UserLayout";
-import RoleMedInstLayout from "./router/RoleMedInstLayout";
 import Main from "./main/Main";
 import Login from "./accounts/auth/Login";
 import Register from "./accounts/auth/Register";
 import About from "./main/About";
-import ProfileEdit from "./accounts/auth/ProfileEdit";
 import Profile from "./accounts/users/Profile";
 import LaboratoryEdit from "./accounts/med_Insts/LaboratoryEdit";
 import Laboratories from "./agregator/Laboratories";
@@ -18,6 +16,8 @@ import AnalysisEdit from "./accounts/med_Insts/AnalysisEdit";
 import AnalysisPage from "./agregator/AnalysisPage";
 import LaboratoryPage from "./agregator/LaboratoryPage";
 import Partners from "./main/Partners";
+import ProfileEdit from "./accounts/auth/ProfileEdit";
+import Statistics from "./accounts/med_Insts/Statistics";
 
 const analysis = {
         path: 'analysis/',
@@ -29,26 +29,22 @@ const analysis = {
                 children: [
                     {
                         index: true,
-                        element: <Layout children={<AnalysisPage/>}/>,
+                        element: <Layout children={<AnalysisPage/>} title={"Анализ"}/>,
                         errorElement: <Layout children={<Error/>}/>,
                     },
                     {
                         path: 'edit',
-                        element: <Layout children={<RoleMedInstLayout children_for_med_inst={<AnalysisEdit/>}/>}/>,
+                         element: <Layout children={<UserLayout children_for_user={<AnalysisEdit/>}
+                                                                role={'agent'}/> }
+                                          title={"Редактирование анализа"}/>,
                         errorElement: <Layout children={<Error/>}/>,
 
                     }
                     ]
             },
-
-            // {
-            //     index: true,
-            //     element: <Layout children={<Analysis/>}/>,
-            //     errorElement: <Layout children={<Error/>}/>,
-            // },
             {
                 path: 'create',
-                element: <Layout children={<RoleMedInstLayout children_for_med_inst={<AnalysisEdit/>}/>}/>,
+                element: <Layout children={<UserLayout children_for_user={<AnalysisEdit/>} role={'agent'}/>}/>,
                 errorElement: <Layout children={<Error/>}/>,
             }
 
@@ -66,7 +62,8 @@ const laboratory = {
                     analysis,
                     {
                         path: 'edit',
-                        element: <Layout children={<RoleMedInstLayout children_for_med_inst={<LaboratoryEdit/>}/>} title={"edit"}/>,
+                        element: <Layout children={<UserLayout children_for_user={<LaboratoryEdit/>} role={'agent'}/>} title={"Редактирование лаборатории"}/>,
+
                         errorElement: <Layout children={<Error/>}/>,
                     },
                     {
@@ -78,14 +75,10 @@ const laboratory = {
             },
             {
                 index: true,
-                element: <Layout children={<Laboratories/>}/>,
+                element: <Layout children={<Laboratories/>} title={"Лаборатории"}/>,
                 errorElement: <Layout children={<Error/>}/>,
             },
-            {
-                path: 'create',
-                element: <Layout children={<RoleMedInstLayout children_for_med_inst={<LaboratoryEdit/>}/>}/>,
-                errorElement: <Layout children={<Error/>}/>,
-            }
+
             ]
     };
 
@@ -93,12 +86,11 @@ const laboratory = {
 const router = createBrowserRouter([
     {
         index: true,
-        element: <Layout children={<Main/>}/>,
+        element: <Layout children={<Main/>} title={"Агрегатор"}/>,
         errorElement: <Layout children={<Error/>}/>,
     },
     {
         path: '/login',
-
         element: <Layout children={<AnonymousLayout children_for_anonymous={<Login/>}/>} title={"Вход"}/>,
         errorElement: <Layout children={<Error/>}/>,
     },
@@ -111,12 +103,16 @@ const router = createBrowserRouter([
         path: '/about',
         element: <Layout children={<About/>} title={"О нас"}/>,
         errorElement: <Layout children={<Error/>}/>,
-
-
     },
     {
         path: '/partners',
         element: <Layout children={<Partners/>} title={"Партнеры"}/>,
+        errorElement: <Layout children={<Error/>}/>,
+    },
+    {
+        path: '/statistics',
+        element: <Layout children={<UserLayout children_for_user={<Statistics/>} role={'agent'}/>
+        } title={"Статистика"}/>,
         errorElement: <Layout children={<Error/>}/>,
     },
     // analysis,
@@ -125,11 +121,11 @@ const router = createBrowserRouter([
         path: '/profile/',
         errorElement: <Layout children={<Error/>}/>,
         children: [
-            // {
-            //     path: 'edit',
-            //     element: <Layout children={<UserLayout children_for_user={<ProfileEdit/>}/>}/>,
-            //     errorElement: <Layout children={<Error/>}/>,
-            // },
+            {
+                path: 'edit',
+                element: <Layout children={<UserLayout children_for_user={<ProfileEdit/>}/>} title={"Редактирование профиля"}/>,
+                errorElement: <Layout children={<Error/>}/>,
+            },
             {
                 index: true,
                 element: <Layout children={<UserLayout children_for_user={<Profile/>}/>} title={"Профиль"}/>,
@@ -138,11 +134,9 @@ const router = createBrowserRouter([
         ],
     },
 
-
-
     {
         path: '/error',
-        element: <Layout children={<Error/>}/>,
+        element: <Layout children={<Error/>} title={"Ошибка"}/>,
         errorElement: <Layout children={<Error/>}/>,
     },
 

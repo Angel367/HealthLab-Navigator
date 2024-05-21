@@ -54,7 +54,7 @@ function AuthForm({ path = "login/", buttonName = "Войти" }) {
           onChange={(e) => setForm({ ...form, password: e.target.value })}
         />
       </div>
-      <button type="submit" id="submitAuth" className="btn btn-primary">
+      <button type="submit" id="submitAuth" className="btn btn-success">
         {buttonName}
       </button>
     </form>

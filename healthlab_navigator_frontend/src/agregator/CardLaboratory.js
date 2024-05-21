@@ -1,6 +1,7 @@
 import {Link} from "react-router-dom";
 import CardAnalysis from "./CardAnalysis";
-
+import {isRole} from "../hooks/user.actions";
+const img_edit = process.env.PUBLIC_URL + '/edit.svg';
 function CardLaboratory({ laboratory, analysis, laboratory_name, no_img}) {
     if (laboratory.medical_institution === 1){
         laboratory.img = "https://cdn1.flamp.ru/cd1d154836c8e7d59a0da017d8e1d380.png"
@@ -12,11 +13,25 @@ function CardLaboratory({ laboratory, analysis, laboratory_name, no_img}) {
     // console.log(analysis)
     return (
         <div className="card" style={{width: "100%"}} id={"laboratory-"+laboratory.id}>
+
             {no_img !== true &&
-            <img src={laboratory.img} className="card-img-top" alt="..." style={{height: "100px", width:"100px", objectFit: "cover"}}/>}
+                <div className="card-img-top" style={{height: "100px", overflow: "hidden"}}>
+                <img src={laboratory.img}
+             alt="..." style={{height: "100px", width:"100px", objectFit: "cover"}}/>
+                </div>}
+            <div className={"card-header d-flex justify-content-between align-items-center"}>
+                <h5 className="card-title">{laboratory_name || laboratory.address}</h5>
+                {
+                    isRole({role: 'agent', medical_institution: laboratory.medical_institution}) &&
+                    <Link to={`/laboratory/${laboratory.medical_institution}/edit`}>
+                        <img src={img_edit} alt="edit" height="20" width="20"/>
+                    </Link>
+                }
+            </div>
             <div className="card-body">
-                <h5 className="card-title">{laboratory_name}</h5>
+                {laboratory_name !== undefined &&
                 <h6 className="card-subtitle mb-2 text-muted">{laboratory.address}</h6>
+                }
 
             {laboratory.metro_stations !== undefined && laboratory.metro_stations.length > 0 &&
                     <div className={"d-flex flex-row flex-wrap gap-4"}>

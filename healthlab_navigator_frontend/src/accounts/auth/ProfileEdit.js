@@ -1,8 +1,9 @@
 function ProfileEdit() {
     return (
-        <div>
+        <main>
 
-        </div>
+
+        </main>
     );
 }
 export default ProfileEdit;

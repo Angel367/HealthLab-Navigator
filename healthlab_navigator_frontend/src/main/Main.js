@@ -7,7 +7,6 @@ import FilterForm from "../agregator/FilterForm";
 import CardLaboratory from "../agregator/CardLaboratory";
 import { useGeolocated } from "react-geolocated";
 import Loading from "../components/Loading";
-import CardAnalysis from "../agregator/CardAnalysis";
 
 function Main({fixedAnalysis = undefined, fixedLaboratories = undefined}) {
 
@@ -190,15 +189,14 @@ function Main({fixedAnalysis = undefined, fixedLaboratories = undefined}) {
                                branches.map((branch, index) => {
                                       return <CardLaboratory key={index} laboratory={branch}
                                                              analysis={analysisInLaboratories.filter(analysis => analysis.medical_institution.id === branch.medical_institution)}
-                                                             laboratory_name={branch.name}/>
+                                                             laboratory_name={branch.name} />
                                  })
 
 
                                :
                                branches.map((branch, index) => {
                                    return <CardLaboratory key={index} laboratory={branch} analysis={[]}
-                                                          laboratory_name={branch.name}/>
-                               })
+                                                          laboratory_name={branch.name} />})
 
 
                            }

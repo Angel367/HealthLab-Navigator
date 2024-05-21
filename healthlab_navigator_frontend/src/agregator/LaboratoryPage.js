@@ -1,13 +1,12 @@
-import CardAnalysis from "./CardAnalysis";
-import { useNavigate, useParams} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import getData from "../requests/getData";
 import CardLaboratory from "./CardLaboratory";
 import {useGeolocated} from "react-geolocated";
 import Loading from "../components/Loading";
-import {isRole} from "../hooks/user.actions";
 import Main from "../main/Main";
-
+import { isRole} from "../hooks/user.actions";
+const img_edit = process.env.PUBLIC_URL + '/edit.svg';
 function LaboratoryPage() {
     const {id_laboratory} = useParams();
     const navigate = useNavigate();
@@ -44,16 +43,20 @@ function LaboratoryPage() {
         return <Loading/>
     }
 
-
     return (
         <div className={"container d-flex flex-column"}>
             <div className="d-flex flex-column flex-grow-1">
                 <div className="d-flex flex-row justify-content-between align-items-center">
                 <h1>{laboratory.name}</h1>
                 <a href={laboratory.website} target="_blank" rel="noreferrer"
-                                          className={"btn btn-primary flex-grow-0"
-                                              }>Сайт лаборатории</a>
-                    {isRole("med_inst") && <a href={`/laboratory/${laboratory.id}/edit`} className={"btn btn-primary flex-grow-0"}>Редактировать</a>}
+                                          className={"btn btn-primary flex-grow-0"}>
+                    Сайт лаборатории</a>
+                    {
+                    isRole({role: 'agent', medical_institution: laboratory.id}) &&
+                    <Link to={`edit`}>
+                        <img src={img_edit} alt="edit" height="20" width="20"/>
+                    </Link>
+                }
                 </div>
                 <p>{laboratory.description}</p>
 

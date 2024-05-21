@@ -1,8 +1,9 @@
-import {useNavigate, useParams} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import getData from "../requests/getData";
 import Loading from "../components/Loading";
-
+import {isRole} from "../hooks/user.actions";
+const img_edit = process.env.PUBLIC_URL + '/edit.svg';
 function AnalysisPage() {
     const {id_analysis} = useParams();
     const navigate = useNavigate();
@@ -21,13 +22,21 @@ function AnalysisPage() {
     if (analysis === undefined) {
         return <Loading/>
     }
+    document.title = analysis.service?.name;
     return (
         <div className={"container d-flex flex-column"}>
             <div className="d-flex flex-column flex-grow-1">
                 <div className="d-flex flex-row justify-content-between align-items-center flex-wrap">
+
                     <h1>{analysis.service?.name}</h1> <h2>{analysis.price}руб</h2>
                     <a className={"btn btn-primary"} href={analysis.url}
                           target="_blank" rel="noreferrer">Записаться</a>
+                    {
+                    isRole({role: 'agent', medical_institution: analysis.medical_institution?.id}) &&
+                    <Link to={`edit`}>
+                        <img src={img_edit} alt="edit" height="20" width="20"/>
+                    </Link>
+                }
                 </div>
 
                 <div>
@@ -50,7 +59,6 @@ function AnalysisPage() {
                     <p>Срок выполнения: {analysis.time_to_complete} дней</p>
                     {analysis?.is_available_fast_result ? <p>Доступен быстрый результат за
                     {analysis?.price_for_fast_result} руб в течение {analysis.time_to_complete_fast_result} часов</p> : null}
-
                     {analysis?.is_available_oms ? <p>Доступно по ОМС</p> : null}
                     {analysis?.is_available_dms ? <p>Доступно по ДМС</p> : null}
                     {analysis?.is_available_at_home ? <div>
@@ -62,11 +70,8 @@ function AnalysisPage() {
                     </div>
                         : null}
                 </div>
-
-
-
+                </div>
             </div>
-        </div>
         </div>
 
             )
