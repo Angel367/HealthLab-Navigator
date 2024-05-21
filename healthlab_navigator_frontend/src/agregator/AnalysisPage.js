@@ -3,6 +3,7 @@ import {useEffect, useState} from "react";
 import getData from "../requests/getData";
 import Loading from "../components/Loading";
 import {isRole} from "../hooks/user.actions";
+import Main from "../main/Main";
 const img_edit = process.env.PUBLIC_URL + '/edit.svg';
 function AnalysisPage() {
     const {id_analysis} = useParams();
@@ -72,6 +73,7 @@ function AnalysisPage() {
                 </div>
                 </div>
             </div>
+            <Main fixedAnalysis={analysis}/>
         </div>
 
             )

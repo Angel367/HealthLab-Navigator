@@ -45,11 +45,22 @@ function AnalysisEdit() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        axiosService.put(`/api/service-in-medical-institution/${id_analysis}/`,
-            analysis).then(navigate(`/laboratory/${analysis.medical_institution.id}/analysis/${id_analysis}`))
-            .catch(error => {
-                NotificationManager.error('Ошибка при сохранении данных');
-            });
+        try {
+            axiosService.put(`/api/service-in-medical-institution/${id_analysis}/`,
+                analysis).then(navigate(`/laboratory/${analysis.medical_institution.id}/analysis/${id_analysis}`))
+                .then((response) => {
+                    if (response.status === 200) {
+                        NotificationManager.success('Данные успешно сохранены');
+                    }
+                })
+                .catch(error => {
+                    NotificationManager.error('Ошибка при сохранении данных');
+                });
+        }
+        catch (error) {
+            console.error("Error updating analysis:", error);
+        }
+
     };
 
     return (
@@ -79,7 +90,7 @@ function AnalysisEdit() {
                     />
                 </div>
                 <div className="form-group">
-                    <label htmlFor="mainDescription">Main Description</label>
+                    <label htmlFor="mainDescription">Описание</label>
                     <textarea
                         className="form-control"
                         id="mainDescription"

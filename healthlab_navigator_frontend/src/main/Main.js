@@ -48,7 +48,8 @@ function Main({fixedAnalysis = undefined, fixedLaboratories = undefined}) {
                 params.append('ordering', ordering.value);
             }
             if (fixedAnalysis !== undefined) {
-                params.append('service', fixedAnalysis.id);
+                // console.log(fixedAnalysis)
+                params.append('service', fixedAnalysis.service?.id);
             } else
             if (selectedAnalysis.length > 0) {
                 selectedAnalysis.forEach(analysis => {
@@ -96,7 +97,7 @@ function Main({fixedAnalysis = undefined, fixedLaboratories = undefined}) {
 
             }
             if (fixedAnalysis !== undefined) {
-                params.append('service', fixedAnalysis.id);
+                params.append('service', fixedAnalysis.service?.id);
             } else
             if (selectedAnalysis.length > 0) {
                 selectedAnalysis.forEach(analysis => {
@@ -169,14 +170,17 @@ function Main({fixedAnalysis = undefined, fixedLaboratories = undefined}) {
                                branches.map((branch, index) => {
                                       return <CardLaboratory key={index} laboratory={branch}
                                                              analysis={analysisInLaboratories.filter(analysis => analysis.medical_institution.id === branch.medical_institution)}
-                                                             laboratory_name={branch.name} />
+                                                             laboratory_name={branch.name}
+                                                             no_img={fixedLaboratories !== undefined}
+                                      />
                                  })
 
 
                                :
                                branches.map((branch, index) => {
                                    return <CardLaboratory key={index} laboratory={branch} analysis={[]}
-                                                          laboratory_name={branch.name} />})
+                                                          laboratory_name={branch.name}  no_img={fixedLaboratories !== undefined}
+                                   />})
 
 
                            }

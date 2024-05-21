@@ -11,9 +11,9 @@ function LaboratoryPage() {
     const {id_laboratory} = useParams();
     const navigate = useNavigate();
     const [laboratory, setLaboratory] = useState(undefined);
-    const [branches, setBranches] = useState([]);
+    const [branches, setBranches] = useState(undefined);
     const {coords} = useGeolocated();
-
+    // const [page, setPage] = useState(1);
     useEffect(() => {
         const fetchLaboratory = async () => {
             const response = await getData(`/api/medical-institution/${id_laboratory}/`);
@@ -25,19 +25,23 @@ function LaboratoryPage() {
         fetchLaboratory();
     }, [id_laboratory]);
 
-    useEffect(() => {
-        const fetchBranches = async () => {
-            const params = new URLSearchParams();
-            if (coords !== undefined) {
-                params.append('latitude', coords.latitude);
-                params.append('longitude', coords.longitude);
-            }
-            const response = await getData(`/api/medical-institution-branch/?medical_institution=${id_laboratory}`,
-                params);
-            setBranches(response.data?.results);
-        }
-        fetchBranches();
-    }, [id_laboratory, coords]);
+    // useEffect(() => {
+    //     const fetchBranches = async () => {
+    //         const params = new URLSearchParams();
+    //         if (coords !== undefined) {
+    //             params.append('latitude', coords.latitude);
+    //             params.append('longitude', coords.longitude);
+    //         }
+    //         params.set('page', page);
+    //         const response = await getData(`/api/medical-institution-branch/?medical_institution=${id_laboratory}`,
+    //             params);
+    //         setBranches((prev) => prev.concat(response.data?.results));
+    //         // if (response.data?.next() !== null) {
+    //         //     setPage(page + 1);
+    //         // }
+    //     }
+    //     fetchBranches();
+    // }, [id_laboratory, coords, page]);
 
     if (laboratory === undefined) {
         return <Loading/>
