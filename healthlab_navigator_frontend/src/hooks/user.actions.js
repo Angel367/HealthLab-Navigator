@@ -4,13 +4,10 @@ function isAuth() {
  return getAccessToken() !== null && getAccessToken() !== undefined;
 }
 function isRole(role) {
-
-
     if (getRole() === undefined)
         return false;
-
-    if (role.medical_institution !== undefined)
-        return getRole() === role.role && getMedicalInstitution() == role.medical_institution;
+    if (role?.medical_institution !== undefined)
+        return getRole() === role.role && (getMedicalInstitution() == role.medical_institution);
     return getRole() === role;
 }
 

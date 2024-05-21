@@ -11,7 +11,7 @@ function Footer() {
             <ul className="list-unstyled">
               <li><Link to="/">Главная</Link></li>
               <li><Link to="/about">О нас</Link></li>
-              {/*<li><Link to="/partners">Партнеры</Link></li>*/}
+              <li><Link to="/partners">Партнеры</Link></li>
             </ul>
           </div>
           <div className="col-md-3 mb-3">

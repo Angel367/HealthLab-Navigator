@@ -16,6 +16,7 @@ const Header = () => (
         </button>
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav ms-auto">
+
             <li className="nav-item">
                 <Link to="/" className="nav-link">Поиск</Link>
             </li>
@@ -25,6 +26,9 @@ const Header = () => (
 
             <li className="nav-item">
               <Link to="/about" className="nav-link">О нас</Link>
+            </li>
+            <li className="nav-item">
+                <Link to="/partners" className="nav-link">Партнеры</Link>
             </li>
             {isAuth() ? (
               <>

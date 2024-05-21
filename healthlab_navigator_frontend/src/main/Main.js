@@ -78,45 +78,22 @@ function Main({fixedAnalysis = undefined, fixedLaboratories = undefined}) {
                 const resp = await getData('/api/service-in-medical-institution/', params);
                 setAnalysisInLaboratories(resp.data?.results);
 
-
-
-
         };
         fetchAnalysisInLaboratories();
     }, [selectedLaboratories, selectedAnalysis, selectedMinMaxPrice, oms, dms, at_home, fastResult, ordering, fixedLaboratories, fixedAnalysis]);
-
-//    const calcMinMaxPrice = (analysisInLaboratories) => {
-//     if (!analysisInLaboratories || analysisInLaboratories.length === 0) {
-//         return { min: null, max: null };
-//     }
-//
-//     let min = Infinity;
-//     let max = -Infinity;
-//
-//     analysisInLaboratories.forEach(analysis => {
-//         if (analysis.price < min) {
-//             min = analysis.price;
-//         }
-//         if (analysis.price > max) {
-//             max = analysis.price;
-//         }
-//     });
-//
-//     setSelectedMinMaxPrice({ min, max })
-//     return { min, max };
-// };
 
     useEffect(() => {
         const fetchBranches = async () => {
             const params = new URLSearchParams();
             if (fixedLaboratories !== undefined) {
-
                 params.append('medical_institution', fixedLaboratories.id);
             } else
             if (selectedLaboratories.length > 0) {
                 selectedLaboratories.forEach(laboratory => {
                     params.append('medical_institution', laboratory.value);
                 });
+                setPage(1);
+
             }
             if (fixedAnalysis !== undefined) {
                 params.append('service', fixedAnalysis.id);
@@ -125,15 +102,18 @@ function Main({fixedAnalysis = undefined, fixedLaboratories = undefined}) {
                 selectedAnalysis.forEach(analysis => {
                     params.append('service', analysis.value);
                 });
+                setPage(1);
             }
             if (selectedMetroStations.length > 0) {
                 selectedMetroStations.forEach(station => {
                     params.append('metro_stations', station.value);
                 });
+                setPage(1);
             }
             if (isGeolocationAvailable && isGeolocationEnabled && coords !== undefined) {
                 params.append('longitude', coords?.longitude);
                 params.append('latitude', coords?.latitude);
+
             }
             params.append('page', page);
             const resp = await getData('/api/medical-institution-branch/', params);

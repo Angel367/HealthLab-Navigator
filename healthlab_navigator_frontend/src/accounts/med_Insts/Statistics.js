@@ -19,15 +19,15 @@ function Statistics() {
         <div>
             <h1>Statistics</h1>
             <ul>
-                {statistics?.length > 0 &&
-                    statistics.map((stat, index) => {
-                    return (
-                        <li key={index}>
-                            <p>{stat.date}</p>
-                            <p>{stat.visits}</p>
-                        </li>
-                    )
-                })}
+                {/*{statistics?.length > 0 &&*/}
+                {/*    statistics.map((stat, index) => {*/}
+                {/*    return (*/}
+                {/*        <li key={index}>*/}
+                {/*            <p>{stat.date}</p>*/}
+                {/*            <p>{stat.visits}</p>*/}
+                {/*        </li>*/}
+                {/*    )*/}
+                {/*})}*/}
             </ul>
 
         </div>
