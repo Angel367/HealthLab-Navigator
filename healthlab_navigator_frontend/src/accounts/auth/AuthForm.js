@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import postData from '../../requests/postData';
 import { NotificationManager } from 'react-notifications';
+import 'react-notifications/lib/notifications.css';
 import { setUserData } from '../../hooks/user.actions';
 
 function AuthForm({ path = "login/", buttonName = "Войти" }) {
@@ -18,10 +19,21 @@ function AuthForm({ path = "login/", buttonName = "Войти" }) {
 
     const authForm = await postData(path, data);
     if (authForm.status === 201 || authForm.status === 200) {
-      navigate('/profile');
-      setUserData(authForm.data);
+
+      // navigate('/profile');
+      if (authForm.status === 201) {
+        NotificationManager.success("Вы успешно зарегистрировались", "Регистрация", 5000);
+        navigate('/login')
+      }
+      else {
+        NotificationManager.success("Вы успешно вошли", "Авторизация", 5000);
+        setUserData(authForm.data);
+        navigate('/profile');
+      }
+
+
     } else {
-      NotificationManager.error("Произошла ошибка. Попробуйте позже", "Ошибка auth", 5000);
+      NotificationManager.error("Произошла ошибка.", "Ошибка auth", 5000);
     }
   };
 
