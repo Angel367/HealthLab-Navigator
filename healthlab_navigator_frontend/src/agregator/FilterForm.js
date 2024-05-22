@@ -127,8 +127,8 @@ function FilterForm({
 
 
               }}
-              value={fixedAnalysis && {value: fixedAnalysis.id, label: fixedAnalysis.name}}
-              defaultValue={fixedAnalysis ? {value: fixedAnalysis.id, label: fixedAnalysis.name} : null}
+              value={fixedAnalysis && {value: fixedAnalysis.service?.id, label: fixedAnalysis.service?.name}}
+              defaultValue={fixedAnalysis ? {value: fixedAnalysis.service?.id, label: fixedAnalysis.service?.name} : null}
               isDisabled={fixedAnalysis !== undefined}
               isLoading={analysis === undefined && fixedAnalysis === undefined}
               options={analysisOptions}

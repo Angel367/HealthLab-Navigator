@@ -1,20 +1,19 @@
-import CardAnalysis from "./CardAnalysis";
-import { useNavigate, useParams} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import getData from "../requests/getData";
 import CardLaboratory from "./CardLaboratory";
 import {useGeolocated} from "react-geolocated";
 import Loading from "../components/Loading";
-import {isRole} from "../hooks/user.actions";
 import Main from "../main/Main";
-
+import { isRole} from "../hooks/user.actions";
+const img_edit = process.env.PUBLIC_URL + '/edit.svg';
 function LaboratoryPage() {
     const {id_laboratory} = useParams();
     const navigate = useNavigate();
     const [laboratory, setLaboratory] = useState(undefined);
-    const [branches, setBranches] = useState([]);
+    const [branches, setBranches] = useState(undefined);
     const {coords} = useGeolocated();
-
+    // const [page, setPage] = useState(1);
     useEffect(() => {
         const fetchLaboratory = async () => {
             const response = await getData(`/api/medical-institution/${id_laboratory}/`);
@@ -26,24 +25,27 @@ function LaboratoryPage() {
         fetchLaboratory();
     }, [id_laboratory]);
 
-    useEffect(() => {
-        const fetchBranches = async () => {
-            const params = new URLSearchParams();
-            if (coords !== undefined) {
-                params.append('latitude', coords.latitude);
-                params.append('longitude', coords.longitude);
-            }
-            const response = await getData(`/api/medical-institution-branch/?medical_institution=${id_laboratory}`,
-                params);
-            setBranches(response.data?.results);
-        }
-        fetchBranches();
-    }, [id_laboratory, coords]);
+    // useEffect(() => {
+    //     const fetchBranches = async () => {
+    //         const params = new URLSearchParams();
+    //         if (coords !== undefined) {
+    //             params.append('latitude', coords.latitude);
+    //             params.append('longitude', coords.longitude);
+    //         }
+    //         params.set('page', page);
+    //         const response = await getData(`/api/medical-institution-branch/?medical_institution=${id_laboratory}`,
+    //             params);
+    //         setBranches((prev) => prev.concat(response.data?.results));
+    //         // if (response.data?.next() !== null) {
+    //         //     setPage(page + 1);
+    //         // }
+    //     }
+    //     fetchBranches();
+    // }, [id_laboratory, coords, page]);
 
     if (laboratory === undefined) {
         return <Loading/>
     }
-
 
     return (
         <div className={"container d-flex flex-column"}>
@@ -51,9 +53,14 @@ function LaboratoryPage() {
                 <div className="d-flex flex-row justify-content-between align-items-center">
                 <h1>{laboratory.name}</h1>
                 <a href={laboratory.website} target="_blank" rel="noreferrer"
-                                          className={"btn btn-primary flex-grow-0"
-                                              }>Сайт лаборатории</a>
-                    {isRole("med_inst") && <a href={`/laboratory/${laboratory.id}/edit`} className={"btn btn-primary flex-grow-0"}>Редактировать</a>}
+                                          className={"btn btn-primary flex-grow-0"}>
+                    Сайт лаборатории</a>
+                    {
+                    isRole({role: 'agent', medical_institution: laboratory.id}) &&
+                    <Link to={`edit`}>
+                        <img src={img_edit} alt="edit" height="20" width="20"/>
+                    </Link>
+                }
                 </div>
                 <p>{laboratory.description}</p>
 

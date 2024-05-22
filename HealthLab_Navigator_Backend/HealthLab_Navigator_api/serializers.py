@@ -51,8 +51,8 @@ class MedicalInstitutionBranchSerializer(serializers.ModelSerializer):
                 is_active=True
             )
             data = ServiceInMedicalInstitutionSerializer(services, many=True).data
-            for service in data:
-                service['adelina'] = "ya v ahye s tvoih zaprosov"
+            # for service in data:
+                # service['adelina'] = "ya v ahye s tvoih zaprosov"
             return data
         return []
 
@@ -100,9 +100,18 @@ class ChangePasswordSerializer(serializers.Serializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
+    role = serializers.SerializerMethodField()
+
+    def get_role(self, obj):
+        role = MedicalAgentOfMedicalInstitution.objects.filter(user=obj).first()
+        if role is not None:
+            return {'role': 'agent', 'medical_institution': role.medical_institution.id}
+        return 'patient'
+
     class Meta:
         model = CustomUser
-        fields = ['id', 'phone_number', 'email', 'first_name', 'last_name']
+        fields = ['id', 'phone_number', 'email', 'first_name', 'last_name',
+                  'role', 'date_of_birth', 'gender']
         extra_kwargs = {'password': {'write_only': True}}
 
 

@@ -122,6 +122,13 @@ class ProfileView(UpdateAPIView, RetrieveAPIView):
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated]
 
+    def update(self, request, *args, **kwargs):
+        if 'password' in request.data:
+            password = request.data.pop('password')
+            self.get_object().set_password(password)
+        return super().update(request, *args, **kwargs)
+
+
     def get_object(self):
         return self.request.user
 

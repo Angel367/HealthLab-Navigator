@@ -7,7 +7,6 @@ import FilterForm from "../agregator/FilterForm";
 import CardLaboratory from "../agregator/CardLaboratory";
 import { useGeolocated } from "react-geolocated";
 import Loading from "../components/Loading";
-import CardAnalysis from "../agregator/CardAnalysis";
 
 function Main({fixedAnalysis = undefined, fixedLaboratories = undefined}) {
 
@@ -49,7 +48,8 @@ function Main({fixedAnalysis = undefined, fixedLaboratories = undefined}) {
                 params.append('ordering', ordering.value);
             }
             if (fixedAnalysis !== undefined) {
-                params.append('service', fixedAnalysis.id);
+                // console.log(fixedAnalysis)
+                params.append('service', fixedAnalysis.service?.id);
             } else
             if (selectedAnalysis.length > 0) {
                 selectedAnalysis.forEach(analysis => {
@@ -79,62 +79,42 @@ function Main({fixedAnalysis = undefined, fixedLaboratories = undefined}) {
                 const resp = await getData('/api/service-in-medical-institution/', params);
                 setAnalysisInLaboratories(resp.data?.results);
 
-
-
-
         };
         fetchAnalysisInLaboratories();
     }, [selectedLaboratories, selectedAnalysis, selectedMinMaxPrice, oms, dms, at_home, fastResult, ordering, fixedLaboratories, fixedAnalysis]);
-
-//    const calcMinMaxPrice = (analysisInLaboratories) => {
-//     if (!analysisInLaboratories || analysisInLaboratories.length === 0) {
-//         return { min: null, max: null };
-//     }
-//
-//     let min = Infinity;
-//     let max = -Infinity;
-//
-//     analysisInLaboratories.forEach(analysis => {
-//         if (analysis.price < min) {
-//             min = analysis.price;
-//         }
-//         if (analysis.price > max) {
-//             max = analysis.price;
-//         }
-//     });
-//
-//     setSelectedMinMaxPrice({ min, max })
-//     return { min, max };
-// };
 
     useEffect(() => {
         const fetchBranches = async () => {
             const params = new URLSearchParams();
             if (fixedLaboratories !== undefined) {
-
                 params.append('medical_institution', fixedLaboratories.id);
             } else
             if (selectedLaboratories.length > 0) {
                 selectedLaboratories.forEach(laboratory => {
                     params.append('medical_institution', laboratory.value);
                 });
+                setPage(1);
+
             }
             if (fixedAnalysis !== undefined) {
-                params.append('service', fixedAnalysis.id);
+                params.append('service', fixedAnalysis.service?.id);
             } else
             if (selectedAnalysis.length > 0) {
                 selectedAnalysis.forEach(analysis => {
                     params.append('service', analysis.value);
                 });
+                setPage(1);
             }
             if (selectedMetroStations.length > 0) {
                 selectedMetroStations.forEach(station => {
                     params.append('metro_stations', station.value);
                 });
+                setPage(1);
             }
             if (isGeolocationAvailable && isGeolocationEnabled && coords !== undefined) {
                 params.append('longitude', coords?.longitude);
                 params.append('latitude', coords?.latitude);
+
             }
             params.append('page', page);
             const resp = await getData('/api/medical-institution-branch/', params);
@@ -190,15 +170,17 @@ function Main({fixedAnalysis = undefined, fixedLaboratories = undefined}) {
                                branches.map((branch, index) => {
                                       return <CardLaboratory key={index} laboratory={branch}
                                                              analysis={analysisInLaboratories.filter(analysis => analysis.medical_institution.id === branch.medical_institution)}
-                                                             laboratory_name={branch.name}/>
+                                                             laboratory_name={branch.name}
+                                                             no_img={fixedLaboratories !== undefined}
+                                      />
                                  })
 
 
                                :
                                branches.map((branch, index) => {
                                    return <CardLaboratory key={index} laboratory={branch} analysis={[]}
-                                                          laboratory_name={branch.name}/>
-                               })
+                                                          laboratory_name={branch.name}  no_img={fixedLaboratories !== undefined}
+                                   />})
 
 
                            }
