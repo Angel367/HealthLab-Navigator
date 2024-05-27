@@ -115,7 +115,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
-
+    'HealthLab_Navigator_api.middlewares.RemoveCOOPHeaderMiddleware'
 ]
 
 ROOT_URLCONF = 'HealthLab_Navigator_Backend.urls'
