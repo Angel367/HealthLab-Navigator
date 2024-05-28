@@ -29,13 +29,17 @@ function getRefreshToken() {
 function setRole(role)
 {
     if (role.medical_institution !== undefined)
-        Cookies.set("medical_institution", role.medical_institution, { expires: 1, secure: true })
-    Cookies.set("role", role.role || role, { expires: 1, secure: true });
+        Cookies.set("medical_institution", role.medical_institution, { expires: 1})
+    Cookies.set("role", role.role || role, { expires: 1 });
+        // Cookies.set("medical_institution", role.medical_institution, { expires: 1, secure: true })
+    // Cookies.set("role", role.role || role, { expires: 1, secure: true });
 }
 // Set the access, token and user property
 function setUserData(data) {
- Cookies.set("access", data.access, { expires:  1, secure: true });
- Cookies.set("refresh", data.refresh, { expires: 1, secure: true });
+    Cookies.set("access", data.access, { expires:  1});
+    Cookies.set("refresh", data.refresh, { expires: 1});
+    // Cookies.set("access", data.access, { expires:  1, secure: true });
+    // Cookies.set("refresh", data.refresh, { expires: 1, secure: true });
 }
  // Logout the user
  function logout() {
